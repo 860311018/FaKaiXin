@@ -427,7 +427,7 @@
 {
     NSDictionary *paramDic = @{@"start" : @(start), @"size": @(size), @"type" : @(mindType), @"uid":@([FKXUserManager shareInstance].currentUserId)};
     NSString *methodName = @"";
-    methodName = @"worry/sorrys_hot";
+    methodName = @"voice/voice_worry";
     [FKXSameMindModel sendGetOrPostRequest:methodName param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
      {
          self.tableView.header.state = MJRefreshHeaderStateIdle;
@@ -435,6 +435,8 @@
          
          if (data)
          {
+             NSArray *listArr = data;
+            
              [self hideHud];
              
              if ([data count] < kRequestSize) {

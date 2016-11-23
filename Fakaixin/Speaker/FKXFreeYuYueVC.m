@@ -23,8 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *fuqiBtn;
 @property (weak, nonatomic) IBOutlet UIButton *poxiBtn;
 
-@property (nonatomic,strong) NSString *male;
-@property (nonatomic,strong) NSNumber *sel;
+@property (nonatomic,assign) NSInteger male;
+@property (nonatomic,assign) NSInteger sel;
 
 @end
 
@@ -36,6 +36,9 @@
     self.navTitle = @"情感挽回";
     
     [self setUpUI];
+    
+    self.male = -1;
+    self.sel = -1;
 }
 
 - (void)nameChanged:(UITextField *)textField {
@@ -49,14 +52,14 @@
 
     self.menBtn.selected = YES;
     self.womenBtn.selected = NO;
-    self.male = @"男";
+    self.male = 1;
     
 }
 - (IBAction)selecWomen:(id)sender {
 
     self.menBtn.selected = NO;
     self.womenBtn.selected = YES;
-    self.male = @"女";
+    self.male = 0;
 
 }
 
@@ -65,14 +68,14 @@
     self.shilianBtn.selected = NO;
     self.fuqiBtn.selected = NO;
     self.poxiBtn.selected = NO;
-    self.sel = @1;
+    self.sel = 0;
 }
 - (IBAction)selectShiLian:(id)sender {
     self.hunlianBtn.selected = NO;
     self.shilianBtn.selected = YES;
     self.fuqiBtn.selected = NO;
     self.poxiBtn.selected = NO;
-    self.sel = @2;
+    self.sel = 1;
 
 }
 - (IBAction)selectFuqi:(id)sender {
@@ -80,7 +83,7 @@
     self.shilianBtn.selected = NO;
     self.fuqiBtn.selected = YES;
     self.poxiBtn.selected = NO;
-    self.sel = @3;
+    self.sel = 2;
 
 }
 - (IBAction)selectPoxi:(id)sender {
@@ -88,7 +91,7 @@
     self.shilianBtn.selected = NO;
     self.fuqiBtn.selected = NO;
     self.poxiBtn.selected = YES;
-    self.sel = @4;
+    self.sel = 3;
 
 }
 
@@ -101,11 +104,22 @@
     if (![NSString isEmpty:self.nameTF.text]) {
         if (![NSString isEmpty:self.phoneTF.text]) {
             if ([self.phoneTF.text isRealPhoneNumber]) {
-                if (self.male && self.sel) {
-                    NSLog(@"%@",self.male);
-                    NSLog(@"%@",self.sel);
-                    NSLog(@"%@",self.nameTF.text);
-                    NSLog(@"%@",self.phoneTF.text);
+                if ((self.male!=-1) && (self.sel !=-1)) {
+                    
+                    NSDictionary *paramDic = @{@"name":self.nameTF.text,@"mobile":self.phoneTF.text,@"sex":@(self.male),@"type":@(self.sel)};
+                    
+                    [AFRequest sendGetOrPostRequest:@"order_now/insert" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+                        [self hideHud];
+                        if ([data[@"code"] integerValue] == 0){
+                            [self showHint:@"预约成功"];
+                            [self.navigationController popViewControllerAnimated:YES];
+                        }else{
+                            [self showHint:data[@"message"]];
+                        }
+                    } failure:^(NSError *error) {
+                        [self hideHud];
+                        [self showAlertViewWithTitle:@"网络出错"];
+                    }];
 
                 }else {
                     [self showHint:@"请完善信息"];

@@ -9,7 +9,7 @@
 #import "FKXTouGaoVC.h"
 #import "FKXCustomKeyboardUp.h"
 #import "UITextView+Placeholder.h"
-
+#import "NSString+Extension.h"
 #import <QiniuSDK.h>
 
 
@@ -73,79 +73,48 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
 }
 
-//发送心事
+//发送
 - (void)sendMind
 {
-//    [_myTextView resignFirstResponder];
-//    NSString *text = [_myTextView.text stringByReplacingOccurrencesOfString:@" " withString:@""];
-//    NSString *tex = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-//    if (tex.length < 20)
-//    {
-//        [self showHint:@"请说的再详细些哦~"];
-//        return;
-//    }else if (tex.length > 500)
-//    {
-//        [self showHint:@"字数超出500字了哦~"];
-//        return;
-//    }
-//    
-//    [self showHudInView:self.view hint:@"正在发布..."];
-//    self.navigationItem.rightBarButtonItem.enabled = NO;
-//    NSDictionary *paramDic = @{
-//                               @"type" : @(selectedType),
-//                               @"text":_myTextView.text,
-//                               @"isPublic":@(customKeyB.mySwitch.on ? 0 : 1),
-//                               @"imageArray":imagesNamesArr};
-//    [AFRequest sendGetOrPostRequest:@"worry/add"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-//     {
-//         self.navigationItem.rightBarButtonItem.enabled = YES;
-//         [self hideHud];
-//         if ([data[@"code"] integerValue] == 0)
-//         {
-//             [self showHint:data[@"data"][@"alert"]];
-//             [self dismissViewControllerAnimated:YES completion:nil];
-//         }else if ([data[@"code"] integerValue] == 4)
-//         {
-//             [self showAlertViewWithTitle:data[@"message"]];
-//             [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-//         }
-//         else if ([data[@"code"] integerValue] == 11)
-//         {
-//             [self dismissViewControllerAnimated:YES completion:^{
-//                 //支付爱心值或者分享朋友圈
-//                 UIAlertController *alV = [UIAlertController alertControllerWithTitle:@"您的爱心值不足" message:nil preferredStyle:UIAlertControllerStyleAlert];
-//                 UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"去获得爱心值" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-//                                       {
-//                                           FKXGetMoreLoveValueVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXGetMoreLoveValueVC"];
-//                                           vc.hidesBottomBarWhenPushed = YES;
-//                                           SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
-//                                           [tab.viewControllers[0] pushViewController:vc animated:YES];
-//                                       }];
-//                 [alV addAction:ac1];
-//                 SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
-//                 tab.selectedIndex = 0;
-//                 FKXBaseNavigationController *nav = tab.viewControllers[0];
-//                 [[nav viewControllers][0] presentViewController:alV animated:YES completion:nil];
-//             }];
-//         }
-//         
-//         else
-//         {
-//             [self showHint:data[@"message"]];
-//         }
-//     } failure:^(NSError *error) {
-//         self.navigationItem.rightBarButtonItem.enabled = YES;
-//         [self hideHud];
-//         [self showAlertViewWithTitle:@"网络出错"];
-//     }];
-}
-
-- (void)dismissSelf {
+    [_titleTF resignFirstResponder];
+    [_myTextView resignFirstResponder];
     
-}
-
-- (void)clickMindType {
+    if ([NSString isEmpty:_titleTF.text]) {
+        [self showHint:@"请输入题目"];
+        return;
+    }
+    if ([NSString isEmpty:_myTextView.text]) {
+        [self showHint:@"文稿内容不能为空哟"];
+        return;
+    }
     
+    [self showHudInView:self.view hint:@"正在提交..."];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    NSDictionary *paramDic = @{
+                               @"title" : _titleTF.text,
+                               @"text":_myTextView.text,
+                               @"imageArray":imagesNamesArr};
+    [AFRequest sendGetOrPostRequest:@"contribute/insert"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+     {
+         self.navigationItem.rightBarButtonItem.enabled = YES;
+         [self hideHud];
+         if ([data[@"code"] integerValue] == 0)
+         {
+             [self showHint:@"投稿成功"];
+             [self.navigationController popViewControllerAnimated:YES];
+         }else if ([data[@"code"] integerValue] == 4)
+         {
+             [self showAlertViewWithTitle:data[@"message"]];
+             [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+         }
+         else{
+             [self showHint:data[@"message"]];
+         }
+     } failure:^(NSError *error) {
+         self.navigationItem.rightBarButtonItem.enabled = YES;
+         [self hideHud];
+         [self showAlertViewWithTitle:@"网络出错"];
+     }];
 }
 
 

@@ -36,4 +36,7 @@
 @property(nonatomic, strong)NSNumber<Optional> * worryType;
 @property   (nonatomic,strong)NSNumber<Optional> *searchType;//搜索的类型：1，心事；2，享问；3，专家；4，文章
 
+//享问
+
+
 @end
