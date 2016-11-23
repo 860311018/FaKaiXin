@@ -25,6 +25,9 @@
 #import "STypeSignInView.h"
 #import "FKXSignInVC.h"
 
+#import "FKXMyOrderVC.h"
+
+
 @interface FKXPersonalViewController ()
 {
     FKXUserInfoModel *userModel;
@@ -832,7 +835,9 @@
                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
                 return;
             }
-            
+            FKXMyOrderVC *vc = [[FKXMyOrderVC alloc]init];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
            

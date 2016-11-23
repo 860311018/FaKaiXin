@@ -10,7 +10,7 @@
 #import "FKXConfirmView.h"
 #import "FKXBindPhone.h"
 
-#define WINDOW_COLOR                            [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5]
+#define WINDOW_COLOR                            [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]
 
 @interface FKXGrayView ()<ConfirmDelegate>
 {
@@ -24,17 +24,20 @@
 
 -(instancetype)initWithPoint:(CGRect)frame{
     if (self=[super init]) {
-        self.frame=CGRectMake(0, 0,kScreenWidth, kScreenHeight);
+        self.frame= frame;
+        //CGRectMake(0, 0,kScreenWidth, kScreenHeight);
         self.backgroundColor = WINDOW_COLOR;
         
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hide)];
-        [self addGestureRecognizer:tap];
+//        [self addGestureRecognizer:tap];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, self.frame.size.height-285+30)];
+        view.backgroundColor = [UIColor clearColor];
+        [self addSubview:view];
+        [view addGestureRecognizer:tap];
         
         order =  [FKXConfirmView creatOrder];
-//        CGRect  rect =order.frame;
-//        rect.origin.x = point.x;
-//        rect.origin.y = point.y;
-        order.frame=frame;
+        order.frame = CGRectMake(0, self.frame.size.height-285, kScreenWidth, 285);
         order.confirmDelegate = self;
         
         [self addSubview:order];
@@ -47,6 +50,8 @@
     if (self=[super init]) {
         self.frame=CGRectMake(0, 0,kScreenWidth, kScreenHeight);
         self.backgroundColor = WINDOW_COLOR;
+        //[UIColor clearColor];
+        //WINDOW_COLOR;
         
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hide)];
         [self addGestureRecognizer:tap];
@@ -96,8 +101,13 @@
 
 -(void)show {
     
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
-    
+    [UIView animateWithDuration:2 animations:^{
+        self.alpha = 1;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [[UIApplication sharedApplication].keyWindow addSubview:self];
+        }
+    }];
 }
 
 -(void)hide{

@@ -9,14 +9,21 @@
 #import "FKXConfirmView.h"
 #define WINDOW_COLOR  [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]
 
+@interface FKXConfirmView ()
+{
+    NSInteger minutes;
+    NSInteger totals;
+}
+@end
+
 @implementation FKXConfirmView
 
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.headImgV.layer.cornerRadius = 21;
+    self.headImgV.layer.cornerRadius = 25;
     self.headImgV.layer.masksToBounds = YES;
-    self.headImgV.backgroundColor = [UIColor whiteColor];
+//    self.headImgV.backgroundColor = [UIColor whiteColor];
 
     [self.weiXinPay setImage:[UIImage imageNamed:@"Order_WeiXin_nor"] forState:UIControlStateNormal];
     [self.weiXinPay setImage:[UIImage imageNamed:@"Order_WeiXin_sel"] forState:UIControlStateSelected];
@@ -24,8 +31,20 @@
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_nor"] forState:UIControlStateNormal];
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_sel"] forState:UIControlStateSelected];
     
+    minutes = 15;
+    self.price = 10;
+    
     self.weiXinPay.selected = YES;
     self.zhiFuPay.selected = NO;
+}
+
+- (void)layoutSubviews {
+    
+    self.priceL.text = [NSString stringWithFormat:@"%ld",self.price];
+    
+    self.minutesTF.text = [NSString stringWithFormat:@"%ld",minutes];
+    
+    self.totalL.text = [NSString stringWithFormat:@"%ld",minutes*self.price];
 }
 
 
@@ -34,10 +53,26 @@
 }
 
 - (IBAction)descMinutes:(id)sender {
-    [_confirmDelegate desMinute];
+
+    if (minutes <= 15) {
+        return;
+    }
+    
+    minutes = minutes - 15;
+    totals = minutes * self.price;
+   
+    [self layoutSubviews];
+
+//    [_confirmDelegate desMinute];
 }
 - (IBAction)addMinutes:(id)sender {
-    [_confirmDelegate addMinute];
+
+    minutes = minutes + 15;
+    totals = minutes * self.price;
+    
+    [self layoutSubviews];
+    
+//    [_confirmDelegate addMinute];
 }
 - (IBAction)bangDing:(id)sender {
     [_confirmDelegate bangDingPhone];

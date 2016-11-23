@@ -13,15 +13,17 @@
 #import "FKXProfessionInfoVC.h"
 
 #import "FKXYuYueProCell.h"
+#import "FKXGrayView.h"
+#import "FKXBindPhone.h"
 
-@interface FKXConsultViewController ()<CallProDelegate>//<FKXConsulterCellDelegate>
+@interface FKXConsultViewController ()<CallProDelegate,FKXGrayDelegate>//<FKXConsulterCellDelegate>
 {
     NSInteger start;
     NSInteger size;
     BOOL isVip;
 
-    UILabel *newMessageLab;
-
+    FKXGrayView *order;
+    CGFloat keyboardHeight;
 }
 @property   (nonatomic,strong)NSMutableArray *contentArr;
 
@@ -45,7 +47,7 @@
     _contentArr = [NSMutableArray arrayWithCapacity:1];
     size = kRequestSize;
     
-    [self setUpNavBar];
+//    [self setUpNavBar];
     
     self.tableView.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
     
@@ -59,6 +61,9 @@
     [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
     //首次刷新加载页面数据
     [self headerRefreshEvent];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
     
 }
 
@@ -131,12 +136,6 @@
     
 }
 
-- (void)callPro {
-    if ([FKXUserManager needShowLoginVC]) {
-        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-        return;
-    }
-}
 
 #pragma mark - separator insets 设置
 -(void)viewDidLayoutSubviews {
@@ -221,29 +220,66 @@
     
 }
 
-- (void)setUpNavBar
-{
-    UIImage *imageMind = [UIImage imageNamed:@"img_mine_message"];
-    UIView *itemV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, imageMind.size.width/2 + 2 + 18,imageMind.size.width/2 + 2 + 18)];
-    UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, itemV.height - imageMind.size.height - 5, imageMind.size.width, imageMind.size.height)];
-    imgV.image = imageMind;
-    [itemV addSubview:imgV];
-    
-    newMessageLab = [[UILabel alloc] initWithFrame:CGRectMake(itemV.width - 18, 0, 18, 18)];
-    newMessageLab.textAlignment = NSTextAlignmentCenter;
-    newMessageLab.textColor = [UIColor whiteColor];
-    [newMessageLab setAdjustsFontSizeToFitWidth:YES];
-    newMessageLab.backgroundColor = UIColorFromRGB(0xfe9595);
-    newMessageLab.font = [UIFont systemFontOfSize:12];
-    newMessageLab.layer.cornerRadius = newMessageLab.width/2;
-    newMessageLab.clipsToBounds = YES;
-    [itemV addSubview:newMessageLab];
-    
-    newMessageLab.hidden = YES;
-    
-    [itemV addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickRightBtn)]];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:itemV];
 
+#pragma mark - 打电话
+
+- (void)callPro {
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        return;
+    }
+    
+    order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    order.grayDelegate = self;
+    [order show];
+}
+
+- (void)keyboardWillShow:(NSNotification *)not{
+//    NSValue * value = [not.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGSize size2 = [value CGRectValue].size;
+//    keyboardHeight = size2.height;
+//    [UIView animateWithDuration:0.5 animations:^{
+//        order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, 0, kScreenWidth, kScreenHeight-keyboardHeight)];
+//    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)not{
+    
+}
+
+- (void)adMinutes {
+    
+}
+
+- (void)deMinutes {
+    
+}
+
+- (void)bangDingMobile {
+
+//    FKXBindPhone *phone = [FKXBindPhone creatBangDing];
+//    CGPoint center = self.view.center;
+//    phone.center = center;
+//    
+//    CGPoint rect = phone.origin;
+//    rect.y = 64;
+//    phone.origin = rect;
+//   
+//    [[UIApplication sharedApplication].keyWindow addSubview:phone];
+
+//    [self.view addSubview:phone];
+}
+
+- (void)clickWeiXinPay {
+    
+}
+
+- (void)clickZhiFuBaoPay {
+    
+}
+
+- (void)clickConfirm {
+    
 }
 
 

@@ -31,8 +31,12 @@
 
 - (void)awakeFromNib {
     // Initialization code
+    [super awakeFromNib];
     _btnHug.tag = 200;
     _btnShare.tag = 202;
+    
+    [_imgCardBackground addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapBack:)]];
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -47,6 +51,14 @@
         [self.delegate hugOrFeelImgDidSelect:self.model type:btn.tag-200];
     }
 }
+
+- (void)tapBack:(UITapGestureRecognizer *)tap {
+    NSInteger type = tap.view.tag-200;
+    if ([self.delegate respondsToSelector:@selector(hugOrFeelImgDidSelect:type:)]) {
+        [self.delegate hugOrFeelImgDidSelect:self.model type:type];
+    }
+}
+
 
 -(void)setModel:(FKXSameMindModel *)model
 {

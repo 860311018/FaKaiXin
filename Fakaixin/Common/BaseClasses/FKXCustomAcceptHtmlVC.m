@@ -182,8 +182,8 @@ typedef enum : NSUInteger {
 #pragma mark - 订单相关
 
 - (void)bangDingMobile {
-    FKXGrayView *phone = [[FKXGrayView alloc]initWithMobileFrame:CGRectMake(0, 0, 0, 0)];
-    [phone show];
+//    FKXGrayView *phone = [[FKXGrayView alloc]initWithMobileFrame:CGRectMake(0, 0, 0, 0)];
+//    [phone show];
 }
 
 
@@ -192,7 +192,7 @@ typedef enum : NSUInteger {
 //电话咨询
 - (void)call {
 //    CGFloat height = (285.0/350.0)*kScreenWidth;
-    FKXGrayView *order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, kScreenHeight-285, kScreenWidth, 285)];
+    FKXGrayView *order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, 0, kScreenWidth, kScreenWidth)];
     order.grayDelegate = self;
     [order show];
 }

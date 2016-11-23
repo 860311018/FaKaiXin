@@ -34,7 +34,7 @@
 
 -(void)show;
 
-- (instancetype)initWithMobileFrame:(CGRect)frame;
+//- (instancetype)initWithMobileFrame:(CGRect)frame;
 
 
 @end

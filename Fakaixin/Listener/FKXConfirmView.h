@@ -43,6 +43,7 @@
 
 @property(nonatomic,weak)id<ConfirmDelegate>confirmDelegate;
 
+@property (nonatomic,assign) NSInteger price;
 
 +(id)creatOrder;
 

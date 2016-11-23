@@ -59,6 +59,8 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SelectMind" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SelectMindType" object:nil];
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fkxReceiveEaseMobMessage" object:nil];
 }
 
@@ -90,6 +92,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNewMessageLab) name:@"fkxReceiveEaseMobMessage" object:nil];
     //增加改变心事类型的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"SelectMind" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMind:) name:@"SelectMindType" object:nil];
     
     //基本赋值
     _contentArr = [NSMutableArray arrayWithCapacity:1];
@@ -156,6 +159,8 @@
         [self showAlertViewWithTitle:@"网络出错"];
     }];
 }
+
+
 #pragma mark - 导航栏
 - (void)clickRightBtn
 {
@@ -387,6 +392,36 @@
     start += size;
     [self loadData];
 }
+
+- (void)refreshMind:(NSNotification *)not {
+    mindType = [not.object integerValue];
+    NSString *btnTitle = @"";
+    switch (mindType) {
+        case -1:
+            btnTitle = @"综合";
+            break;
+        case 0:
+            btnTitle = @"出轨";
+            break;
+        case 1:
+            btnTitle = @"失恋";
+            break;
+        case 2:
+            btnTitle = @"夫妻";
+            break;
+        case 3:
+            btnTitle = @"婆媳";
+            break;
+            
+        default:
+            break;
+    }
+    titleLab.text = btnTitle;
+    start = 0;
+    [self loadData];
+}
+
+
 //加载相同心情的人
 - (void)loadData
 {
@@ -465,57 +500,86 @@
 #pragma mark - tableView代理
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
-    CGRect screen = [UIScreen mainScreen].bounds;
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineSpacing = 8;
-    CGFloat height = [model.text heightForWidth:screen.size.width - 34 usingFont:[UIFont systemFontOfSize:kFontOfContent] style:style];
-    if (model.imageArray.count) {//如果有图片
+    if (indexPath.section == 0) {
+        return 155;
+    }else {
+        FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
+        CGRect screen = [UIScreen mainScreen].bounds;
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 8;
+        CGFloat height = [model.text heightForWidth:screen.size.width - 34 usingFont:[UIFont systemFontOfSize:kFontOfContent] style:style];
+        if (model.imageArray.count) {//如果有图片
+            if (height > oneLineH*3)//文字高度大于3行
+            {
+                if ([model.isOpen boolValue])//是展开的
+                {
+                    return height + 354 - 14;//隐藏查看更多
+                }else{
+                    return oneLineH*3 + 354;
+                }
+            }else{
+                return height + 354 - 14;
+            }
+        }
+        //如果没有图片
         if (height > oneLineH*3)//文字高度大于3行
         {
             if ([model.isOpen boolValue])//是展开的
             {
-                return height + 354 - 14;//隐藏查看更多
+                return height + 142 - 14;//隐藏查看更多
             }else{
-                return oneLineH*3 + 354;
+                return oneLineH*3 + 142;
             }
         }else{
-            return height + 354 - 14;
-        }
-    }
-    //如果没有图片
-    if (height > oneLineH*3)//文字高度大于3行
-    {
-        if ([model.isOpen boolValue])//是展开的
-        {
             return height + 142 - 14;//隐藏查看更多
-        }else{
-            return oneLineH*3 + 142;
         }
-    }else{
-        return height + 142 - 14;//隐藏查看更多
     }
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 1;
+    }
     return _contentArr.count;
 }
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
-    
-    if (!model.imageArray.count) {
-        FKXSameMindCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindCell" forIndexPath:indexPath];
-        cell.delegate = self;
-        cell.model = model;
+    if (indexPath.section == 0) {
+    static NSString *Identifier = @"SameMindTitle";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier];
+        }
+        
+        UIImageView *titleImgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 150)];
+        [titleImgV sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
+        [cell addSubview:titleImgV];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 5)];
+        view.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
+        [cell addSubview:view];
         
         return cell;
-    }else
-    {
-        FKXSameMindImgCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindImgCell" forIndexPath:indexPath];
-        cell.delegate = self;
-        cell.model = model;
-        return cell;
+    }else {
+        FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
+        
+        if (!model.imageArray.count) {
+            FKXSameMindCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindCell" forIndexPath:indexPath];
+            cell.delegate = self;
+            cell.model = model;
+            
+            return cell;
+        }else
+        {
+            FKXSameMindImgCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindImgCell" forIndexPath:indexPath];
+            cell.delegate = self;
+            cell.model = model;
+            return cell;
+        }
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

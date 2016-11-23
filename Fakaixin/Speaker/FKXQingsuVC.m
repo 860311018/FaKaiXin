@@ -13,8 +13,9 @@
 
 #import "QingsuView.h"
 #import "ScrllTitleView.h"
+#import "FKXGrayView.h"
 
-@interface FKXQingsuVC ()<UITableViewDelegate,UITableViewDataSource,CallProDelegate>
+@interface FKXQingsuVC ()<UITableViewDelegate,UITableViewDataSource,CallProDelegate,FKXGrayDelegate>
 {
     NSInteger start;
     NSInteger size;
@@ -170,12 +171,6 @@
 }
 
 
-- (void)callPro {
-    if ([FKXUserManager needShowLoginVC]) {
-        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-        return;
-    }
-}
 
 #pragma mark - tableViewDelegate
 
@@ -336,6 +331,46 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - 打电话
+
+- (void)callPro {
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        return;
+    }
+    
+    FKXGrayView *order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, kScreenHeight-285, kScreenWidth, 285)];
+    order.grayDelegate = self;
+    [order show];
+}
+
+- (void)adMinutes {
+    
+}
+
+- (void)deMinutes {
+    
+}
+
+- (void)bangDingMobile {
+    
+}
+
+- (void)clickWeiXinPay {
+    
+}
+
+- (void)clickZhiFuBaoPay {
+    
+}
+
+- (void)clickConfirm {
+    
+}
+
+
 
 /*
 #pragma mark - Navigation
