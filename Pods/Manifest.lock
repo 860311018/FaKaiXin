@@ -1,0 +1,90 @@
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - BeeCloud/Alipay (3.4.3):
+    - BeeCloud/Core
+  - BeeCloud/Core (3.4.3)
+  - BeeCloud/Wx (3.4.3):
+    - BeeCloud/Core
+  - EaseMobSDK (2.2.2)
+  - GrowingIO (0.9.36)
+  - HappyDNS (0.3.5)
+  - JSONModel (1.1.2)
+  - MOBFoundation (2.0.11)
+  - Qiniu (7.0.20):
+    - AFNetworking (~> 3)
+    - HappyDNS (~> 0.3)
+  - SDWebImage (3.7.5):
+    - SDWebImage/Core (= 3.7.5)
+  - SDWebImage-ProgressView (0.4.0):
+    - SDWebImage (~> 3.7.0)
+  - SDWebImage/Core (3.7.5)
+  - ShareSDK3 (3.4.2):
+    - ShareSDK3/ShareSDK (= 3.4.2)
+  - ShareSDK3/ShareSDK (3.4.2)
+  - ShareSDK3/ShareSDKPlatforms/QQ (3.4.2)
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo (3.4.2)
+  - ShareSDK3/ShareSDKPlatforms/WeChat (3.4.2)
+  - UMengAnalytics (4.0.4)
+
+DEPENDENCIES:
+  - AFNetworking (~> 3.1.0)
+  - BeeCloud/Alipay (~> 3.4.3)
+  - BeeCloud/Wx (~> 3.4.3)
+  - EaseMobSDK (from `https://github.com/easemob/sdk-ios-cocoapods.git`)
+  - GrowingIO
+  - JSONModel (~> 1.1.0)
+  - MOBFoundation
+  - Qiniu (from `https://github.com/qiniu/objc-sdk.git`, branch `AFNetworking-3.x`)
+  - SDWebImage-ProgressView (~> 0.4.0)
+  - ShareSDK3
+  - ShareSDK3/ShareSDKPlatforms/QQ
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo
+  - ShareSDK3/ShareSDKPlatforms/WeChat
+  - UMengAnalytics (~> 4.0.4)
+
+EXTERNAL SOURCES:
+  EaseMobSDK:
+    :git: https://github.com/easemob/sdk-ios-cocoapods.git
+  Qiniu:
+    :branch: AFNetworking-3.x
+    :git: https://github.com/qiniu/objc-sdk.git
+
+CHECKOUT OPTIONS:
+  EaseMobSDK:
+    :commit: 94d26ad129403f1c8b6bef1ec505f842d41be3b1
+    :git: https://github.com/easemob/sdk-ios-cocoapods.git
+  Qiniu:
+    :commit: 6828e9e71c4e2fe8b87027fcbb05802f72ed4ac7
+    :git: https://github.com/qiniu/objc-sdk.git
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  BeeCloud: d8e0b616784b33f657495b75386c9373dcd84c3f
+  EaseMobSDK: c686ef0f313d14ae18df45d82b9fc3746d6354bd
+  GrowingIO: 994700c4e49274a867549eaec991c0136293b7d1
+  HappyDNS: 6f8cf46fa7c0b98a6591fe8ecb2e08d9907a6e8b
+  JSONModel: 216584d0311b053ff714f1d6cb700dbf890847bc
+  MOBFoundation: e213065e65eebd8146ab29d10a8445dc8f385091
+  Qiniu: 4dbf1e6acb3236c4d7251046a17d08b16d21fcfe
+  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  SDWebImage-ProgressView: cdc29091ec0d53fd6dab3df65039a4f308e0a5ae
+  ShareSDK3: 2fa975dd22937fc7de3f6b5d0c41a18ba0dd1661
+  UMengAnalytics: 4ed421fb3bca63b26fc13c947743cabf3831d199
+
+PODFILE CHECKSUM: e333c6d9e1768d9550fc8bae5a4150c1b4a6151d
+
+COCOAPODS: 1.1.1

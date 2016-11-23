@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="FKXRichRecordCell" rowHeight="94" id="KGk-i7-Jjw" customClass="FKXRichRecordCell">
+            <rect key="frame" x="0.0" y="0.0" width="362" height="94"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="362" height="93"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="签到奖励爱心值" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Luv-gg-lqO">
+                        <rect key="frame" x="15" y="10" width="108" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="K4A-kY-RZX"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10-20 15:34" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TFa-vT-wPf">
+                        <rect key="frame" x="15" y="35" width="79" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="QE6-ay-ehi"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="爱心值+2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ueJ-VB-1vT">
+                        <rect key="frame" x="282" y="10" width="65" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="elw-Xy-d4E"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="0.0" green="0.62352941176470589" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="签到爱心值奖励" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzM-bK-MqJ">
+                        <rect key="frame" x="247" y="35" width="100" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="RLi-4U-1hP"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="MzM-bK-MqJ" firstAttribute="top" secondItem="ueJ-VB-1vT" secondAttribute="bottom" constant="5" id="184-nF-3um"/>
+                    <constraint firstAttribute="bottom" secondItem="MzM-bK-MqJ" secondAttribute="bottom" constant="10" id="4NU-XW-Uqg"/>
+                    <constraint firstItem="Luv-gg-lqO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="A5K-kU-Kc1"/>
+                    <constraint firstItem="ueJ-VB-1vT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Lys-b5-gi8"/>
+                    <constraint firstAttribute="bottom" secondItem="TFa-vT-wPf" secondAttribute="bottom" constant="10" id="Mjd-uu-K6e"/>
+                    <constraint firstAttribute="trailing" secondItem="MzM-bK-MqJ" secondAttribute="trailing" constant="15" id="c8r-w7-Dpz"/>
+                    <constraint firstAttribute="trailing" secondItem="ueJ-VB-1vT" secondAttribute="trailing" constant="15" id="dGg-P5-vbZ"/>
+                    <constraint firstItem="Luv-gg-lqO" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="j4J-4z-vHM"/>
+                    <constraint firstItem="TFa-vT-wPf" firstAttribute="top" secondItem="Luv-gg-lqO" secondAttribute="bottom" constant="5" id="vTI-eo-wV1"/>
+                    <constraint firstItem="TFa-vT-wPf" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="vts-tQ-4d0"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="recordCount" destination="ueJ-VB-1vT" id="ST6-UL-XTu"/>
+                <outlet property="recordDetail" destination="MzM-bK-MqJ" id="z0W-Gi-gVD"/>
+                <outlet property="recordL" destination="Luv-gg-lqO" id="Dcr-cR-NIC"/>
+                <outlet property="recordTime" destination="TFa-vT-wPf" id="hBE-dX-dY7"/>
+            </connections>
+            <point key="canvasLocation" x="55" y="175"/>
+        </tableViewCell>
+    </objects>
+</document>

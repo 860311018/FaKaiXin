@@ -1,0 +1,83 @@
+//
+//  Fakaixin-Prefix.pch
+//  Fakaixin
+//
+//  Created by Connor on 10/14/15.
+//  Copyright © 2015 Fakaixin. All rights reserved.
+//
+
+#ifndef Fakaixin_Prefix_pch
+#define Fakaixin_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef DEBUG
+#define NSLog(...) NSLog(__VA_ARGS__)
+#define debugMethod() NSLog(@"%s", __func__)
+#else
+#define NSLog(...)
+#define debugMethod()
+#endif
+
+#import "FKXUICommon.h"
+#import "FKXMacro.h"
+#import "FKXMacroAnother.h"
+
+#import "UIViewAdditions.h"
+#import <UIKit/UIKit.h>
+#import "EaseMob.h"
+#import "EaseUI.h"
+
+#import "UIViewController+CreateCustomUIViewController.h"
+#import <SDWebImage/UIButton+WebCache.h>
+#import "AFRequest.h"
+#import "MJRefresh.h"
+#import "BeeCloud.h"
+#import "MobClick.h"
+#import "BeeCloudAdapter.h"
+
+/***shareSDK头文件 -- start***/
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+//腾讯开放平台（对应QQ和QQ空间）SDK头文件
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+//微信SDK头文件
+#import "WXApi.h"
+//新浪微博SDK头文件
+#import "WeiboSDK.h"
+//新浪微博SDK需要在项目Build Settings中的Other Linker Flags添加"-ObjC"
+//#import <ShareSDKUI/ShareSDK+SSUI.h>
+/***shareSDK头文件 -- end***/
+
+//用户
+#import "FKXUserManager.h"
+#import "FKXUserInfoModel.h"
+#import "FKXLoginManager.h"
+#import "FKXBaseModel.h"
+
+//14，16，18进我答
+//17进我问
+//5,13,15进我的财富
+typedef enum : NSUInteger {
+    notification_type_comment = 3,//评价了倾听者
+    notification_type_order_coming = 4,//某人付费咨询了你（伐开心用户购买了您的服务，请去工作台订单中确认）
+    notification_type_refund = 5,//退款
+    notification_type_order_is_accepted = 8,//订单被接
+    notification_type_evaluate = 12,//评论
+    notification_type_listen = 13,//偷听语音通知
+    notification_type_people = 14,//个人主页提问通知
+    notification_type_praise = 15,//偷听的赞赏通知
+    notification_type_continue_ask = 16, //追问通知
+    notification_type_care = 17,//语音回复通知
+    notification_type_agree = 18,//语音认可通知
+    notification_type_topic = 19,   //专题
+    notification_type_end_talk = 20, //结束对话之后提醒用户去评价
+    notification_type_agree_by_another = 21,//和别人回复的同一条语音，别人的被认可了，自己的没有被认可
+    notification_type_hot = 98,//热门案例的推送
+    notification_type_reward = 99,//评价打赏了倾听者
+} NOTIFICATION_TYPE;
+
+
+#endif /* Fakaixin_Prefix_pch */

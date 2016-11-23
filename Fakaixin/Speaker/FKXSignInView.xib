@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="FKXSignInView">
+            <rect key="frame" x="0.0" y="0.0" width="310" height="550"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="签到好礼" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YG3-lg-hPM">
+                    <rect key="frame" x="0.0" y="0.0" width="310" height="60"/>
+                    <color key="backgroundColor" red="0.95294117647058818" green="0.792156862745098" blue="0.53333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="CBM-oe-xbD"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                    <color key="textColor" red="0.5490196078431373" green="0.41176470588235292" blue="0.27058823529411763" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rtL-A5-IK4">
+                    <rect key="frame" x="25" y="400" width="260" height="120"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asV-qF-dwT">
+                            <rect key="frame" x="70" y="37" width="130" height="46"/>
+                            <state key="normal" backgroundImage="img_s_type_sign_in_btn_bac"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kaN-mQ-wXM">
+                            <rect key="frame" x="7" y="89" width="60" height="30"/>
+                            <state key="normal" title="使用补签">
+                                <color key="titleColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.94509803921568625" green="0.85490196078431369" blue="0.58823529411764708" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="kaN-mQ-wXM" firstAttribute="leading" secondItem="rtL-A5-IK4" secondAttribute="leading" constant="7" id="7XW-G5-ZMy"/>
+                        <constraint firstItem="asV-qF-dwT" firstAttribute="centerY" secondItem="rtL-A5-IK4" secondAttribute="centerY" id="Dta-y0-uxe"/>
+                        <constraint firstAttribute="height" constant="120" id="FJ6-RV-LCy"/>
+                        <constraint firstAttribute="bottom" secondItem="kaN-mQ-wXM" secondAttribute="bottom" constant="1" id="kEH-RU-UqR"/>
+                        <constraint firstItem="asV-qF-dwT" firstAttribute="centerX" secondItem="rtL-A5-IK4" secondAttribute="centerX" id="nrs-4Q-GQv"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30天之后清空签到" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="an1-WJ-pOw">
+                    <rect key="frame" x="161" y="377" width="124" height="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.69411764705882351" green="0.52156862745098043" blue="0.34509803921568627" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JXg-W1-UxR">
+                    <rect key="frame" x="0.0" y="535" width="310" height="15"/>
+                    <color key="backgroundColor" red="0.95294117649999999" green="0.79215686269999996" blue="0.53333333329999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="rrx-Ag-omx"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3fd-bd-QNq">
+                    <rect key="frame" x="15" y="67" width="280" height="300"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="300" id="bQR-9o-fEO"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="75Z-Lw-b5d">
+                    <rect key="frame" x="263" y="10" width="47" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="acc-r0-ngF"/>
+                        <constraint firstAttribute="width" constant="47" id="mOV-fB-bGa"/>
+                    </constraints>
+                    <state key="normal" image="img_s_type_close"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.99215686274509807" green="0.98039215686274506" blue="0.7803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="75Z-Lw-b5d" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="147-bw-cSE"/>
+                <constraint firstItem="JXg-W1-UxR" firstAttribute="top" secondItem="rtL-A5-IK4" secondAttribute="bottom" constant="15" id="2bK-du-755"/>
+                <constraint firstAttribute="trailing" secondItem="JXg-W1-UxR" secondAttribute="trailing" id="8pP-Ov-bKP"/>
+                <constraint firstItem="3fd-bd-QNq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="15" id="FqL-KZ-Fuq"/>
+                <constraint firstAttribute="trailing" secondItem="YG3-lg-hPM" secondAttribute="trailing" id="Jqf-5m-jNW"/>
+                <constraint firstAttribute="trailing" secondItem="an1-WJ-pOw" secondAttribute="trailing" constant="25" id="NWI-7P-q28"/>
+                <constraint firstAttribute="trailing" secondItem="rtL-A5-IK4" secondAttribute="trailing" constant="25" id="Qqg-vi-rz2"/>
+                <constraint firstItem="YG3-lg-hPM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ZVT-vA-DuC"/>
+                <constraint firstAttribute="trailing" secondItem="3fd-bd-QNq" secondAttribute="trailing" constant="15" id="ccE-6v-XPn"/>
+                <constraint firstItem="rtL-A5-IK4" firstAttribute="top" secondItem="an1-WJ-pOw" secondAttribute="bottom" constant="5" id="dGm-ar-bkX"/>
+                <constraint firstItem="YG3-lg-hPM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="dz1-pt-c7A"/>
+                <constraint firstItem="an1-WJ-pOw" firstAttribute="top" secondItem="3fd-bd-QNq" secondAttribute="bottom" constant="10" id="efx-r9-m9c"/>
+                <constraint firstAttribute="trailing" secondItem="75Z-Lw-b5d" secondAttribute="trailing" id="hea-nv-jBj"/>
+                <constraint firstItem="JXg-W1-UxR" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="qV5-qe-NQb"/>
+                <constraint firstItem="3fd-bd-QNq" firstAttribute="top" secondItem="YG3-lg-hPM" secondAttribute="bottom" constant="7" id="sca-SG-lgO"/>
+                <constraint firstItem="rtL-A5-IK4" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="xdy-pP-dTB"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="10"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="btnAddSign" destination="kaN-mQ-wXM" id="gT9-Ob-RyA"/>
+                <outlet property="btnClose" destination="75Z-Lw-b5d" id="04t-eu-b05"/>
+                <outlet property="btnSignIn" destination="asV-qF-dwT" id="0Hi-R5-NBz"/>
+                <outlet property="labTodays" destination="an1-WJ-pOw" id="UV0-sf-m9n"/>
+            </connections>
+            <point key="canvasLocation" x="224" y="341"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="img_s_type_close" width="17" height="17"/>
+        <image name="img_s_type_sign_in_btn_bac" width="130" height="46"/>
+    </resources>
+</document>

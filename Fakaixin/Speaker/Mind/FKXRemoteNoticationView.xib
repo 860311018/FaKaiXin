@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="FKXRemoteNoticationView">
+            <rect key="frame" x="0.0" y="0.0" width="292" height="275"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_notication" translatesAutoresizingMaskIntoConstraints="NO" id="a5B-45-gyH">
+                    <rect key="frame" x="17" y="0.0" width="267" height="266"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u7a-B4-KL8">
+                    <rect key="frame" x="241" y="0.0" width="28" height="30"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="KwI-Vn-BSF"/>
+                        <constraint firstAttribute="width" constant="28" id="NHA-tN-BS2"/>
+                    </constraints>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="开启推送通知" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D1k-hJ-UYI">
+                    <rect key="frame" x="80" y="138" width="108" height="22"/>
+                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="为了更快安抚你的小情绪" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bZc-ww-gpX">
+                    <rect key="frame" x="68" y="172" width="132" height="15"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FRx-rR-8K4">
+                    <rect key="frame" x="40" y="209" width="188" height="38"/>
+                    <color key="backgroundColor" red="0.0" green="0.57254901960000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="38" id="0dV-ne-zdx"/>
+                    </constraints>
+                    <state key="normal" title="请通知我">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="bZc-ww-gpX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="68" id="61E-PI-KXW"/>
+                <constraint firstItem="bZc-ww-gpX" firstAttribute="top" secondItem="D1k-hJ-UYI" secondAttribute="bottom" constant="12" id="9Wr-aK-0i3"/>
+                <constraint firstItem="FRx-rR-8K4" firstAttribute="top" secondItem="bZc-ww-gpX" secondAttribute="bottom" constant="22" id="HB3-wb-84X"/>
+                <constraint firstItem="a5B-45-gyH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="VLY-6q-q2X"/>
+                <constraint firstItem="a5B-45-gyH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="17" id="VUM-9H-fvw"/>
+                <constraint firstAttribute="bottom" secondItem="a5B-45-gyH" secondAttribute="bottom" constant="9" id="W0d-Yz-YwL"/>
+                <constraint firstItem="D1k-hJ-UYI" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="138" id="c9F-Yw-bZ6"/>
+                <constraint firstItem="u7a-B4-KL8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="dbP-gb-vBY"/>
+                <constraint firstAttribute="trailing" secondItem="FRx-rR-8K4" secondAttribute="trailing" constant="64" id="evt-Av-sJT"/>
+                <constraint firstItem="D1k-hJ-UYI" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="80" id="obS-GT-HJM"/>
+                <constraint firstAttribute="trailing" secondItem="a5B-45-gyH" secondAttribute="trailing" constant="8" id="rSu-5E-2QZ"/>
+                <constraint firstAttribute="trailing" secondItem="u7a-B4-KL8" secondAttribute="trailing" constant="23" id="wjc-v2-09d"/>
+                <constraint firstItem="FRx-rR-8K4" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="ztJ-wN-tKL"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnClose" destination="u7a-B4-KL8" id="qJY-sR-QFb"/>
+                <outlet property="btnConfirm" destination="FRx-rR-8K4" id="Rbo-LN-O2K"/>
+            </connections>
+            <point key="canvasLocation" x="199" y="212.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="img_notication" width="307" height="313"/>
+    </resources>
+</document>

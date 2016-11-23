@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="15D21" minimumToolsVersion="Xcode 7.0">
+    <entity name="ChatUser" representedClassName="ChatUser" syncable="YES">
+        <attribute name="avatar" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasStop" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="isPayTalk" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="lastPeplayTimeMillisecond" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="nick" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="roleType" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="startChat" optional="YES" attributeType="Integer 16" syncable="YES"/>
+        <attribute name="startTimeMillisecond" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="talkId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ChatUser" positionX="-45" positionY="0" width="128" height="195"/>
+    </elements>
+</model>
