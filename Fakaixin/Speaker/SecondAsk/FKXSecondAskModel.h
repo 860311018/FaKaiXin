@@ -70,6 +70,7 @@
 @property(nonatomic, strong)NSString<Optional> * listenerProfession;
 @property(nonatomic, strong)NSString<Optional> * listenerHead;
 @property(nonatomic, strong)NSString<Optional> * voiceUrl;
+@property(nonatomic, strong)NSString<Optional> * userBackground;
 
 @property(nonatomic, strong)NSNumber<Optional> *lqId;//个人主页付费提问的问题id
 @property(nonatomic, strong)NSNumber<Optional> *topicId;//专题的id

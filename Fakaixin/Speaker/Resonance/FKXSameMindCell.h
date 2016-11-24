@@ -12,9 +12,19 @@
 
 
 @protocol  FKXSameMindCellDelegate<NSObject>
-// 0 抱抱 1 同感
-- (void)hugOrFeelDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type;
+// 1 同感
+- (void)hugOrFeelDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type andCellType:(NSInteger)cellType;
 - (void)clickToOpenDetail;
+
+//抱抱
+- (void)baobao:(FKXSameMindModel*)cellModel;
+
+//跳转评论HTML
+- (void)comment:(FKXSameMindModel*)cellModel;
+
+
+//跳转语音HTML
+- (void)voice:(FKXSameMindModel*)cellModel;
 
 @end
 
@@ -23,6 +33,8 @@
 
 @property(nonatomic, assign)id<FKXSameMindCellDelegate> delegate;
 @property(nonatomic, strong)FKXSameMindModel * model;
+
+@property (nonatomic,assign)NSInteger type;
 
 //@property (weak, nonatomic) IBOutlet UIButton *btnOpenDetail;
 

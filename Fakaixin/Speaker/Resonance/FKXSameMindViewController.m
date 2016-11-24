@@ -21,6 +21,8 @@
 #import "FKXChatListController.h"
 #import "FKXPublishMindViewController.h"
 
+#import "FKXRongHeModel.h"
+
 #define kFontOfContent 15
 
 //navBar 筛选按钮大小
@@ -428,14 +430,14 @@
     NSDictionary *paramDic = @{@"start" : @(start), @"size": @(size), @"type" : @(mindType), @"uid":@([FKXUserManager shareInstance].currentUserId)};
     NSString *methodName = @"";
     methodName = @"voice/voice_worry";
-    [FKXSameMindModel sendGetOrPostRequest:methodName param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+    [FKXRongHeModel sendGetOrPostRequest:methodName param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
      {
          self.tableView.header.state = MJRefreshHeaderStateIdle;
          self.tableView.footer.state = MJRefreshFooterStateIdle;
          
          if (data)
          {
-             NSArray *listArr = data;
+             NSLog(@"%@",data);
             
              [self hideHud];
              
@@ -445,7 +447,7 @@
              {
                  self.tableView.footer.hidden = NO;
              }
-             
+
              if (start == 0)
              {
                  [_contentArr removeAllObjects];
@@ -458,8 +460,9 @@
                      }
                  }
              }
-             for (FKXSameMindModel *model in data) {
-                 model.isOpen = @(NO);
+             
+             for (FKXRongHeModel *model in data) {
+//                 model.isOpen = @(NO);
                  [_contentArr addObject:model];
              }
              [self.tableView reloadData];
@@ -505,35 +508,43 @@
     if (indexPath.section == 0) {
         return 155;
     }else {
-        FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
+        FKXRongHeModel *allModel = [self.contentArr objectAtIndex:indexPath.row];
+        FKXSameMindModel *model = [[FKXSameMindModel alloc]init];
+        if ([allModel.type integerValue]==0) {
+            model = allModel.worryVO;
+        }else{
+            model = allModel.sendsAskVO;
+        }
+        
         CGRect screen = [UIScreen mainScreen].bounds;
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineSpacing = 8;
         CGFloat height = [model.text heightForWidth:screen.size.width - 34 usingFont:[UIFont systemFontOfSize:kFontOfContent] style:style];
-        if (model.imageArray.count) {//如果有图片
+    
+        if ([allModel.type integerValue] == 0) {
+            if (model.imageArray.count) {//如果有图片
+                if (height > oneLineH*3)//文字高度大于3行
+                {
+                    return oneLineH*3 + 354-20;
+                }else{
+                    return height + 354 - 14;
+                }
+            }else {
+                //如果没有图片
+                if (height > oneLineH*3)//文字高度大于3行
+                {
+                    return oneLineH*3 +142-20;
+                }else{
+                    return height + 142-14;//隐藏查看更多
+                }
+            }
+        }else {
             if (height > oneLineH*3)//文字高度大于3行
             {
-                if ([model.isOpen boolValue])//是展开的
-                {
-                    return height + 354 - 14;//隐藏查看更多
-                }else{
-                    return oneLineH*3 + 354;
-                }
+                return oneLineH*3 + 142-20 +20;
             }else{
-                return height + 354 - 14;
+                return height + 142 - 14 +20;//隐藏查看更多
             }
-        }
-        //如果没有图片
-        if (height > oneLineH*3)//文字高度大于3行
-        {
-            if ([model.isOpen boolValue])//是展开的
-            {
-                return height + 142 - 14;//隐藏查看更多
-            }else{
-                return oneLineH*3 + 142;
-            }
-        }else{
-            return height + 142 - 14;//隐藏查看更多
         }
     }
 }
@@ -567,18 +578,24 @@
         
         return cell;
     }else {
-        FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
-        
+        FKXRongHeModel *allModel = [self.contentArr objectAtIndex:indexPath.row];
+        FKXSameMindModel *model = [[FKXSameMindModel alloc]init];
+        if ([allModel.type integerValue]==0) {
+            model = allModel.worryVO;
+        }else {
+            model = allModel.sendsAskVO;
+        }
         if (!model.imageArray.count) {
             FKXSameMindCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindCell" forIndexPath:indexPath];
             cell.delegate = self;
+            cell.type = [allModel.type integerValue];
             cell.model = model;
-            
             return cell;
         }else
         {
             FKXSameMindImgCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXSameMindImgCell" forIndexPath:indexPath];
             cell.delegate = self;
+            cell.type = [allModel.type integerValue];
             cell.model = model;
             return cell;
         }
@@ -586,230 +603,195 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FKXSameMindModel *model = [self.contentArr objectAtIndex:indexPath.row];
-    
-    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
-    vc.shareType = @"comment";
-    vc.pageType = MyPageType_nothing;
-    vc.urlString = [NSString stringWithFormat:@"%@front/comment.html?worryId=%@&uid=%ld&token=%@",kServiceBaseURL,model.worryId, (long)[FKXUserManager shareInstance].currentUserId,  [FKXUserManager shareInstance].currentUserToken];
-    vc.sameMindModel = model;
-    //push的时候隐藏tabbar
-    [vc setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:vc animated:YES];
+    FKXRongHeModel *allModel = [self.contentArr objectAtIndex:indexPath.row];
+    if ([allModel.type integerValue] == 0) {
+        FKXSameMindModel *model = allModel.worryVO;
+        [self toComment:model];
+
+    }else {
+        FKXSameMindModel *model = allModel.sendsAskVO;
+        [self toVoice:model];
+    }
 }
+
 #pragma mark - FKXSameMindCellDelegate 代理
 - (void)clickToOpenDetail
 {
     [self.tableView reloadData];
 }
-- (void)hugOrFeelDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type
-{
 
-    if (type == 0)
+
+//抱抱
+- (void)baobaoImg:(FKXSameMindModel*)cellModel {
+    [self baobaoClick:cellModel];
+}
+- (void)baobao:(FKXSameMindModel*)cellModel {
+    [self baobaoClick:cellModel];
+}
+
+//跳转评论HTML
+- (void)comment:(FKXSameMindModel*)cellModel{
+    [self toComment:cellModel];
+}
+
+- (void)commentImg:(FKXSameMindModel*)cellModel {
+    [self toComment:cellModel];
+}
+
+//跳转语音HTML
+- (void)voice:(FKXSameMindModel*)cellModel {
+    [self toVoice:cellModel];
+}
+
+- (void)voiceImg:(FKXSameMindModel*)cellModel {
+    [self toVoice:cellModel];
+}
+
+
+- (void)hugOrFeelDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type andCellType:(NSInteger)cellType
+{
+     if (type == 2)
     {
-        if ([cellModel.hug boolValue]) {
-            [self showHint:@"已经抱过了"];
-            return;
-        }
-        [self showHudInView:self.view hint:@"正在抱抱..."];
-        NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-        [paramDic setValue:cellModel.worryId forKey:@"worryId"];
-        [AFRequest sendGetOrPostRequest:@"worry/hug"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-         {
-             [self hideHud];
-             
-             if ([data[@"code"] integerValue] == 0)
-             {
-                 cellModel.hug = @(YES);
-                 [self.tableView reloadData];
-                 //                 [self headerRefreshEvent];
-             }
-             else if ([data[@"code"] integerValue] == 4)
-             {
-                 [self showAlertViewWithTitle:data[@"message"]];
-                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-                 
-             }else
-             {
-                 [self showHint:data[@"message"]];
-             }
-             
-         } failure:^(NSError *error) {
-             [self hideHud];
-             
-             [self showHint:@"网络出错"];
-         }];
-    }
-    else if (type == 2)
-    {
-        FKXBaseShareView *shareV = [[FKXBaseShareView alloc] initWithFrame:[UIScreen mainScreen].bounds imageUrlStr:cellModel.head urlStr:[NSString stringWithFormat:@"%@front/comment.html?worryId=%@&token=%@&uid=%ld",kServiceBaseURL,cellModel.worryId,  [FKXUserManager shareInstance].currentUserToken, (long)[FKXUserManager shareInstance].currentUserId] title:[NSString stringWithFormat:@"伐开心|%@", cellModel.text] text:@"来自伐开心"];
-        [shareV createSubviews];
+        [self toShare:cellModel];
     }else if (type == 3)
     {
-        UIAlertController *alV = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"举报" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
-                              {
-                                  NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-                                  [paramDic setValue:@(10) forKey:@"type"];
-                                  [paramDic setValue:cellModel.uid forKey:@"uid"];
-                                  [paramDic setValue:@"用户举报-共鸣" forKey:@"reason"];
-                                  [self showHudInView:self.view hint:@"正在举报..."];
-                                  [AFRequest sendGetOrPostRequest:@"sys/report"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-                                   {
-                                       [self hideHud];
-                                       if ([data[@"code"] integerValue] == 0)
-                                       {
-                                           [self showAlertViewWithTitle:@"举报成功"];
-                                       }
-                                       
-                                       else if ([data[@"code"] integerValue] == 4)
-                                       {
-                                           [self showAlertViewWithTitle:data[@"message"]];
-                                           [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-                                       }else
-                                           
-                                       {
-                                           
-                                           [self showHint:data[@"message"]];
-                                           
-                                       }
-                                       
-                                       
-                                   } failure:^(NSError *error) {
-                                       [self showHint:@"网络出错"];
-                                       [self hideHud];
-                                   }];
-                                  
-                              }];
-        UIAlertAction *ac2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
-                              {
-                                  
-                              }];
-        
-        [alV addAction:ac1];
-        [alV addAction:ac2];
-        
-        if ([FKXUserManager shareInstance].currentUserId == [cellModel.uid integerValue]) {
-            UIAlertAction *ac3 = [UIAlertAction actionWithTitle:@"置顶" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-            {
-                NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-                [paramDic setValue:cellModel.worryId forKey:@"worryId"];
-                [self showHudInView:self.view hint:@"正在处理..."];
-                [AFRequest sendGetOrPostRequest:@"worry/top"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-                 {
-                     [self hideHud];
-                     if ([data[@"code"] integerValue] == 0)
-                     {
-                         [self showHint:@"已经置顶"];
-                         [self headerRefreshEvent];
-                     }
-                     
-                     else if ([data[@"code"] integerValue] == 4)
-                     {
-                         [self showAlertViewWithTitle:data[@"message"]];
-                         [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-                     }else
-                     {
-                         [self showHint:data[@"message"]];
-                     }
-                 } failure:^(NSError *error) {
-                     [self showHint:@"网络出错"];
-                     [self hideHud];
-                 }];
-            }];
-            [alV addAction:ac3];
-        }
-        else{
-            if (cellModel.checkedPendant.length) {
-                UIAlertAction *ac4 = [UIAlertAction actionWithTitle:@"使用ta的头饰" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-                                      {
-                                          FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
-                                          [vc setHidesBottomBarWhenPushed:YES];
-                                          [self.navigationController pushViewController:vc animated:YES];
-                                      }];
-                [alV addAction:ac4];
-            }
-            if (cellModel.checkedBackground.length) {
-                UIAlertAction *ac5 = [UIAlertAction actionWithTitle:@"使用ta的背景" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-                                      {
-                                          FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
-                                          [vc setHidesBottomBarWhenPushed:YES];
-                                          [self.navigationController pushViewController:vc animated:YES];
-                                      }];
-                [alV addAction:ac5];
-            }
-        }
-        
-        [self presentViewController:alV animated:YES completion:nil];
+        [self toChang:cellModel];
     }else if (type == 4)
     {
+        [self toPro:cellModel andCellType:cellType];
+    }
+}
+- (void)hugOrFeelImgDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type andCellType:(NSInteger)cellType
+{
+     if (type == 2)
+    {
+        [self toShare:cellModel];
+    }else if (type == 3)
+    {
+        [self toChang:cellModel];
+    }else if (type == 4)
+    {
+        [self toPro:cellModel andCellType:cellType];
+    }
+}
+
+#pragma mark - 专家个人页面
+- (void)toPro:(FKXSameMindModel *)cellModel andCellType:(NSInteger)cellType {
+    if (cellType == 0) {
         if ([cellModel.isPublic integerValue] || [FKXUserManager shareInstance].currentUserId == [cellModel.uid integerValue]) {
             FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
             vc.userId = cellModel.uid;
             [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
         }
+    }else {
+        FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+        vc.userId = cellModel.listenerId;
+        [vc setHidesBottomBarWhenPushed:YES];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
-- (void)hugOrFeelImgDidSelect:(FKXSameMindModel*)cellModel type:(NSInteger)type
-{
-    if (type == 0)
-    {
-        if ([cellModel.hug boolValue]) {
-            [self showHint:@"已经抱过了"];
-            return;
-        }
-        [self showHudInView:self.view hint:@"正在抱抱..."];
-        NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-        [paramDic setValue:cellModel.worryId forKey:@"worryId"];
 
-        [AFRequest sendGetOrPostRequest:@"worry/hug"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-         {
-             [self hideHud];
-             
-             if ([data[@"code"] integerValue] == 0)
-             {
-                 cellModel.hug = @(YES);
-                 [self.tableView reloadData];
-                 //                 [self headerRefreshEvent];
-             }
-             else if ([data[@"code"] integerValue] == 4)
-             {
-                 [self showAlertViewWithTitle:data[@"message"]];
-                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-                 
-             }else
-             {
-                 [self showHint:data[@"message"]];
-             }
-             
-         } failure:^(NSError *error) {
-             [self hideHud];
-             
-             [self showHint:@"网络出错"];
-         }];
+#pragma mark - 抱抱
+- (void)baobaoClick:(FKXSameMindModel *)cellModel {
+    if ([cellModel.hug boolValue]) {
+        [self showHint:@"已经抱过了"];
+        return;
     }
-    else if (type == 2)
-    {
-        FKXBaseShareView *shareV = [[FKXBaseShareView alloc] initWithFrame:[UIScreen mainScreen].bounds imageUrlStr:cellModel.head urlStr:[NSString stringWithFormat:@"%@front/comment.html?worryId=%@&token=%@&uid=%ld",kServiceBaseURL,cellModel.worryId,  [FKXUserManager shareInstance].currentUserToken, (long)[FKXUserManager shareInstance].currentUserId] title:[NSString stringWithFormat:@"伐开心|%@", cellModel.text] text:@"来自伐开心"];
-        [shareV createSubviews];
-    }else if (type == 3)
-    {
-        UIAlertController *alV = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"举报" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+    [self showHudInView:self.view hint:@"正在抱抱..."];
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [paramDic setValue:cellModel.worryId forKey:@"worryId"];
+    [AFRequest sendGetOrPostRequest:@"worry/hug"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+     {
+         [self hideHud];
+         
+         if ([data[@"code"] integerValue] == 0)
+         {
+             cellModel.hug = @(YES);
+             [self.tableView reloadData];
+             //                 [self headerRefreshEvent];
+         }
+         else if ([data[@"code"] integerValue] == 4)
+         {
+             [self showAlertViewWithTitle:data[@"message"]];
+             [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+             
+         }else
+         {
+             [self showHint:data[@"message"]];
+         }
+         
+     } failure:^(NSError *error) {
+         [self hideHud];
+         
+         [self showHint:@"网络出错"];
+     }];
+}
+
+#pragma mark - 分享
+- (void)toShare:(FKXSameMindModel *)cellModel {
+    FKXBaseShareView *shareV = [[FKXBaseShareView alloc] initWithFrame:[UIScreen mainScreen].bounds imageUrlStr:cellModel.head urlStr:[NSString stringWithFormat:@"%@front/comment.html?worryId=%@&token=%@&uid=%ld",kServiceBaseURL,cellModel.worryId,  [FKXUserManager shareInstance].currentUserToken, (long)[FKXUserManager shareInstance].currentUserId] title:[NSString stringWithFormat:@"伐开心|%@", cellModel.text] text:@"来自伐开心"];
+    [shareV createSubviews];
+}
+
+#pragma mark - 举报，换头像，换北京
+- (void)toChang:(FKXSameMindModel *)cellModel {
+    UIAlertController *alV = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"举报" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
+                          {
+                              NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+                              [paramDic setValue:@(10) forKey:@"type"];
+                              [paramDic setValue:cellModel.uid forKey:@"uid"];
+                              [paramDic setValue:@"用户举报-共鸣" forKey:@"reason"];
+                              [self showHudInView:self.view hint:@"正在举报..."];
+                              [AFRequest sendGetOrPostRequest:@"sys/report"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+                               {
+                                   [self hideHud];
+                                   if ([data[@"code"] integerValue] == 0)
+                                   {
+                                       [self showAlertViewWithTitle:@"举报成功"];
+                                   }
+                                   
+                                   else if ([data[@"code"] integerValue] == 4)
+                                   {
+                                       [self showAlertViewWithTitle:data[@"message"]];
+                                       [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+                                   }else
+                                       
+                                   {
+                                       
+                                       [self showHint:data[@"message"]];
+                                       
+                                   }
+                                   
+                                   
+                               } failure:^(NSError *error) {
+                                   [self showHint:@"网络出错"];
+                                   [self hideHud];
+                               }];
                               
+                          }];
+    UIAlertAction *ac2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
+                          {
+                              
+                          }];
+    
+    [alV addAction:ac1];
+    [alV addAction:ac2];
+    
+    if ([FKXUserManager shareInstance].currentUserId == [cellModel.uid integerValue]) {
+        UIAlertAction *ac3 = [UIAlertAction actionWithTitle:@"置顶" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                               {
                                   NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-                                  [paramDic setValue:@(10) forKey:@"type"];
-                                  [paramDic setValue:cellModel.uid forKey:@"uid"];
-                                  [paramDic setValue:@"用户举报-共鸣" forKey:@"reason"];
-                                  [self showHudInView:self.view hint:@"正在举报..."];
-                                  [AFRequest sendGetOrPostRequest:@"sys/report"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+                                  [paramDic setValue:cellModel.worryId forKey:@"worryId"];
+                                  [self showHudInView:self.view hint:@"正在处理..."];
+                                  [AFRequest sendGetOrPostRequest:@"worry/top"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
                                    {
                                        [self hideHud];
                                        if ([data[@"code"] integerValue] == 0)
                                        {
-                                           [self showAlertViewWithTitle:@"举报成功"];
+                                           [self showHint:@"已经置顶"];
+                                           [self headerRefreshEvent];
                                        }
                                        
                                        else if ([data[@"code"] integerValue] == 4)
@@ -817,88 +799,79 @@
                                            [self showAlertViewWithTitle:data[@"message"]];
                                            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
                                        }else
-                                           
                                        {
-                                           
                                            [self showHint:data[@"message"]];
-                                           
                                        }
-                                       
-                                       
                                    } failure:^(NSError *error) {
                                        [self showHint:@"网络出错"];
                                        [self hideHud];
                                    }];
-                                  
                               }];
-        UIAlertAction *ac2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action)
-                              {
-                                  
-                              }];
-        
-        [alV addAction:ac1];
-        [alV addAction:ac2];
-        
-        if ([FKXUserManager shareInstance].currentUserId == [cellModel.uid integerValue]) {
-            UIAlertAction *ac3 = [UIAlertAction actionWithTitle:@"置顶" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+        [alV addAction:ac3];
+    }
+    else{
+        if (cellModel.checkedPendant.length) {
+            UIAlertAction *ac4 = [UIAlertAction actionWithTitle:@"使用ta的头饰" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                                   {
-                                      NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-                                      [paramDic setValue:cellModel.worryId forKey:@"worryId"];
-                                      [self showHudInView:self.view hint:@"正在处理..."];
-                                      [AFRequest sendGetOrPostRequest:@"worry/top"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-                                       {
-                                           [self hideHud];
-                                           if ([data[@"code"] integerValue] == 0)
-                                           {
-                                               [self showHint:@"已经置顶"];
-                                               [self headerRefreshEvent];
-                                           }
-                                           
-                                           else if ([data[@"code"] integerValue] == 4)
-                                           {
-                                               [self showAlertViewWithTitle:data[@"message"]];
-                                               [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-                                           }else
-                                           {
-                                               [self showHint:data[@"message"]];
-                                           }
-                                       } failure:^(NSError *error) {
-                                           [self showHint:@"网络出错"];
-                                           [self hideHud];
-                                       }];
+                                      FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
+                                      [vc setHidesBottomBarWhenPushed:YES];
+                                      [self.navigationController pushViewController:vc animated:YES];
                                   }];
-            [alV addAction:ac3];
+            [alV addAction:ac4];
         }
-        else{
-            if (cellModel.checkedPendant.length) {
-                UIAlertAction *ac4 = [UIAlertAction actionWithTitle:@"使用ta的头饰" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-                                      {
-                                          FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
-                                          [vc setHidesBottomBarWhenPushed:YES];
-                                          [self.navigationController pushViewController:vc animated:YES];
-                                      }];
-                [alV addAction:ac4];
-            }
-            if (cellModel.checkedBackground.length) {
-                UIAlertAction *ac5 = [UIAlertAction actionWithTitle:@"使用ta的背景" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
-                                      {
-                                          FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
-                                          [vc setHidesBottomBarWhenPushed:YES];
-                                          [self.navigationController pushViewController:vc animated:YES];
-                                      }];
-                [alV addAction:ac5];
-            }
-        }
-        [self presentViewController:alV animated:YES completion:nil];
-    }else if (type == 4)
-    {
-        if ([cellModel.isPublic integerValue] || [FKXUserManager shareInstance].currentUserId == [cellModel.uid integerValue]) {
-            FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];           
-            vc.userId = cellModel.uid;
-            [vc setHidesBottomBarWhenPushed:YES];
-            [self.navigationController pushViewController:vc animated:YES];
+        if (cellModel.checkedBackground.length) {
+            UIAlertAction *ac5 = [UIAlertAction actionWithTitle:@"使用ta的背景" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                                  {
+                                      FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
+                                      [vc setHidesBottomBarWhenPushed:YES];
+                                      [self.navigationController pushViewController:vc animated:YES];
+                                  }];
+            [alV addAction:ac5];
         }
     }
+    
+    [self presentViewController:alV animated:YES completion:nil];
+
+}
+
+#pragma mark - 跳转评论HTML
+- (void)toComment:(FKXSameMindModel *)cellModel {
+    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+    vc.shareType = @"comment";
+    vc.pageType = MyPageType_nothing;
+    vc.urlString = [NSString stringWithFormat:@"%@front/comment.html?worryId=%@&uid=%ld&token=%@",kServiceBaseURL,cellModel.worryId, (long)[FKXUserManager shareInstance].currentUserId,  [FKXUserManager shareInstance].currentUserToken];
+    vc.sameMindModel = cellModel;
+    //push的时候隐藏tabbar
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 跳转语音HTML
+- (void)toVoice:(FKXSameMindModel *)cellModel {
+    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+    vc.isNeedTwoItem = YES;
+    //这里都是已经被认可的，直接传1
+    vc.pageType = MyPageType_nothing;
+    vc.shareType = @"second_ask";
+    NSString *paraStr = @"worryId";//默认传worryId
+    NSNumber *paraId;
+    if (cellModel.worryId) {
+        paraId = cellModel.worryId;
+    }
+    if (cellModel.topicId) {
+        paraStr = @"topicId";
+        paraId = cellModel.topicId;
+    }
+    if (cellModel.lqId) {
+        paraStr = @"lqId";
+        paraId = cellModel.lqId;
+    }
+    vc.urlString = [NSString stringWithFormat:@"%@front/QA_a_detail.html?%@=%@&uid=%ld&voiceId=%@&IsAgree=1&token=%@",kServiceBaseURL,paraStr, paraId, (long)[FKXUserManager shareInstance].currentUserId, cellModel.voiceId, [FKXUserManager shareInstance].currentUserToken];
+//    vc.secondModel = cellModel;
+    //push的时候隐藏tabbar
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 #pragma mark - 求助

@@ -67,6 +67,7 @@
 		18EAA0BC1DE453C60051E46E /* ScrllTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EAA0BB1DE453C60051E46E /* ScrllTitleView.xib */; };
 		18EDC85E1DDDB1D400D10356 /* FKXBindPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDC85D1DDDB1D300D10356 /* FKXBindPhone.m */; };
 		18EDC8601DDDB1F100D10356 /* FKXBindPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EDC85F1DDDB1F100D10356 /* FKXBindPhone.xib */; };
+		18F02C781DE67ED600AB3F4A /* FKXRongHeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18F02C771DE67ED600AB3F4A /* FKXRongHeModel.m */; };
 		18FF65641DD2D1A6001EA9B7 /* FKXPsyListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FF65631DD2D1A6001EA9B7 /* FKXPsyListModel.m */; };
 		18FF65671DD2D2AE001EA9B7 /* FKXPsyInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FF65661DD2D2AE001EA9B7 /* FKXPsyInfoModel.m */; };
 		18FF656A1DD2FDD1001EA9B7 /* FKXProfessionInfoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18FF65691DD2FDD1001EA9B7 /* FKXProfessionInfoVC.m */; };
@@ -577,6 +578,8 @@
 		18EDC85C1DDDB1D300D10356 /* FKXBindPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXBindPhone.h; sourceTree = "<group>"; };
 		18EDC85D1DDDB1D300D10356 /* FKXBindPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXBindPhone.m; sourceTree = "<group>"; };
 		18EDC85F1DDDB1F100D10356 /* FKXBindPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXBindPhone.xib; sourceTree = "<group>"; };
+		18F02C761DE67ED600AB3F4A /* FKXRongHeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXRongHeModel.h; sourceTree = "<group>"; };
+		18F02C771DE67ED600AB3F4A /* FKXRongHeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXRongHeModel.m; sourceTree = "<group>"; };
 		18FF65621DD2D1A6001EA9B7 /* FKXPsyListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPsyListModel.h; sourceTree = "<group>"; };
 		18FF65631DD2D1A6001EA9B7 /* FKXPsyListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPsyListModel.m; sourceTree = "<group>"; };
 		18FF65651DD2D2AE001EA9B7 /* FKXPsyInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPsyInfoModel.h; sourceTree = "<group>"; };
@@ -2863,6 +2866,8 @@
 			children = (
 				61804C4E1C4F663000A5F804 /* FKXSameMindModel.h */,
 				61804C4F1C4F663000A5F804 /* FKXSameMindModel.m */,
+				18F02C761DE67ED600AB3F4A /* FKXRongHeModel.h */,
+				18F02C771DE67ED600AB3F4A /* FKXRongHeModel.m */,
 			);
 			path = ResonanceModel;
 			sourceTree = "<group>";
@@ -3711,6 +3716,7 @@
 				61B9CCD81DAB7CE8002E431D /* FKXReplyLetterVC.m in Sources */,
 				617F53651C43A73B00CCD8AB /* EMBubbleView+Gif.m in Sources */,
 				617F53C21C43A73B00CCD8AB /* EaseBubbleView+File.m in Sources */,
+				18F02C781DE67ED600AB3F4A /* FKXRongHeModel.m in Sources */,
 				617F53771C43A73B00CCD8AB /* MJRefreshFooter.m in Sources */,
 				18B3B27F1DE28AEC000E1939 /* FKXVoiceResponseCell.m in Sources */,
 				1800900D1DD0519B00FE8551 /* PaiMingFirstCell.m in Sources */,
