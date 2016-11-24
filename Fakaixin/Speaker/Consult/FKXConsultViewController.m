@@ -14,23 +14,41 @@
 
 #import "FKXYuYueProCell.h"
 #import "FKXGrayView.h"
+
+#import "FKXConfirmView.h"
 #import "FKXBindPhone.h"
 
-@interface FKXConsultViewController ()<CallProDelegate,FKXGrayDelegate>//<FKXConsulterCellDelegate>
+#import "NSString+Extension.h"
+
+@interface FKXConsultViewController ()<CallProDelegate,ConfirmDelegate,BindPhoneDelegate>//<FKXConsulterCellDelegate>
 {
     NSInteger start;
     NSInteger size;
     BOOL isVip;
 
-    FKXGrayView *order;
+//    FKXGrayView *order;
     CGFloat keyboardHeight;
+    
+    FKXConfirmView *order;
+    UIView *view1;
+    
+    FKXBindPhone *phone;
+    UIView *view2;
 }
 @property   (nonatomic,strong)NSMutableArray *contentArr;
+
+@property (nonatomic,copy) NSString *mobile;
+@property (nonatomic,copy) NSString *clientNum;
+
 
 @end
 
 @implementation FKXConsultViewController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoginBackToConsult" object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -62,6 +80,8 @@
     //首次刷新加载页面数据
     [self headerRefreshEvent];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"LoginBackToConsult"  object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
     
@@ -86,11 +106,20 @@
 - (void)loadData
 {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    //未登录
+    if ([FKXUserManager needShowLoginVC]) {
+        paramDic[@"uid"] = @0;
+    }else {
+        paramDic[@"uid"] = @([FKXUserManager shareInstance].currentUserId);
+    }
     paramDic[@"start"] = @(start);
     paramDic[@"size"] = @(size);
     paramDic[@"role"] = _paraDic[@"role"];
     paramDic[@"priceRange"] = [_paraDic[@"priceRange"] integerValue] == -1 ? nil : _paraDic[@"priceRange"];
     paramDic[@"goodAt"] = [_paraDic[@"goodAt"] count]?_paraDic[@"goodAt"] : nil;
+    
+    FKXUserInfoModel *model = [FKXUserManager getUserInfoModel];
+    NSLog(@"%@",model);
     
     [FKXUserInfoModel sendGetOrPostRequest:@"listener/listByRole" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
      {
@@ -99,6 +128,7 @@
          
          if (data)
          {
+            
              if ([data count] < kRequestSize) {
                  self.tableView.footer.hidden = YES;
              }else
@@ -229,58 +259,113 @@
         return;
     }
     
-    order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-    order.grayDelegate = self;
-    [order show];
+    order = [FKXConfirmView creatOrder];
+    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+    order.confirmDelegate = self;
+    
+    view1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide)]];
+
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:view1];
+    [[UIApplication sharedApplication].keyWindow addSubview:order];
+
 }
 
+- (void)textBeginEdit {
+    if (keyboardHeight >0) {
+        [UIView animateWithDuration:0.5 animations:^{
+            order.frame = CGRectMake(0, kScreenHeight-285-keyboardHeight, kScreenWidth, 285);
+        }];
+    }
+}
+
+- (void)bangDingPhone:(NSString *)phoneStr{
+    
+    if (![phoneStr isRealPhoneNumber]) {
+        [self showHint:@"请输入正确的手机号"];
+        return;
+    }
+    
+    phone = [FKXBindPhone creatBangDing];
+    phone.frame = CGRectMake(0, 0, 235, 345);
+    CGPoint center = self.view.center;
+    phone.center = center;
+    phone.phoneStr = phoneStr;
+    phone.bindPhoneDelegate = self;
+    
+    view2 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide2)]];
+    
+    [[UIApplication sharedApplication].keyWindow addSubview:view2];
+    [[UIApplication sharedApplication].keyWindow addSubview:phone];
+    
+    
+}
+
+
+#pragma mark - 绑定手机代理
+- (void)receiveCode:(NSString *)phoneStr {
+    if (![phoneStr isRealPhoneNumber]) {
+        [self showHint:@"请输入正确的手机号"];
+        return;
+    }
+}
+
+#pragma mark - 其他操作
+- (void)tapHide {
+    [UIView animateWithDuration:0.6 animations:^{
+        view1.alpha = 0;
+        order.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view1 removeFromSuperview];
+            [order removeFromSuperview];
+        }
+    }];
+}
+
+- (void)tapHide2 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view2.alpha = 0;
+        phone.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view2 removeFromSuperview];
+            [phone removeFromSuperview];
+        }
+    }];
+}
+
+- (void)noOperation {
+    return;
+}
+
+
 - (void)keyboardWillShow:(NSNotification *)not{
-//    NSValue * value = [not.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGSize size2 = [value CGRectValue].size;
-//    keyboardHeight = size2.height;
-//    [UIView animateWithDuration:0.5 animations:^{
-//        order = [[FKXGrayView alloc]initWithPoint:CGRectMake(0, 0, kScreenWidth, kScreenHeight-keyboardHeight)];
-//    }];
+    NSValue * value = [not.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGSize size2 = [value CGRectValue].size;
+    keyboardHeight = size2.height;
+    if (keyboardHeight >0) {
+        static int i=0;
+        if (i==0) {
+            [UIView animateWithDuration:0.5 animations:^{
+                order.frame = CGRectMake(0, kScreenHeight-285-keyboardHeight, kScreenWidth, 285);
+            }];
+            i++;
+        }
+    }
 }
 
 - (void)keyboardWillHide:(NSNotification *)not{
     
+        order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+ 
+   
 }
 
-- (void)adMinutes {
-    
-}
-
-- (void)deMinutes {
-    
-}
-
-- (void)bangDingMobile {
-
-//    FKXBindPhone *phone = [FKXBindPhone creatBangDing];
-//    CGPoint center = self.view.center;
-//    phone.center = center;
-//    
-//    CGPoint rect = phone.origin;
-//    rect.y = 64;
-//    phone.origin = rect;
-//   
-//    [[UIApplication sharedApplication].keyWindow addSubview:phone];
-
-//    [self.view addSubview:phone];
-}
-
-- (void)clickWeiXinPay {
-    
-}
-
-- (void)clickZhiFuBaoPay {
-    
-}
-
-- (void)clickConfirm {
-    
-}
 
 
 @end

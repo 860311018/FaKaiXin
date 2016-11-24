@@ -126,6 +126,8 @@
                  NSLog(@"登录成功,用户信息:%@", loginInfo);
                  // 设置自动登录
 //                 [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];                       //设置推送设置
+                 //LoginBackToConsult
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToConsult" object:nil];
                  [[EaseMob sharedInstance].chatManager setApnsNickname:model.name];
              }
          } onQueue:nil];

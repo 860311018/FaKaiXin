@@ -8,9 +8,22 @@
 
 #import "FKXBindPhone.h"
 
+
 @implementation FKXBindPhone
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+   }
+
+- (void)layoutSubviews {
+    if (self.phoneStr) {
+        self.phoneTF.text = self.phoneStr;
+        self.phoneTF.enabled = NO;
+    }
+}
+
 - (IBAction)sendCode:(id)sender {
+    [_bindPhoneDelegate receiveCode:self.phoneTF.text];
 }
 
 - (IBAction)clickSave:(id)sender {

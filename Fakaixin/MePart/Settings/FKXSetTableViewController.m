@@ -157,6 +157,8 @@
         
         if ([data[@"code"] integerValue] == 0)
         {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToConsult" object:nil];
+
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil userInfo:@{@"status" : @"logout"}];
             [FKXUserManager userLogout];
             [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:NO completion:^(NSDictionary *info, EMError *error) {

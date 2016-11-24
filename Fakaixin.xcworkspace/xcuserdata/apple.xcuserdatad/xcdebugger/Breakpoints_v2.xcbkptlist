@@ -51,13 +51,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Message/FKXProfessionInfoVC.m"
-            timestampString = "501664742.965088"
+            filePath = "Fakaixin/Speaker/Consult/FKXConsultViewController.m"
+            timestampString = "501678275.229"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "495"
-            endingLineNumber = "495"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "-textBeginEdit"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -67,12 +67,44 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Message/FKXProfessionInfoVC.m"
-            timestampString = "501664755.466024"
+            filePath = "Fakaixin/Common/FMINetworking/FKXBaseModel.m"
+            timestampString = "501678224.361192"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "+hanleResponseData:class:handleBlock:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Fakaixin/Common/BaseClasses/AFRequest.m"
+            timestampString = "501678236.090677"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
+            landmarkName = "+hanleResponseData:class:handleBlock:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Fakaixin/Speaker/Consult/FKXConsultViewController.m"
+            timestampString = "501678902.806983"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
             landmarkName = "-loadData"
             landmarkType = "7">
          </BreakpointContent>

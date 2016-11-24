@@ -12,7 +12,8 @@
 
 - (void)addMinute;
 - (void)desMinute;
-- (void)bangDingPhone;
+- (void)textBeginEdit;
+- (void)bangDingPhone:(NSString *)phoneStr;
 - (void)weiXin;
 - (void)zhiFuBao;
 - (void)confirm;

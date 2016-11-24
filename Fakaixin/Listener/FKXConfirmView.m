@@ -6,10 +6,11 @@
 //  Copyright © 2016年 Fakaixin. All rights reserved.
 //
 
+#import "NSString+Extension.h"
 #import "FKXConfirmView.h"
 #define WINDOW_COLOR  [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2]
 
-@interface FKXConfirmView ()
+@interface FKXConfirmView ()<UITextFieldDelegate>
 {
     NSInteger minutes;
     NSInteger totals;
@@ -30,6 +31,9 @@
 
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_nor"] forState:UIControlStateNormal];
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_sel"] forState:UIControlStateSelected];
+    
+    self.minutesTF.delegate = self;
+    self.phoneTF.delegate = self;
     
     minutes = 15;
     self.price = 10;
@@ -74,8 +78,17 @@
     
 //    [_confirmDelegate addMinute];
 }
+
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    [_confirmDelegate textBeginEdit];
+}
+
 - (IBAction)bangDing:(id)sender {
-    [_confirmDelegate bangDingPhone];
+    [self.minutesTF resignFirstResponder];
+
+   
+    [_confirmDelegate bangDingPhone:self.phoneTF.text];
 }
 - (IBAction)weiXinPay:(id)sender {
     self.weiXinPay.selected = YES;
