@@ -13,7 +13,10 @@
 @interface FKXConfirmView ()<UITextFieldDelegate>
 {
     NSInteger minutes;
-    NSInteger totals;
+    
+    NSInteger multiple;
+
+    CGFloat totals;
 }
 @end
 
@@ -32,11 +35,11 @@
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_nor"] forState:UIControlStateNormal];
     [self.zhiFuPay setImage:[UIImage imageNamed:@"Order_ZhiFuBao_sel"] forState:UIControlStateSelected];
     
-    self.minutesTF.delegate = self;
     self.phoneTF.delegate = self;
+    self.minutesTF.userInteractionEnabled = NO;
     
     minutes = 15;
-    self.price = 10;
+    multiple = 1;
     
     self.weiXinPay.selected = YES;
     self.zhiFuPay.selected = NO;
@@ -44,11 +47,33 @@
 
 - (void)layoutSubviews {
     
-    self.priceL.text = [NSString stringWithFormat:@"%ld",self.price];
+    self.priceL.text = [NSString stringWithFormat:@"￥%ld元/15分钟",self.price];
     
     self.minutesTF.text = [NSString stringWithFormat:@"%ld",minutes];
     
-    self.totalL.text = [NSString stringWithFormat:@"%ld",minutes*self.price];
+    totals = multiple *self.price;
+    if (minutes>=60) {
+        totals = multiple *self.price*0.9;
+    }
+    self.totalL.text = [NSString stringWithFormat:@"￥%.2f",totals];
+    
+    [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.head,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+    
+    self.nameL.text = self.name;
+    
+    if ([self.status integerValue] == 0) {
+        self.statusL.text = @" 离线 ";
+    }else if ([self.status integerValue] == 1){
+        self.statusL.text = @" 在线 ";
+    }else if ([self.status integerValue]) {
+        self.statusL.text = @" 通话中 ";
+    }
+    
+
+    if (self.phoneStr) {
+        self.phoneTF.text = self.phoneStr;
+        self.phoneTF.enabled = NO;
+    }
 }
 
 
@@ -59,12 +84,13 @@
 - (IBAction)descMinutes:(id)sender {
 
     if (minutes <= 15) {
+        
         return;
     }
     
     minutes = minutes - 15;
-    totals = minutes * self.price;
-   
+    multiple = multiple - 1;
+    
     [self layoutSubviews];
 
 //    [_confirmDelegate desMinute];
@@ -72,7 +98,7 @@
 - (IBAction)addMinutes:(id)sender {
 
     minutes = minutes + 15;
-    totals = minutes * self.price;
+    multiple = multiple + 1;
     
     [self layoutSubviews];
     
@@ -101,7 +127,9 @@
     [_confirmDelegate zhiFuBao];
 }
 - (IBAction)confirmOrder:(id)sender {
-    [_confirmDelegate confirm];
+    NSString *totalStr = [NSString stringWithFormat:@"%f",totals];
+    NSInteger total = [totalStr integerValue]*100;
+    [_confirmDelegate confirm:self.listenerId time:@(minutes) totals:@(total)];
 }
 
 /*

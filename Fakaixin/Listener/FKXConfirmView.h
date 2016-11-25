@@ -10,13 +10,14 @@
 
 @protocol ConfirmDelegate <NSObject>
 
-- (void)addMinute;
-- (void)desMinute;
+//- (void)addMinute;
+//- (void)desMinute;
 - (void)textBeginEdit;
 - (void)bangDingPhone:(NSString *)phoneStr;
 - (void)weiXin;
 - (void)zhiFuBao;
-- (void)confirm;
+
+- (void)confirm:(NSNumber *)listenerId time:(NSNumber *)time totals:(NSNumber *)totals;
 
 @end
 
@@ -44,7 +45,17 @@
 
 @property(nonatomic,weak)id<ConfirmDelegate>confirmDelegate;
 
-@property (nonatomic,assign) NSInteger price;
+@property (nonatomic,assign) NSInteger price; //单价
+@property (nonatomic,copy) NSString *phoneStr;//电话
+
+@property (nonatomic,copy) NSString *head;//咨询师头像
+@property (nonatomic,copy) NSString *name;//咨询师姓名
+@property (nonatomic,strong)NSNumber *status;//咨询师在线状态
+
+@property (nonatomic,strong)NSNumber *listenerId;//咨询师Id
+
+
+- (void)layoutSubviews;
 
 +(id)creatOrder;
 

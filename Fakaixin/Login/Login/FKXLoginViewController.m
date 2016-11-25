@@ -128,6 +128,8 @@
 //                 [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];                       //设置推送设置
                  //LoginBackToConsult
                  [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToConsult" object:nil];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToSameMind" object:nil];
+
                  [[EaseMob sharedInstance].chatManager setApnsNickname:model.name];
              }
          } onQueue:nil];

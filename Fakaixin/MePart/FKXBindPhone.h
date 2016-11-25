@@ -12,6 +12,9 @@
 
 - (void)receiveCode:(NSString *)phoneStr;
 
+- (void)saveBind:(NSString *)phoneStr code:(NSString *)codeStr secret:(NSString *)secret;
+
+
 @end
 
 @interface FKXBindPhone : UIView

@@ -67,6 +67,10 @@ typedef void(^DataHandleBlockTwo)(id data,NSError *error,FMIErrorModelTwo *error
                setSerializer:(HTTPResponseType)serializer
                  handleBlock:(DataHandleBlockTwo)block;
 
++ (void)sendPostRequestTwo:(NSString *)url
+                       param:(NSDictionary *)param
+                     success:(void (^)(id data))success
+                     failure:(void (^)(NSError *error))failure;
 
 //调Reset Post
 + (void)sendResetPostRequest:(NSString *)url

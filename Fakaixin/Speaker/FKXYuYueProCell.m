@@ -21,8 +21,8 @@
 }
 
 - (IBAction)touchCall:(id)sender {
-    if ([self.callProDelegate respondsToSelector:@selector(callPro)]) {
-        [self.callProDelegate callPro];
+    if ([self.callProDelegate respondsToSelector:@selector(callPro:listenerId:head:listenName:status:listenMobile:)]) {
+        [self.callProDelegate callPro:self.model.phonePrice listenerId:self.model.uid head:self.model.head listenName:self.model.name status:self.model.status listenMobile:self.model.mobile];
     }
 }
 
@@ -50,6 +50,15 @@
         self.imgVip.hidden = NO;
     }else{
         self.imgVip.hidden = YES;
+    }
+    
+    [self.phoneBtn setImage:[UIImage imageNamed:@"phone_lixian"] forState:UIControlStateNormal];
+    
+    if ([model.status integerValue] == 1) {
+        [self.phoneBtn setImage:[UIImage imageNamed:@"phone_zaixian"] forState:UIControlStateNormal];
+
+    }else if ([model.status integerValue] == 2) {
+        [self.phoneBtn setImage:[UIImage imageNamed:@"phone_tonghua"] forState:UIControlStateNormal];
     }
 }
 

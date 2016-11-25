@@ -27,6 +27,7 @@
 }
 
 - (IBAction)clickSave:(id)sender {
+    [_bindPhoneDelegate saveBind:self.phoneTF.text code:self.codeTF.text secret:self.pwdTF.text];
 }
 
 +(id)creatBangDing {

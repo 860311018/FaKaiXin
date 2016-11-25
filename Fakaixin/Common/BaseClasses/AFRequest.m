@@ -221,6 +221,34 @@
     }];
 }
 */
+
++ (void)sendPostRequestTwo:(NSString *)url
+                       param:(NSDictionary *)param
+                     success:(void (^)(id data))success
+                     failure:(void (^)(NSError *error))failure{
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@%@?token=%@",kServiceBaseURL,url,kToken ? kToken : @""];
+    urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"请求url:%@", urlString);
+    
+    // 创建请求 管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [manager setResponseSerializer:[AFJSONResponseSerializer serializer]];//默认(返回的是json并自动解析成数组或字典)
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil]];
+
+    [manager POST:urlString parameters:param progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        success(responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        failure(error);
+    }];
+    
+}
+
+
 + (void)sendGetOrPostRequest:(NSString *)url
                        param:(NSDictionary *)param
                 requestStyle:(NSInteger)requestStyle

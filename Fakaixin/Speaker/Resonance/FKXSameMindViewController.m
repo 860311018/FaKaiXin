@@ -54,6 +54,8 @@
 
 @property (nonatomic,strong) UIButton *helpBtn;
 
+@property (nonatomic,strong)NSDictionary *bannerDic;
+
 @end
 
 @implementation FKXSameMindViewController
@@ -62,6 +64,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SelectMind" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SelectMindType" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoginBackToSameMind" object:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fkxReceiveEaseMobMessage" object:nil];
 }
@@ -90,11 +93,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _bannerDic = [[NSDictionary alloc]init];
     //收到环信消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNewMessageLab) name:@"fkxReceiveEaseMobMessage" object:nil];
     //增加改变心事类型的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"SelectMind" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshMind:) name:@"SelectMindType" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"LoginBackToSameMind"  object:nil];
+
     
     //基本赋值
     _contentArr = [NSMutableArray arrayWithCapacity:1];
@@ -427,60 +434,58 @@
 //加载相同心情的人
 - (void)loadData
 {
-    NSDictionary *paramDic = @{@"start" : @(start), @"size": @(size), @"type" : @(mindType), @"uid":@([FKXUserManager shareInstance].currentUserId)};
-    NSString *methodName = @"";
-    methodName = @"voice/voice_worry";
-    [FKXRongHeModel sendGetOrPostRequest:methodName param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
-     {
-         self.tableView.header.state = MJRefreshHeaderStateIdle;
-         self.tableView.footer.state = MJRefreshFooterStateIdle;
-         
-         if (data)
-         {
-             NSLog(@"%@",data);
-            
-             [self hideHud];
-             
-             if ([data count] < kRequestSize) {
-                 self.tableView.footer.hidden = YES;
-             }else
-             {
-                 self.tableView.footer.hidden = NO;
-             }
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    //未登录
+    if ([FKXUserManager needShowLoginVC]) {
+        paramDic[@"uid"] = @0;
+    }else {
+        paramDic[@"uid"] = @([FKXUserManager shareInstance].currentUserId);
+    }
+    paramDic[@"start"] = @(start);
+    paramDic[@"size"] = @(size);
+    paramDic[@"type"] = @(mindType);
 
-             if (start == 0)
-             {
-                 [_contentArr removeAllObjects];
-                 if ([data count] == 0) {
-                     [self createEmptyData];
-                 }else{
-                     if (emptyDataView) {
-                         [emptyDataView removeFromSuperview];
-                         emptyDataView = nil;
-                     }
-                 }
-             }
-             
-             for (FKXRongHeModel *model in data) {
-//                 model.isOpen = @(NO);
-                 [_contentArr addObject:model];
-             }
-             [self.tableView reloadData];
-         }else if (errorModel)
-         {
-             NSInteger index = [errorModel.code integerValue];
-             
-             if (index == 4)
-                 
-             {
-                 [self showAlertViewWithTitle:errorModel.message];
-                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-             }else
-             {
-                 [self showHint:errorModel.message];
-             }
-         }
-     }];
+    [AFRequest sendPostRequestTwo:@"voice/voice_worry" param:paramDic success:^(id data) {
+        self.tableView.header.state = MJRefreshHeaderStateIdle;
+        self.tableView.footer.state = MJRefreshFooterStateIdle;
+        
+        _bannerDic = data[@"data"][@"banner"];
+        
+        if ([data[@"code"] integerValue] == 0) {
+            NSArray *listArr = data[@"data"][@"list"];
+            if (listArr) {
+                [self hideHud];
+                if ([data count] < kRequestSize) {
+                    self.tableView.footer.hidden = YES;
+                }else{
+                    self.tableView.footer.hidden = NO;
+                }
+                if (start == 0){
+                    [_contentArr removeAllObjects];
+                    if ([data count] == 0) {
+                        [self createEmptyData];
+                    }else{
+                        if (emptyDataView) {
+                            [emptyDataView removeFromSuperview];
+                            emptyDataView = nil;
+                        }
+                    }
+                }
+                for (NSDictionary *dic in listArr) {
+                    FKXRongHeModel * officalSources = [[FKXRongHeModel alloc] initWithDictionary:dic error:nil];
+                    [_contentArr addObject:officalSources];
+                }
+                [self.tableView reloadData];
+            }
+        }else {
+            [self showHint:data[@"message"]];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
 }
 #pragma mark - seperator insets 设置
 -(void)viewDidLayoutSubviews
@@ -569,7 +574,9 @@
         }
         
         UIImageView *titleImgV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 150)];
-        [titleImgV sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
+        titleImgV.contentMode = UIViewContentModeScaleAspectFill;
+        titleImgV.clipsToBounds = YES;
+        [titleImgV sd_setImageWithURL:[NSURL URLWithString:_bannerDic[@"background"]] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
         [cell addSubview:titleImgV];
         
         UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 150, kScreenWidth, 5)];

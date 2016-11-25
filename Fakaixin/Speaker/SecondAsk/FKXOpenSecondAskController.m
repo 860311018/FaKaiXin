@@ -205,7 +205,6 @@
 
     [AFRequest sendGetOrPostRequest:@"sys/mobilecode"param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
      {
-         NSLog(@"%@",data);
          [self hideHud];
          if ([data[@"code"] integerValue] == 0)
          {

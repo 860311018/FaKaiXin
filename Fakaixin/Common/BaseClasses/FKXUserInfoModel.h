@@ -45,6 +45,7 @@
 @property (nonatomic, strong) NSNumber<Optional> *price;//提问费
 @property(nonatomic, strong)NSNumber<Optional> * consultingFee;//咨询费
 @property(nonatomic, strong)NSNumber<Optional> * phonePrice;//电话咨询费
+@property (nonatomic, strong) NSNumber<Optional> *status;
 @property(nonatomic, strong)NSString<Optional> * clientNum;
 @property(nonatomic, strong)NSString<Optional> * clientPwd;
 @property(nonatomic, strong)NSString<Optional> *pwd;
