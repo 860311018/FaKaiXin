@@ -10,7 +10,7 @@
 
 @protocol CallProDelegate <NSObject>
 
-- (void)callPro:(NSNumber *)phonePrice listenerId:(NSNumber *)listenerId head:(NSString *)head listenName:(NSString *)name status:(NSNumber *)status listenMobile:(NSString *)listenMobile;
+- (void)callPro:(FKXUserInfoModel *)proModel;
 
 @end
 

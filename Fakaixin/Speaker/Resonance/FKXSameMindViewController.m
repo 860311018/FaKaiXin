@@ -817,7 +817,7 @@
         [alV addAction:ac3];
     }
     else{
-        if (cellModel.checkedPendant.length) {
+        if (cellModel.checkedPendant.length || cellModel.listenerPendant) {
             UIAlertAction *ac4 = [UIAlertAction actionWithTitle:@"使用ta的头饰" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                                   {
                                       FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
@@ -826,7 +826,7 @@
                                   }];
             [alV addAction:ac4];
         }
-        if (cellModel.checkedBackground.length) {
+        if (cellModel.checkedBackground.length || cellModel.listenerBackground) {
             UIAlertAction *ac5 = [UIAlertAction actionWithTitle:@"使用ta的背景" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                                   {
                                       FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];

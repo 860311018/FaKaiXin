@@ -12,6 +12,7 @@
 #import "FKXOrderManageController.h"
 #import "FKXServiceVC.h"
 #import "FKXTouGaoVC.h"
+#import "FKXFangkeVC.h"
 
 @interface FKXWorkBenchViewController ()<UITableViewDelegate>
 {
@@ -73,9 +74,17 @@
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];
 }
-//查看粉丝
+//查看数据
 - (IBAction)lookLiker:(UIButton *)sender {
     [self showHint:@"即将开放"];
+}
+
+//查看访客
+- (IBAction)lookOrder:(id)sender {
+//    [self showHint:@"即将开放"];
+    FKXFangkeVC *vc = [[FKXFangkeVC alloc]init];
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 //投稿
@@ -87,16 +96,14 @@
 }
 
 
-//查看数据
+//查看订单
 - (IBAction)lookData:(UIButton *)sender {
     FKXOrderManageController *vc = [[UIStoryboard storyboardWithName:@"FKXCare" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXOrderManageController"];
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];
 }
-- (IBAction)lookOrder:(id)sender {
-    [self showHint:@"即将开放"];
 
-}
+
 - (IBAction)lookRange:(id)sender {
      [self showHint:@"即将开放"];
 }

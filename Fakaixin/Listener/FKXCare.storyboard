@@ -327,12 +327,12 @@
                                                         <action selector="tougao:" destination="RAg-to-cjW" eventType="touchUpInside" id="a6r-dH-ln0"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMM-8Q-6Fh">
+                                                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMM-8Q-6Fh">
                                                     <rect key="frame" x="0.0" y="119" width="125.5" height="121"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <inset key="titleEdgeInsets" minX="-28" minY="30" maxX="0.0" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="20" minY="-25" maxX="0.0" maxY="0.0"/>
-                                                    <state key="normal" title="数据" image="img_work_data">
+                                                    <state key="normal" title="访客" image="img_work_user">
                                                         <color key="titleColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <userDefinedRuntimeAttributes>
@@ -372,7 +372,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <inset key="titleEdgeInsets" minX="-28" minY="30" maxX="0.0" maxY="0.0"/>
                                                     <inset key="imageEdgeInsets" minX="20" minY="-25" maxX="0.0" maxY="0.0"/>
-                                                    <state key="normal" title="粉丝" image="img_work_user">
+                                                    <state key="normal" title="数据" image="img_work_data">
                                                         <color key="titleColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     </state>
                                                     <userDefinedRuntimeAttributes>

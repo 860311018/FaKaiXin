@@ -17,6 +17,8 @@
 
 #import "FKXConfirmView.h"
 #import "FKXBindPhone.h"
+#import "FKXLiXianView.h"
+#import "FKXLianjieView.h"
 
 #import "NSString+Extension.h"
 
@@ -38,6 +40,15 @@
     NSInteger times;
     NSTimer * timer;
     
+    FKXUserInfoModel *professionModel;
+    
+    FKXLiXianView *lixian;
+    UIView *view3;
+    
+    FKXLianjieView *lianjie;
+    UIView *view4;
+
+    
 }
 @property   (nonatomic,strong)NSMutableArray *contentArr;
 
@@ -50,7 +61,6 @@
 
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
 
-@property (nonatomic,strong) UITableView *tableView;
 
 @end
 
@@ -65,6 +75,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+//    self.view.backgroundColor = [UIColor yellowColor];
     //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法
     [BeeCloud setBeeCloudDelegate:self];
     
@@ -82,13 +93,15 @@
     
 //
     [self.tableView registerNib:[UINib nibWithNibName:@"FKXYuYueProCell" bundle:nil] forCellReuseIdentifier:@"FKXYuYueProCell"];
-//    //给tableview添加下拉刷新,上拉加载
+    
+    //给tableview添加下拉刷新,上拉加载
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
-//
+    
     [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
     //首次刷新加载页面数据
     [self headerRefreshEvent];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"LoginBackToConsult"  object:nil];
 
@@ -263,6 +276,7 @@
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
+//        _tableView.backgroundColor = [UIColor blueColor];
         _tableView.estimatedRowHeight = 44;
         _tableView.rowHeight = UITableViewAutomaticDimension;
         
@@ -274,20 +288,21 @@
 
 #pragma mark - 打电话
 
-- (void)callPro:(NSNumber *)phonePrice listenerId:(NSNumber *)listenerId head:(NSString *)head listenName:(NSString *)name status:(NSNumber *)status listenMobile:(NSString *)listenMobile{
+- (void)callPro:(FKXUserInfoModel *)proModel{
     
+    professionModel = proModel;
     
     if ([FKXUserManager needShowLoginVC]) {
         [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
         return;
     }
-    
-    if (!listenMobile || [NSString isEmpty:listenMobile]) {
+
+    if (!proModel.mobile || [NSString isEmpty:proModel.mobile] ||[NSString isEmpty:proModel.clientNum]) {
         [self showHint:@"该咨询师暂未开通电话咨询服务"];
         return;
     }
     
-    if ([listenerId integerValue] == [FKXUserManager shareInstance].currentUserId) {
+    if ([proModel.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
         [self showHint:@"不能咨询自己"];
         return;
     }
@@ -296,11 +311,11 @@
     order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
     order.confirmDelegate = self;
 
-    order.price = [phonePrice integerValue]/100;
-    order.head = head;
-    order.name = name;
-    order.status = status;
-    order.listenerId = listenerId;
+    order.price = [proModel.phonePrice integerValue]/100;
+    order.head = proModel.head;
+    order.name = proModel.name;
+    order.status = proModel.status;
+    order.listenerId = proModel.uid;
     
     if (self.mobile) {
         order.phoneStr = self.mobile;
@@ -315,10 +330,16 @@
     view1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     [view1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide)]];
 
-    
+    view1.alpha = 0;
+    order.alpha = 0;
     [[UIApplication sharedApplication].keyWindow addSubview:view1];
     [[UIApplication sharedApplication].keyWindow addSubview:order];
-
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view1.alpha = 1;
+        order.alpha = 1;
+    }];
+   
 }
 
 - (void)textBeginEdit {
@@ -352,8 +373,15 @@
     view2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     [view2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide2)]];
     
+    view2.alpha = 0;
+    phone.alpha = 0;
     [[UIApplication sharedApplication].keyWindow addSubview:view2];
     [[UIApplication sharedApplication].keyWindow addSubview:phone];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view2.alpha = 1;
+        phone.alpha = 1;
+    }];
   
 }
 
@@ -449,6 +477,7 @@
             if (tempResp.resultCode == 0)
             {
                 [self showHint:@"支付成功，等待对方确认"];
+                [self showView];
             }
             else
             {
@@ -462,6 +491,56 @@
             break;
     }
 }
+
+- (void)showView {
+    [self hideHud];
+    //离线
+    if ([professionModel.status integerValue]==0) {
+        lixian = [FKXLiXianView creatLiXian];
+        lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+        lixian.head = professionModel.head;
+        lixian.name = professionModel.name;
+        
+        view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
+        
+        view3.alpha = 0;
+        lixian.alpha = 0;
+        [[UIApplication sharedApplication].keyWindow addSubview:view3];
+        [[UIApplication sharedApplication].keyWindow addSubview:lixian];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            view3.alpha = 1;
+            lixian.alpha = 1;
+        }];
+
+
+        
+    }else {
+        lianjie = [FKXLianjieView creatZaiXian];
+        lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+        lianjie.head = professionModel.head;
+        lianjie.name = professionModel.name;
+        
+        view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
+        
+        view4.alpha = 0;
+        lianjie.alpha = 0;
+        [[UIApplication sharedApplication].keyWindow addSubview:view4];
+        [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            view4.alpha = 1;
+            lianjie.alpha = 1;
+        }];
+
+    }
+
+}
+
 #pragma mark - 绑定手机代理
 - (void)receiveCode:(NSString *)phoneStr {
     if (![phoneStr isRealPhoneNumber]) {
@@ -549,6 +628,32 @@
         }
     }];
 }
+
+- (void)tapHide3 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view3.alpha = 0;
+        lixian.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view3 removeFromSuperview];
+            [lixian removeFromSuperview];
+        }
+    }];
+}
+
+
+- (void)tapHide4 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view4.alpha = 0;
+        lianjie.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view4 removeFromSuperview];
+            [lianjie removeFromSuperview];
+        }
+    }];
+}
+
 
 - (void)noOperation {
     return;

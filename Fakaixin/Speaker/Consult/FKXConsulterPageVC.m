@@ -69,9 +69,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    self.view.backgroundColor = [UIColor redColor];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNewMessageLab) name:@"fkxReceiveEaseMobMessage" object:nil];
 
-    
+//    [currentVC.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
+
     //默认值是第一个
     currentTag = 100;
 //    if (!self.navTitle) {
@@ -89,6 +92,9 @@
     [self setUpMyPageVC];
 }
 
+//- (void)headerRefreshEvent {
+//    [currentVC loadData];
+//}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -365,7 +371,11 @@
         transparentView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.2];
         transparentView.alpha = 0;
         [[UIApplication sharedApplication].keyWindow addSubview:transparentView];
-        [transparentView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenTransparent)]];
+        
+        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, kViewShaiXuanHeight, kScreenWidth, self.view.height-kViewShaiXuanHeight)];
+        view.backgroundColor = [UIColor clearColor];
+        [transparentView addSubview:view];
+        [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenTransparent)]];
 
         viewShaiXuan = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, kViewShaiXuanHeight)];
         viewShaiXuan.backgroundColor = [UIColor whiteColor];

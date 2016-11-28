@@ -134,13 +134,13 @@
     [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     //判断是否需要加载对应的弹出界面
-//    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
-//    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
+    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
+    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
         //加载用户是否签到
-//        if (![FKXUserManager needShowLoginVC]) {
-////            [self loadSignDays];
-//        }
-//    }
+        if (![FKXUserManager needShowLoginVC]) {
+            [self loadSignDays];
+        }
+    }
     //创建提醒用户开启通知的UI
     NSString *transKey = [NSString stringWithFormat:@"hasTransparentNotifiV%@", AppVersionBuild];
     if (![[NSUserDefaults standardUserDefaults] stringForKey:transKey])

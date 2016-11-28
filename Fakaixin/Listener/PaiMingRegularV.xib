@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PaiMingRegularV">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="368"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_bac_remind" translatesAutoresizingMaskIntoConstraints="NO" id="sAK-kH-VXJ">
+                    <rect key="frame" x="0.0" y="0.0" width="300" height="368"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dT5-qX-6cx">
+                    <rect key="frame" x="50" y="297" width="200" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="200" id="JOB-bs-DHL"/>
+                        <constraint firstAttribute="height" constant="44" id="mTo-8H-9fG"/>
+                    </constraints>
+                    <state key="normal" title="我知道了">
+                        <color key="titleColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                            <color key="value" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veJ-UI-bl3">
+                    <rect key="frame" x="25" y="60" width="250" height="38"/>
+                    <attributedString key="attributedText">
+                        <fragment content="日榜前三名获得">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="10">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" metaFont="system" size="15"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content="点爱心值奖励，其余名次随机获得爱心值奖励">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRM-YW-G6l">
+                    <rect key="frame" x="25" y="121" width="250" height="35"/>
+                    <attributedString key="attributedText">
+                        <fragment content="周榜前三名将获得随机红包奖励，其余名次随机获得爱心值奖励">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZK-lR-b0w">
+                    <rect key="frame" x="25" y="179" width="250" height="35"/>
+                    <attributedString key="attributedText">
+                        <fragment content="月榜前三名将获得实物礼品奖励，其余名次随机获得红包奖励">
+                            <attributes>
+                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_left_quotation" translatesAutoresizingMaskIntoConstraints="NO" id="zDP-0R-ye3">
+                    <rect key="frame" x="25" y="30" width="14" height="11"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="11" id="2qo-AO-oJf"/>
+                        <constraint firstAttribute="width" constant="14" id="nbh-W6-TdO"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_right_quotation" translatesAutoresizingMaskIntoConstraints="NO" id="tdd-6O-CiZ">
+                    <rect key="frame" x="264" y="234" width="14" height="11"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="14" id="7tA-yz-EkX"/>
+                        <constraint firstAttribute="height" constant="11" id="ICY-TY-WdE"/>
+                    </constraints>
+                </imageView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="yRM-YW-G6l" firstAttribute="top" secondItem="veJ-UI-bl3" secondAttribute="bottom" constant="23" id="455-Bb-9bN"/>
+                <constraint firstItem="dT5-qX-6cx" firstAttribute="centerX" secondItem="sAK-kH-VXJ" secondAttribute="centerX" id="68O-2t-9bu"/>
+                <constraint firstItem="sAK-kH-VXJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8WY-bt-R9p"/>
+                <constraint firstAttribute="trailing" secondItem="sAK-kH-VXJ" secondAttribute="trailing" id="96N-Db-cHS"/>
+                <constraint firstItem="yRM-YW-G6l" firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" id="CyA-rB-YaT"/>
+                <constraint firstAttribute="trailing" secondItem="tdd-6O-CiZ" secondAttribute="trailing" constant="22" id="ENh-75-VN1"/>
+                <constraint firstAttribute="bottom" secondItem="sAK-kH-VXJ" secondAttribute="bottom" id="H1J-Ri-c2r"/>
+                <constraint firstItem="tdd-6O-CiZ" firstAttribute="top" secondItem="HZK-lR-b0w" secondAttribute="bottom" constant="20" id="Njx-aI-Lek"/>
+                <constraint firstItem="yRM-YW-G6l" firstAttribute="leading" secondItem="veJ-UI-bl3" secondAttribute="leading" id="Q1m-ra-pvF"/>
+                <constraint firstItem="veJ-UI-bl3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="Wru-pN-tdV"/>
+                <constraint firstItem="veJ-UI-bl3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="60" id="aeT-BU-UME"/>
+                <constraint firstItem="dT5-qX-6cx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="297" id="e0v-xO-aTK"/>
+                <constraint firstItem="zDP-0R-ye3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="eCG-lH-DZK"/>
+                <constraint firstItem="HZK-lR-b0w" firstAttribute="top" secondItem="yRM-YW-G6l" secondAttribute="bottom" constant="23" id="esB-Mu-c4p"/>
+                <constraint firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" constant="25" id="fyM-We-C4I"/>
+                <constraint firstItem="zDP-0R-ye3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="qyM-nx-wsA"/>
+                <constraint firstItem="HZK-lR-b0w" firstAttribute="leading" secondItem="veJ-UI-bl3" secondAttribute="leading" id="uqL-Jo-apD"/>
+                <constraint firstItem="sAK-kH-VXJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="wSr-Vl-YuX"/>
+                <constraint firstItem="HZK-lR-b0w" firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" id="zF5-5h-Tu7"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="btnDone" destination="dT5-qX-6cx" id="zo4-E6-ZvY"/>
+            </connections>
+        </view>
+    </objects>
+    <resources>
+        <image name="img_bac_remind" width="325" height="359"/>
+        <image name="img_left_quotation" width="14" height="11"/>
+        <image name="img_right_quotation" width="14" height="11"/>
+    </resources>
+</document>

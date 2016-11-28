@@ -9,5 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface FKXLiXianView : UIView
+@property (weak, nonatomic) IBOutlet UILabel *nameL;
+
+@property (weak, nonatomic) IBOutlet UIImageView *headImgV;
+
+@property (nonatomic,copy) NSString *head;//咨询师头像
+@property (nonatomic,copy) NSString *name;//咨询师姓名
+
++ (id)creatLiXian;
 
 @end

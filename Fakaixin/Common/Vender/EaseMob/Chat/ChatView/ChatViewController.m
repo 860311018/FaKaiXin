@@ -12,6 +12,9 @@
 #import "FKXTimeWarning.h"
 #import "FKXCommitHtmlViewController.h"
 
+#import "FKXChatTitleView.h"
+
+
 @interface ChatViewController ()<UIAlertViewDelegate, EaseMessageViewControllerDelegate, EaseMessageViewControllerDataSource,
     UIActionSheetDelegate,
     EMChatManagerChatDelegate,
@@ -38,6 +41,9 @@
     NSString *ownerName;    //创建者名字
     UIButton *btnClose; //弹出评价的关闭按钮
     UIButton *btnSubmit;    //弹出评价的提交按钮
+    
+    FKXChatTitleView *titleView;
+    CGFloat keyboardHeight;
 }
 @end
 
@@ -122,9 +128,12 @@
     }
     
     [self _setupBarButtonItem];
-    //ui设置
-    self.tableView.backgroundColor = kColor_MainBackground();
     
+    
+    
+    self.view.backgroundColor = kColor_MainBackground();
+    
+    self.tableView.backgroundColor = kColor_MainBackground();
     self.showRefreshHeader = YES;
     self.delegate = self;
     self.dataSource = self;
@@ -154,6 +163,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleCallNotification:) name:@"callOutWithChatter" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleCallNotification:) name:@"callControllerClose" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
     
     //通过会话管理者获取已收发消息,这个方法是处理聊天记录的
     [self tableViewDidTriggerHeaderRefresh];
@@ -164,6 +175,19 @@
     
     EaseEmotionManager *manager= [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:[EaseEmoji allEmoji]];
     [self.faceView setEmotionManagers:@[manager]];
+    
+    //ui设置
+    CGPoint origin = self.tableView.origin;
+    origin.y = origin.y+150;
+    self.tableView.origin = origin;
+    
+    CGSize size = self.tableView.size;
+    size.height = size.height-150;
+    self.tableView.size = size;
+    
+    titleView = [FKXChatTitleView creatChatTitle];
+    titleView.frame = CGRectMake(0, 0, kScreenWidth, 150);
+    [self.view addSubview:titleView];
 }
 
 - (void)loadHistory {
@@ -196,6 +220,33 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+#pragma mark - 键盘处理
+- (void)keyboardWillShow:(NSNotification *)not{
+    NSValue * value = [not.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGSize size2 = [value CGRectValue].size;
+    keyboardHeight = size2.height;
+    if (self.conversation.conversationType == eConversationTypeChat) {
+        CGPoint origin = self.tableView.origin;
+        origin.y = origin.y+150;
+        self.tableView.origin = origin;
+        
+        CGSize size = self.tableView.size;
+        size.height = size.height-150;
+        self.tableView.size = size;
+
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)not{
+    
+    if (self.conversation.conversationType == eConversationTypeChat) {
+        
+    }
+//    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+}
+
 #pragma mark - 判断是否可以结束对话
 - (void)validTalkIsFinish
 {

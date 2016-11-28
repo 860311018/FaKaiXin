@@ -19,5 +19,6 @@ typedef enum : NSUInteger {
 - (void)loadData;//加载数据，为筛选提供接口
 
 @property (nonatomic,assign) PayType payType;
+@property (nonatomic,strong) UITableView *tableView;
 
 @end

@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -27,11 +31,11 @@
                         <constraint firstAttribute="height" constant="44" id="Tdw-F9-B7H"/>
                     </constraints>
                     <state key="normal" title="我知道了">
-                        <color key="titleColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="value" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
                             <real key="value" value="1"/>
@@ -41,28 +45,35 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </button>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="回复他人，就有机会被付费认可，打赏和躺着赚他人偷听的钱。" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omY-kf-reZ">
-                    <rect key="frame" x="22" y="34" width="245" height="36"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="每天保持在线状态，用户即可对您付费电话咨询，你将出现在专家列表前列" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="omY-kf-reZ">
+                    <rect key="frame" x="22" y="34" width="256" height="54"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="所有人都能免费听前30秒的回复，回复得有趣有料的同时，30秒内做好铺垫能提高用户付费偷听的欲望哦！" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5BD-uJ-dsb">
-                    <rect key="frame" x="22" y="88" width="245" height="54"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="语音回复他人，就有机会被付费认可" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5BD-uJ-dsb">
+                    <rect key="frame" x="22" y="106" width="245" height="18"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="每天关怀他人，会拥有更多曝光机会出现在专家列表前列，让他人购买你的服务。" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8K-75-4jJ">
-                    <rect key="frame" x="22" y="165" width="245" height="36"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="积极去评论和私信用户【点击头像进入个人主页即可】，与潜在客户沟通，促成交易订单吧" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G8K-75-4jJ">
+                    <rect key="frame" x="22" y="147" width="245" height="54"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="去工作台-访客-你的潜在客户去沟通吧" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mRO-XT-JUr">
+                    <rect key="frame" x="22" y="224" width="245" height="36"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="omY-kf-reZ" firstAttribute="top" secondItem="bvd-3S-TM9" secondAttribute="top" constant="34" id="6ia-rn-C17"/>
+                <constraint firstItem="mRO-XT-JUr" firstAttribute="leading" secondItem="G8K-75-4jJ" secondAttribute="leading" id="6lh-12-HnU"/>
                 <constraint firstItem="QjT-SI-Zkp" firstAttribute="top" secondItem="bvd-3S-TM9" secondAttribute="top" id="Csu-AF-t16"/>
                 <constraint firstAttribute="bottom" secondItem="oRD-rw-WXZ" secondAttribute="bottom" constant="110" id="F1Y-eJ-gMs"/>
                 <constraint firstItem="G8K-75-4jJ" firstAttribute="top" secondItem="5BD-uJ-dsb" secondAttribute="bottom" constant="23" id="HiY-hN-AND"/>
@@ -71,13 +82,15 @@
                 <constraint firstAttribute="bottom" secondItem="QjT-SI-Zkp" secondAttribute="bottom" id="RxT-Qh-oU1"/>
                 <constraint firstItem="dPc-Oc-oyu" firstAttribute="top" secondItem="bvd-3S-TM9" secondAttribute="top" constant="12" id="TbN-PW-CFp"/>
                 <constraint firstAttribute="trailing" secondItem="oRD-rw-WXZ" secondAttribute="trailing" constant="15" id="UiZ-s8-WFx"/>
+                <constraint firstItem="mRO-XT-JUr" firstAttribute="trailing" secondItem="G8K-75-4jJ" secondAttribute="trailing" id="VoI-Xl-74G"/>
                 <constraint firstAttribute="trailing" secondItem="5BD-uJ-dsb" secondAttribute="trailing" constant="33" id="Xg1-7d-kAt"/>
                 <constraint firstItem="G8K-75-4jJ" firstAttribute="leading" secondItem="bvd-3S-TM9" secondAttribute="leading" constant="22" id="Ydi-Dy-Peo"/>
                 <constraint firstItem="bfq-04-eC1" firstAttribute="centerX" secondItem="bvd-3S-TM9" secondAttribute="centerX" id="cwx-oZ-zYr"/>
+                <constraint firstItem="mRO-XT-JUr" firstAttribute="top" secondItem="G8K-75-4jJ" secondAttribute="bottom" constant="23" id="fPm-6p-cLe"/>
                 <constraint firstItem="dPc-Oc-oyu" firstAttribute="leading" secondItem="bvd-3S-TM9" secondAttribute="leading" constant="18" id="fTc-4e-Rv1"/>
                 <constraint firstItem="bfq-04-eC1" firstAttribute="top" secondItem="bvd-3S-TM9" secondAttribute="top" constant="297" id="mp8-4h-Fvy"/>
                 <constraint firstItem="5BD-uJ-dsb" firstAttribute="leading" secondItem="bvd-3S-TM9" secondAttribute="leading" constant="22" id="nKd-ce-t7M"/>
-                <constraint firstAttribute="trailing" secondItem="omY-kf-reZ" secondAttribute="trailing" constant="33" id="r9j-dI-NPa"/>
+                <constraint firstAttribute="trailing" secondItem="omY-kf-reZ" secondAttribute="trailing" constant="22" id="r9j-dI-NPa"/>
                 <constraint firstItem="5BD-uJ-dsb" firstAttribute="top" secondItem="omY-kf-reZ" secondAttribute="bottom" constant="18" id="tzg-Pe-M4o"/>
                 <constraint firstAttribute="trailing" secondItem="QjT-SI-Zkp" secondAttribute="trailing" id="vSc-mC-tVM"/>
                 <constraint firstAttribute="trailing" secondItem="G8K-75-4jJ" secondAttribute="trailing" constant="33" id="zN8-Kj-Bfo"/>

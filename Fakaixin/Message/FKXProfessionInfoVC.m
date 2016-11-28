@@ -236,13 +236,13 @@
 #pragma mark - 点击头像
 - (void)tapHead {
     
-    if ([myUserInfoModel.role integerValue]) {
-        return;
-    }
-    if (!_userId) {
-        return;
-    }
-    
+//    if ([myUserInfoModel.role integerValue]) {
+//        return;
+//    }
+//    if (!_userId) {
+//        return;
+//    }
+    myUserInfoModel.name = @"sdf";
     //保存接收方的信息
     EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
     receiverMessage.from = [_userId stringValue];

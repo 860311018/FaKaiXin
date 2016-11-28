@@ -18,11 +18,17 @@
     
     self.phoneBtn.layer.cornerRadius = 18;
     self.phoneBtn.layer.masksToBounds = YES;
+    
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.tagL.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(5, 5)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = self.tagL.bounds;
+    maskLayer.path = maskPath.CGPath;
+    self.tagL.layer.mask = maskLayer;
 }
 
 - (IBAction)touchCall:(id)sender {
-    if ([self.callProDelegate respondsToSelector:@selector(callPro:listenerId:head:listenName:status:listenMobile:)]) {
-        [self.callProDelegate callPro:self.model.phonePrice listenerId:self.model.uid head:self.model.head listenName:self.model.name status:self.model.status listenMobile:self.model.mobile];
+    if ([self.callProDelegate respondsToSelector:@selector(callPro:)]) {
+        [self.callProDelegate callPro:self.model];
     }
 }
 
