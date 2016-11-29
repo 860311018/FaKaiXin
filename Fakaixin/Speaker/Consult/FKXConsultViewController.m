@@ -20,6 +20,9 @@
 #import "FKXLiXianView.h"
 #import "FKXLianjieView.h"
 
+#import "ChatViewController.h"
+
+
 #import "NSString+Extension.h"
 
 @interface FKXConsultViewController ()<CallProDelegate,ConfirmDelegate,BindPhoneDelegate,UITableViewDelegate,UITableViewDataSource,BeeCloudDelegate>//<FKXConsulterCellDelegate>
@@ -240,10 +243,28 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FKXUserInfoModel *model = _contentArr[indexPath.row];
-    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
-    vc.userId = model.uid;
-    [vc setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([model.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
+        [self showHint:@"不可以私信自己哟"];
+        return;
+    }
+    
+    //保存接收方的信息
+    
+    //进入聊天
+    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
+    chatController.title = model.name;
+    
+    chatController.toZiXunShi = YES;
+    chatController.userModel = model;
+    
+    chatController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:chatController animated:YES];
+    
+//    FKXUserInfoModel *model = _contentArr[indexPath.row];
+//    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+//    vc.userId = model.uid;
+//    [vc setHidesBottomBarWhenPushed:YES];
+//    [self.navigationController pushViewController:vc animated:YES];
     /*
     
     FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];

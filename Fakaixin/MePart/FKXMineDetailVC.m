@@ -39,9 +39,9 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
     if (self.type == MyDetailTypeHelp) {
-        self.navTitle = @"帮助排行榜";
+        self.navTitle = @"神评榜";
     }else if (self.type == MyDetailTypeZan) {
-        self.navTitle = @"点赞排行榜";
+        self.navTitle = @"热赞榜";
     }
     
     [self setUpNav];
@@ -217,8 +217,12 @@
         if (indexPath.row == 0) {
             PaiMingFirstCell * cell =[tableView dequeueReusableCellWithIdentifier:@"PaiMingFirstCell" forIndexPath:indexPath];
             cell.backgroundColor = [UIColor whiteColor];
-            //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.headImgV.backgroundColor = [UIColor blackColor];
+            if (self.type == MyDetailTypeHelp) {
+                cell.paiMingName.text = @"天下无双";
+            }else {
+                cell.paiMingName.text = @"内涵狂魔";
+            }
             return cell;
         }
         //其他排名
@@ -228,11 +232,28 @@
             if (indexPath.row == 1) {
                 cell.headIcon.image = [UIImage imageNamed:@"mine_King2"];
                 
-                cell.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack2"];            }
+                cell.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack2"];
+                
+                cell.paiMingName.textColor = [UIColor colorWithRed:212/255.0 green:212/255.0 blue:213/255.0 alpha:1];
+
+                if (self.type == MyDetailTypeHelp) {
+                    cell.paiMingName.text = @"无冕之王";
+                }else {
+                    cell.paiMingName.text = @"脑洞大开";
+                }
+            }
             else if (indexPath.row == 2) {
                 cell.headIcon.image = [UIImage imageNamed:@"mine_King3"];
                 
                 cell.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack3"];
+                
+                cell.paiMingName.textColor = [UIColor colorWithRed:139/255.0 green:119/255.0 blue:103/255.0 alpha:1];
+                
+                if (self.type == MyDetailTypeHelp) {
+                    cell.paiMingName.text = @"评论巨人";
+                }else {
+                    cell.paiMingName.text = @"热赞达人";
+                }
             }
             
             return cell;

@@ -236,17 +236,16 @@
 #pragma mark - 点击头像
 - (void)tapHead {
     
-//    if ([myUserInfoModel.role integerValue]) {
-//        return;
-//    }
-//    if (!_userId) {
-//        return;
-//    }
-    myUserInfoModel.name = @"sdf";
+    if ([myUserInfoModel.role integerValue]) {
+        return;
+    }
+    if (!_userId) {
+        return;
+    }
     //保存接收方的信息
     EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
-    receiverMessage.from = [_userId stringValue];
-    receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+    receiverMessage.to = [_userId stringValue];
+    receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
     receiverMessage.ext = @{
                             @"head" : myUserInfoModel.head,
                             @"name": myUserInfoModel.name,

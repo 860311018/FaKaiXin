@@ -23,6 +23,9 @@
 //名次
 @property (weak, nonatomic) IBOutlet UILabel *paiMingL;
 
+@property (weak, nonatomic) IBOutlet UILabel *paiMingName;
+
+
 //头像背景图
 @property (weak, nonatomic) IBOutlet UIImageView *headBackImgV;
 

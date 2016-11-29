@@ -54,7 +54,7 @@
     imagesArr = [NSMutableArray arrayWithCapacity:1];
     imagesNamesArr = [NSMutableArray arrayWithCapacity:1];
     nameAndImage = [NSMutableDictionary dictionaryWithCapacity:1];
-    _myTextView.placeholder = @"描述困扰你的烦恼，得到咨询师的语音回复，获得更好地解决和安抚（不少于20个字）";
+    _myTextView.placeholder = @"描述困扰你的烦恼，得到咨询师的语音回复，获得更好地解决和安抚（不少于40个字）";
     //ui赋值
     _myTextView.textContainerInset = UIEdgeInsetsMake(35, 12, 15, 12);
     self.view.backgroundColor = kColor_MainBackground();
@@ -347,7 +347,7 @@
     [_myTextView resignFirstResponder];
     NSString *text = [_myTextView.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     NSString *tex = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    if (tex.length < 20)
+    if (tex.length < 40)
     {
         [self showHint:@"请说的再详细些哦~"];
         return;

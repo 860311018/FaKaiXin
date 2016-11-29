@@ -17,11 +17,8 @@
     self.headImgV.layer.cornerRadius = ([UIScreen mainScreen].bounds.size.width -20)*0.08;
     self.headImgV.clipsToBounds = YES;
 
-    self.headBackImgV.image = [UIImage imageNamed:@"mine_headBack"];
 
-    self.headIcon.image = [UIImage imageNamed:@"mine_King1"];
 
-    self.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack1"];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

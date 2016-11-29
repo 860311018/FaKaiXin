@@ -625,6 +625,7 @@ static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88
             break;
         case notification_type_end_talk:
         {
+
             if (application.applicationState != UIApplicationStateActive) {
                 [self notificationComing];
             }else{

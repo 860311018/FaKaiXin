@@ -11,6 +11,7 @@
 #import <QiniuSDK.h>
 #import "NSString+Extension.h"
 
+#import "FKXZiXunShiV.h"
 
 #define ImageSize 1024 * 500
 #define kIsShowMoreInfo (![_userModel.role integerValue] && !_isOpen) ? NO : YES//只有当角色是0（倾诉者），并且不开通，就把姓名以下的设置界面屏蔽掉
@@ -27,6 +28,10 @@
     NSInteger role;
     UIImage *imageSelected;
     NSMutableArray *goodAtsArr;//擅长领域
+    
+    UIView *transViewPay;   //透明图
+    FKXZiXunShiV *payView;    //界面
+
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *tfUserName;//不设代理，代理方法只对两个价格有效
@@ -268,7 +273,6 @@
 - (IBAction)clickToOpen:(UIButton *)sender
 {
     [self.view endEditing:YES];
-    
     NSDictionary *paramDic;
 
     if ([NSString isEmpty:_tfUserName.text]) {
@@ -296,15 +300,15 @@
         if ([NSString isEmpty:title]) {
             [self showHint:@"请输入头衔"];
             return;
-        }else if (title.length<2) {
-            [self showHint:@"头衔的字数要大于2"];
+        }else if (title.length<10) {
+            [self showHint:@"头衔的字数要大于10"];
             return;
         }
         else if ([NSString isEmpty:profile]) {
             [self showHint:@"请输入简介"];
             return;
-        }else if (profile.length<10) {
-            [self showHint:@"简介的字数要大于10"];
+        }else if (profile.length<20) {
+            [self showHint:@"简介的字数要大于20"];
             return;
         }
         else if ([_myPriceTF.text integerValue] < 1|| [_myPriceTF.text integerValue] > 100) {
@@ -338,24 +342,18 @@
                  model.role = @(role);
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
-             if (_isShowClose) {//如果是present的此界面
-                 [self dismissViewControllerAnimated:YES completion:^{
-                     SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
+         
+                 if (_isShowClose) {//如果是present的此界面
+                     [self dismissViewControllerAnimated:YES completion:^{
+                         if (_isOpen) {
+                             [self showView];
+                         }
+                     }];
+                 }else {
+                     [self.navigationController popViewControllerAnimated:YES];
                      if (_isOpen) {
-                         //展示切换模式动画
-                         FKXBaseNavigationController *nav = [tab.viewControllers lastObject];
-                         FKXPersonalViewController *vc = [nav viewControllers][0];
-                        [vc clickOpenAsk:nil];
-                     }
-                 }];
-             }else{//如果是push的此界面
-                 [self.navigationController popViewControllerAnimated:YES];
-                 SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
-                 if (_isOpen) {
-                     FKXBaseNavigationController *nav = [tab.viewControllers lastObject];
-                     FKXPersonalViewController *vc = [nav viewControllers][0];
-                     [vc clickOpenAsk:nil];
-                 }
+                         [self showView];
+                }
              }
              
              //登陆成功之后，按照以下代码设置当前登录用户的apns昵称
@@ -382,6 +380,115 @@
          [self showHint:@"网络出错"];
          [self hideHud];
      }];
+}
+
+- (void)showView {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (!transViewPay)
+    {
+        //透明背景
+        transViewPay = [[UIView alloc] initWithFrame:screenBounds];
+        transViewPay.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        transViewPay.alpha = 0.0;
+        [[UIApplication sharedApplication].keyWindow addSubview:transViewPay];
+        
+        payView = [[[NSBundle mainBundle] loadNibNamed:@"FKXZiXunShiV" owner:nil options:nil] firstObject];
+        [payView.closeBtn addTarget:self action:@selector(hiddentransViewPay) forControlEvents:UIControlEventTouchUpInside];
+        [payView.shareBtn addTarget:self action:@selector(share) forControlEvents:UIControlEventTouchUpInside];
+       
+        [transViewPay addSubview:payView];
+        payView.center = transViewPay.center;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            transViewPay.alpha = 1.0;
+        }];
+        
+    }
+
+}
+
+- (void)share {
+    NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+    NSArray* imageArray = @[[NSURL URLWithString:@""]];
+    NSString *urlStr;
+    if ([FKXUserManager shareInstance].inviteCode) {
+        urlStr = [NSString stringWithFormat:@"%@front/share.html?inviteCode=%@", kServiceBaseURL,[FKXUserManager shareInstance].inviteCode];
+    }else{
+        urlStr = [NSString stringWithFormat:@"%@front/share.html", kServiceBaseURL];
+    }
+    [shareParams SSDKSetupShareParamsByText:@"安抚你的小情绪"
+                                     images:imageArray
+     
+                                        url:[NSURL URLWithString:urlStr]
+                                      title:@"如何安全优雅地呵呵"
+                                       type:SSDKContentTypeAuto];
+    //单个分享
+    SSDKPlatformType type = SSDKPlatformSubTypeWechatSession;
+    [ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error)
+     {
+         switch (state)
+         {
+             case SSDKResponseStateSuccess:
+             {
+                 [self shareSuccessCallBack];
+                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                     message:nil
+                                                                    delegate:nil
+                                                           cancelButtonTitle:@"确定"
+                                                           otherButtonTitles:nil];
+                 [alertView show];
+                 break;
+             }
+             case SSDKResponseStateFail:
+             {
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                 message:nil
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil, nil];
+                 [alert show];
+                 break;
+             }
+             case SSDKResponseStateCancel:
+             {
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享取消"
+                                                                 message:nil
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil, nil];
+                 [alert show];
+                 break;
+             }
+         }
+     }];
+}
+
+- (void)shareSuccessCallBack
+{
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [paramDic setValue:@([FKXUserManager shareInstance].currentUserId) forKey:@"uid"];
+    [AFRequest sendGetOrPostRequest:@"sys/share_app" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        [self hiddentransViewPay];
+    } failure:^(NSError *error) {
+    }];
+}
+
+- (void)hiddentransViewPay
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        transViewPay.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [transViewPay removeFromSuperview];
+        transViewPay = nil;
+        
+        SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
+        //展示切换模式动画
+        FKXBaseNavigationController *nav = [tab.viewControllers lastObject];
+        FKXPersonalViewController *vc = [nav viewControllers][0];
+        [vc clickOpenAsk:nil];
+    }];
+    
+    
 }
 
 //存入绑定手机

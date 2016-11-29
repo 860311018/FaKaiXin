@@ -13,7 +13,7 @@
 #import "FKXCommitHtmlViewController.h"
 
 #import "FKXChatTitleView.h"
-
+#import "EMTextMessageBody.h"
 
 @interface ChatViewController ()<UIAlertViewDelegate, EaseMessageViewControllerDelegate, EaseMessageViewControllerDataSource,
     UIActionSheetDelegate,
@@ -48,10 +48,12 @@
 @end
 
 @implementation ChatViewController
-//-(void)dealloc
-//{
-    //在父类释放
-//}
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"notification_type_end_talk" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
+
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -107,7 +109,32 @@
     //单聊判断聊天是否结束
     if (self.conversation.conversationType == eConversationTypeChat) {
         [self validTalkIsFinish];//加载是否显示举报
+       
     }
+    
+//    //删除聊天记录
+//    [[EaseMob sharedInstance].chatManager removeConversationsByChatters:@[self.conversation.chatter] deleteMessages:YES append2Chat:YES];
+
+    
+    if (self.toZiXunShi) {
+        //ui设置
+        CGPoint origin = self.tableView.origin;
+        origin.y = origin.y+150;
+        self.tableView.origin = origin;
+        
+        CGSize size = self.tableView.size;
+        size.height = size.height-150;
+        self.tableView.size = size;
+        
+        titleView = [FKXChatTitleView creatChatTitle];
+        titleView.frame = CGRectMake(0, 0, kScreenWidth, 150);
+        [self.view addSubview:titleView];
+        
+        self.chatToolbar.inputTextView.placeHolder = @"今天您还能免费聊5句";
+        
+//        [self setUpChatView];
+    }
+    
     //发送方,接收方赋值
     senderUser = [FKXUserManager getUserInfoModel];
     NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
@@ -176,18 +203,8 @@
     EaseEmotionManager *manager= [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:[EaseEmoji allEmoji]];
     [self.faceView setEmotionManagers:@[manager]];
     
-    //ui设置
-    CGPoint origin = self.tableView.origin;
-    origin.y = origin.y+150;
-    self.tableView.origin = origin;
     
-    CGSize size = self.tableView.size;
-    size.height = size.height-150;
-    self.tableView.size = size;
-    
-    titleView = [FKXChatTitleView creatChatTitle];
-    titleView.frame = CGRectMake(0, 0, kScreenWidth, 150);
-    [self.view addSubview:titleView];
+   
 }
 
 - (void)loadHistory {
@@ -228,14 +245,15 @@
     CGSize size2 = [value CGRectValue].size;
     keyboardHeight = size2.height;
     if (self.conversation.conversationType == eConversationTypeChat) {
-        CGPoint origin = self.tableView.origin;
-        origin.y = origin.y+150;
-        self.tableView.origin = origin;
-        
-        CGSize size = self.tableView.size;
-        size.height = size.height-150;
-        self.tableView.size = size;
-
+        if (self.toZiXunShi) {
+            CGPoint origin = self.tableView.origin;
+            origin.y = origin.y+150;
+            self.tableView.origin = origin;
+            
+            CGSize size = self.tableView.size;
+            size.height = size.height-150;
+            self.tableView.size = size;
+        }
     }
 }
 
@@ -243,8 +261,16 @@
     
     if (self.conversation.conversationType == eConversationTypeChat) {
         
+        if (self.toZiXunShi) {
+            CGPoint origin = self.tableView.origin;
+            origin.y = origin.y+150;
+            self.tableView.origin = origin;
+            
+            CGSize size = self.tableView.size;
+            size.height = size.height-150;
+            self.tableView.size = size;
+        }
     }
-//    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
 }
 
 #pragma mark - 判断是否可以结束对话
@@ -693,6 +719,16 @@
 #pragma mark - EaseMessageViewControllerDelegate
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
+    if (self.toZiXunShi) {
+        static int i=5;
+        i--;
+        if (i<=0) {
+            return;
+        }
+        self.chatToolbar.inputTextView.placeHolder = [NSString stringWithFormat:@"今天您还能免费聊%d句",i];
+        
+    }
+    
     //将自己的信息发送给对方
     ext = @{
             @"head" : senderUser.head,
@@ -1073,6 +1109,28 @@
     }
     [self.menuController setTargetRect:showInView.frame inView:showInView.superview];
     [self.menuController setMenuVisible:YES animated:YES];
+}
+
+- (void)setUpChatView {
+    
+    NSString *name = self.userModel.name;
+    NSArray *goodsAt = self.userModel.goodAt;
+    for (NSString *goodStr in goodsAt) {
+        
+    }
+    
+    EMChatText *txt2 = [[EMChatText alloc] initWithText:@"下单流程：下单付款--等待确认--接听来电--正式咨询\n\n小贴士：您可以先通过私信联系我确定时间，如果您的问题复杂或需要长期疏导陪伴，请选择套餐【立减折扣】，方便随时联系"];
+    EMTextMessageBody *body2 = [[EMTextMessageBody alloc] initWithChatObject:txt2];
+    
+    EMMessage *message = [[EMMessage alloc] initWithReceiver:[NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId] bodies:@[body2]];
+    message.from = [self.userModel.uid stringValue];
+    message.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+    message.ext = @{@"head":self.userModel.head,@"name":self.userModel.name};
+    message.messageType = eMessageTypeChat; // 设置为单聊消息
+    message.deliveryState = eMessageDeliveryState_Delivered;
+    [[EaseMob sharedInstance].chatManager insertMessageToDB:message];
+    [[FKXBaseViewController alloc] insertDataToTableWith:message managedObjectContext:ApplicationDelegate.managedObjectContext];
+
 }
 
 @end

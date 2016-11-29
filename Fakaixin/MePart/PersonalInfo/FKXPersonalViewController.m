@@ -131,6 +131,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     //收到环信消息
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNewMessageLab) name:@"fkxReceiveEaseMobMessage" object:nil];
     //ui赋值
@@ -831,6 +832,16 @@
             //我的订单
         case 3:
         {
+//            NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:@{
+//                                                                                 @"appId"        : ResetAppId,
+//                                                                                 @"fromClient"       : @"65849071739985",@"fromSerNum":@"4001234567",@"to":@"15311111183",@"toSerNum":@"075512345678",@"maxallowtime":@"910"
+//                                                                                 }, @"callback",nil];
+//            [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
+//                NSLog(@"%@",data);
+//            } failure:^(NSError *error) {
+//                
+//            }];
+            
             if ([FKXUserManager needShowLoginVC]) {
                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
                 return;

@@ -21,6 +21,8 @@
 		180090231DD0702400FE8551 /* FKXRichDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 180090211DD0702400FE8551 /* FKXRichDetailCell.m */; };
 		180090241DD0702400FE8551 /* FKXRichDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 180090221DD0702400FE8551 /* FKXRichDetailCell.xib */; };
 		180916301DDBFF9D000694F6 /* FKXFreeYuYueVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1809162F1DDBFF9D000694F6 /* FKXFreeYuYueVC.xib */; };
+		181B994E1DED29E10061F0B6 /* FKXZiXunShiV.m in Sources */ = {isa = PBXBuildFile; fileRef = 181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */; };
+		181B99501DED29F80061F0B6 /* FKXZiXunShiV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */; };
 		189D2DD51DEC11E6003FDF99 /* FKXChatTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D2DD41DEC11E6003FDF99 /* FKXChatTitleView.m */; };
 		189D2DD71DEC11FE003FDF99 /* FKXChatTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189D2DD61DEC11FE003FDF99 /* FKXChatTitleView.xib */; };
 		189D2DDA1DEC2FA1003FDF99 /* FKXRegularView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D2DD91DEC2FA1003FDF99 /* FKXRegularView.m */; };
@@ -519,6 +521,9 @@
 		180090211DD0702400FE8551 /* FKXRichDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXRichDetailCell.m; sourceTree = "<group>"; };
 		180090221DD0702400FE8551 /* FKXRichDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXRichDetailCell.xib; sourceTree = "<group>"; };
 		1809162F1DDBFF9D000694F6 /* FKXFreeYuYueVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXFreeYuYueVC.xib; sourceTree = "<group>"; };
+		181B994C1DED29E10061F0B6 /* FKXZiXunShiV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXZiXunShiV.h; sourceTree = "<group>"; };
+		181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXZiXunShiV.m; sourceTree = "<group>"; };
+		181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXZiXunShiV.xib; sourceTree = "<group>"; };
 		189D2DD31DEC11E6003FDF99 /* FKXChatTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXChatTitleView.h; sourceTree = "<group>"; };
 		189D2DD41DEC11E6003FDF99 /* FKXChatTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatTitleView.m; sourceTree = "<group>"; };
 		189D2DD61DEC11FE003FDF99 /* FKXChatTitleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXChatTitleView.xib; sourceTree = "<group>"; };
@@ -1829,6 +1834,9 @@
 		6164B4811D387D8500A1990F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				181B994C1DED29E10061F0B6 /* FKXZiXunShiV.h */,
+				181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */,
+				181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */,
 				189D2DE21DEC36D9003FDF99 /* OrderRegularV.h */,
 				189D2DE31DEC36D9003FDF99 /* OrderRegularV.m */,
 				189D2DE51DEC36E9003FDF99 /* OrderRegularV.xib */,
@@ -3437,6 +3445,7 @@
 				6188AFBE1C3525E1002801D2 /* CaptchaView.xib in Resources */,
 				6115ACB61C9A54D7006C175C /* chat_sender_audio_playing_002@2x.png in Resources */,
 				617F53FE1C43A73B00CCD8AB /* VoiceSearchFeedback009@2x.png in Resources */,
+				181B99501DED29F80061F0B6 /* FKXZiXunShiV.xib in Resources */,
 				18B3B2851DE28FA0000E1939 /* FKXdynamicsCommentCell.xib in Resources */,
 				6115ACB71C9A54D7006C175C /* chat_sender_audio_playing_003@2x.png in Resources */,
 				617F53F91C43A73B00CCD8AB /* VoiceSearchFeedback004@2x.png in Resources */,
@@ -3854,6 +3863,7 @@
 				61E5E85D1D7D5EDC002F9A24 /* FKXMyShopVC.m in Sources */,
 				6173752E1C3A499000AE2B15 /* FKXVisitFriendsController.m in Sources */,
 				189D2DDA1DEC2FA1003FDF99 /* FKXRegularView.m in Sources */,
+				181B994E1DED29E10061F0B6 /* FKXZiXunShiV.m in Sources */,
 				610B5D6E1D6EA0EA005715A5 /* FKXSignInVC.m in Sources */,
 				61E5E8691D7D7859002F9A24 /* FKXMyToolCell.m in Sources */,
 				615B54A31D35ED3B002116E6 /* UILabelTextInRectHorVer.m in Sources */,

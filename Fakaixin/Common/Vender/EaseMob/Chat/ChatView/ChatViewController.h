@@ -13,4 +13,8 @@
 
 @interface ChatViewController : EaseMessageViewController
 
+@property (nonatomic,assign) BOOL toZiXunShi;
+
+@property (nonatomic,strong) FKXUserInfoModel *userModel;
+
 @end

@@ -40,7 +40,7 @@
                     </userDefinedRuntimeAttributes>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veJ-UI-bl3">
-                    <rect key="frame" x="25" y="60" width="250" height="38"/>
+                    <rect key="frame" x="25" y="30" width="250" height="38"/>
                     <attributedString key="attributedText">
                         <fragment content="日榜前三名获得">
                             <attributes>
@@ -67,7 +67,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yRM-YW-G6l">
-                    <rect key="frame" x="25" y="121" width="250" height="35"/>
+                    <rect key="frame" x="25" y="91" width="250" height="35"/>
                     <attributedString key="attributedText">
                         <fragment content="周榜前三名将获得随机红包奖励，其余名次随机获得爱心值奖励">
                             <attributes>
@@ -80,7 +80,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZK-lR-b0w">
-                    <rect key="frame" x="25" y="179" width="250" height="35"/>
+                    <rect key="frame" x="25" y="149" width="250" height="35"/>
                     <attributedString key="attributedText">
                         <fragment content="月榜前三名将获得实物礼品奖励，其余名次随机获得红包奖励">
                             <attributes>
@@ -93,21 +93,29 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_left_quotation" translatesAutoresizingMaskIntoConstraints="NO" id="zDP-0R-ye3">
-                    <rect key="frame" x="25" y="30" width="14" height="11"/>
+                    <rect key="frame" x="25" y="10" width="14" height="11"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="11" id="2qo-AO-oJf"/>
                         <constraint firstAttribute="width" constant="14" id="nbh-W6-TdO"/>
                     </constraints>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_right_quotation" translatesAutoresizingMaskIntoConstraints="NO" id="tdd-6O-CiZ">
-                    <rect key="frame" x="264" y="234" width="14" height="11"/>
+                    <rect key="frame" x="264" y="249" width="14" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="14" id="7tA-yz-EkX"/>
                         <constraint firstAttribute="height" constant="11" id="ICY-TY-WdE"/>
                     </constraints>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="帮助人数为问答评论数量与文章弹幕评论的和；被点赞数为你文章和评论被点赞数量的和" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2R-bR-aWd">
+                    <rect key="frame" x="25" y="207" width="250" height="54"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <constraints>
+                <constraint firstItem="y2R-bR-aWd" firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" id="1qR-x6-t48"/>
+                <constraint firstItem="y2R-bR-aWd" firstAttribute="top" secondItem="HZK-lR-b0w" secondAttribute="bottom" constant="23" id="2y2-AR-bt5"/>
                 <constraint firstItem="yRM-YW-G6l" firstAttribute="top" secondItem="veJ-UI-bl3" secondAttribute="bottom" constant="23" id="455-Bb-9bN"/>
                 <constraint firstItem="dT5-qX-6cx" firstAttribute="centerX" secondItem="sAK-kH-VXJ" secondAttribute="centerX" id="68O-2t-9bu"/>
                 <constraint firstItem="sAK-kH-VXJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8WY-bt-R9p"/>
@@ -115,16 +123,17 @@
                 <constraint firstItem="yRM-YW-G6l" firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" id="CyA-rB-YaT"/>
                 <constraint firstAttribute="trailing" secondItem="tdd-6O-CiZ" secondAttribute="trailing" constant="22" id="ENh-75-VN1"/>
                 <constraint firstAttribute="bottom" secondItem="sAK-kH-VXJ" secondAttribute="bottom" id="H1J-Ri-c2r"/>
-                <constraint firstItem="tdd-6O-CiZ" firstAttribute="top" secondItem="HZK-lR-b0w" secondAttribute="bottom" constant="20" id="Njx-aI-Lek"/>
+                <constraint firstItem="tdd-6O-CiZ" firstAttribute="top" secondItem="HZK-lR-b0w" secondAttribute="bottom" constant="65" id="Njx-aI-Lek"/>
                 <constraint firstItem="yRM-YW-G6l" firstAttribute="leading" secondItem="veJ-UI-bl3" secondAttribute="leading" id="Q1m-ra-pvF"/>
                 <constraint firstItem="veJ-UI-bl3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="Wru-pN-tdV"/>
-                <constraint firstItem="veJ-UI-bl3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="60" id="aeT-BU-UME"/>
+                <constraint firstItem="veJ-UI-bl3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="aeT-BU-UME"/>
                 <constraint firstItem="dT5-qX-6cx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="297" id="e0v-xO-aTK"/>
-                <constraint firstItem="zDP-0R-ye3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="eCG-lH-DZK"/>
+                <constraint firstItem="zDP-0R-ye3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="eCG-lH-DZK"/>
                 <constraint firstItem="HZK-lR-b0w" firstAttribute="top" secondItem="yRM-YW-G6l" secondAttribute="bottom" constant="23" id="esB-Mu-c4p"/>
                 <constraint firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" constant="25" id="fyM-We-C4I"/>
                 <constraint firstItem="zDP-0R-ye3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="25" id="qyM-nx-wsA"/>
                 <constraint firstItem="HZK-lR-b0w" firstAttribute="leading" secondItem="veJ-UI-bl3" secondAttribute="leading" id="uqL-Jo-apD"/>
+                <constraint firstItem="y2R-bR-aWd" firstAttribute="leading" secondItem="veJ-UI-bl3" secondAttribute="leading" id="vqk-q9-Iwp"/>
                 <constraint firstItem="sAK-kH-VXJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="wSr-Vl-YuX"/>
                 <constraint firstItem="HZK-lR-b0w" firstAttribute="trailing" secondItem="veJ-UI-bl3" secondAttribute="trailing" id="zF5-5h-Tu7"/>
             </constraints>
