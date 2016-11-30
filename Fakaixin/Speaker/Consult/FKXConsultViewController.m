@@ -53,6 +53,10 @@
 
     
 }
+
+@property (nonatomic,assign) CGFloat headerH;
+@property (nonatomic,copy) NSString *introStr;
+
 @property   (nonatomic,strong)NSMutableArray *contentArr;
 
 @property (nonatomic,copy) NSString *mobile;
@@ -251,37 +255,76 @@
     //保存接收方的信息
     
     //进入聊天
-    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
+//    EaseMessageViewController *vc = [[EaseMessageViewController alloc]initWithConversationChatter:[model.uid stringValue] conversationType:eConversationTypeChat];
+//    vc.toZiXunShi = YES;
+    [self caluteHeight:model];
+    ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
     chatController.title = model.name;
     
     chatController.toZiXunShi = YES;
     chatController.userModel = model;
     
+    chatController.headerH = self.headerH;
+    chatController.introStr = self.introStr;
+    
     chatController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatController animated:YES];
-    
-//    FKXUserInfoModel *model = _contentArr[indexPath.row];
-//    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
-//    vc.userId = model.uid;
-//    [vc setHidesBottomBarWhenPushed:YES];
-//    [self.navigationController pushViewController:vc animated:YES];
-    /*
-    
-    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
-        vc.pageType = MyPageType_people;
-    if ([_paraDic[@"role"] integerValue] == 3) {
-        vc.shareType = @"user_center_xinli";
-        vc.urlString = [NSString stringWithFormat:@"%@front/QA_home.html?uid=%@&loginUserId=%ld&token=%@",kServiceBaseURL, model.uid, [FKXUserManager shareInstance].currentUserId, [FKXUserManager shareInstance].currentUserToken];
-    }else{
-        vc.shareType = @"user_center_jinpai";
-        vc.urlString = [NSString stringWithFormat:@"%@front/QA_home.html?uid=%@&loginUserId=%ld&token=%@",kServiceBaseURL, model.uid, [FKXUserManager shareInstance].currentUserId, [FKXUserManager shareInstance].currentUserToken];
-    }
-    vc.userModel = model;
-    //push的时候隐藏tabbar
-    [vc setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:vc animated:YES];*/
+
     
 }
+
+- (void)caluteHeight:(FKXUserInfoModel *)model {
+    NSString *name = model.name;
+    NSString *profile = model.profile;
+    NSString *cureCount = [model.cureCount stringValue];
+    
+    NSString *goodStr = @"";
+    NSArray *goodAt = model.goodAt;
+    //婚恋出轨   失恋阴影  夫妻相处  婆媳关系
+    for (int i=0; i<goodAt.count; i++) {
+        NSString *str = @"";
+        if (i==0) {
+            if ([goodAt[i] integerValue]==0) {
+                str = @"婚恋出轨";
+            }else if ([goodAt[i] integerValue]==1) {
+                str = @"失恋阴影";
+            }else if ([goodAt[i] integerValue]==2) {
+                str = @"夫妻相处";
+            }else if ([goodAt[i] integerValue]==3) {
+                str = @"婆媳关系";
+            }
+            
+        }else{
+            if ([goodAt[i] integerValue]==0) {
+                str = [NSString stringWithFormat:@"、%@",@"婚恋出轨"];
+            }else if ([goodAt[i] integerValue]==1) {
+                str = [NSString stringWithFormat:@"、%@",@"失恋阴影"];
+            }else if ([goodAt[i] integerValue]==2) {
+                str = [NSString stringWithFormat:@"、%@",@"夫妻相处"];
+            }else if ([goodAt[i] integerValue]==3) {
+                str = [NSString stringWithFormat:@"、%@",@"婆媳关系"];
+            }
+        }
+        goodStr = [goodStr stringByAppendingString:str];
+    }
+    
+    NSString *introStr = [NSString stringWithFormat:@"你好，我是%@ 心理咨询专家，资深婚恋情感咨询师,%@。 擅长%@类的问题，已经在伐开心中成功治愈了%@人，在这里聆听解决你的烦恼，给出中肯的建议",name,profile,goodStr,cureCount];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 170, 20)];
+    label.numberOfLines = 0;
+    label.font = [UIFont systemFontOfSize:15];
+    label.text = introStr;
+    [label sizeToFit];
+    
+    CGFloat height = CGRectGetHeight(label.frame);
+//    CGSize titleSize = [label boundingRectWithSize:CGSizeMake(170, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil].size;
+//    NSLog(@"%f",tit)
+//    NSLog(@"%f",height);
+    self.headerH = height+250;
+    self.introStr = introStr;
+  
+}
+
 
 - (NSMutableDictionary *)payParameterDic {
     if (!_payParameterDic) {

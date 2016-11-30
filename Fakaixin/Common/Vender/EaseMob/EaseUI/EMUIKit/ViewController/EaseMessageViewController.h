@@ -11,6 +11,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "EaseRefreshTableViewController.h"
 
+#import "FKXUserInfoModel.h"
 #import "IMessageModel.h"
 #import "EaseMessageModel.h"
 #import "EaseBaseMessageCell.h"
@@ -241,4 +242,9 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id<IEMChatProgressDelegate>)progress;
 
+@property(nonatomic,assign)BOOL toZiXunShi;
+@property(nonatomic,strong)FKXUserInfoModel *userModel;
+
+@property (nonatomic,assign)CGFloat headerH;
+@property (nonatomic,copy)NSString *introStr;
 @end

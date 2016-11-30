@@ -81,7 +81,7 @@ static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88
 
 @implementation AppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    [UMessage setLogEnabled:YES];
     launOptions = launchOptions;
     //设置未读消息数
     [self setupUnreadMessageCount];
@@ -426,6 +426,7 @@ static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88
                                       stringByReplacingOccurrencesOfString: @"<" withString: @""]
                                      stringByReplacingOccurrencesOfString: @">" withString: @""]
                                     stringByReplacingOccurrencesOfString: @" " withString: @""];
+    NSLog(@"%@",deviceTokenString);
     [FKXUserManager shareInstance].deviceTokenString = deviceTokenString;
     NSLog(@"deviceTokenString:%@", deviceTokenString);
 

@@ -16,7 +16,9 @@
  toId:198,           //给谁的评论
  toNickname:"评论人的昵称",
  replyText:"评论谁的内容",
- type:2,       //  1评论     2抱    3 偷听    4 赞  5语音回复 6收到回信
+ type:2,       //  1评论     2抱    3 偷听    4 赞   
+ // (个人主页） 5评价 6我语音回复  7 购买电话服务
+ // (与我相关) 5语音回复 6收到回信 7浏览
  voiceId:12,
  voiceUrl:"",
  listenerProfession:"",

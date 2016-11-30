@@ -14,6 +14,7 @@
 #import "EaseMessageReadManager.h"
 
 #import "AFRequest.h"
+#import "FKXChatV.h"
 
 #define KHintAdjustY    50
 
@@ -24,6 +25,7 @@
     UILongPressGestureRecognizer *_lpgr;
     
     dispatch_queue_t _messageQueue;
+    
 }
 
 @property (strong, nonatomic) id<IMessageModel> playingVoiceModel;
@@ -47,7 +49,9 @@
         return nil;
     }
     
-    self = [super initWithStyle:UITableViewStylePlain];
+    self = [super initWithStyle:UITableViewStyleGrouped];
+
+    
     if (self) {
         _conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:conversationChatter conversationType:conversationType];
 //        [[EaseMob sharedInstance].chatManager addDelegate:self delegateQueue:nil];
@@ -104,6 +108,8 @@
                                              selector:@selector(didBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+    
+   
 }
 
 - (void)didReceiveMemoryWarning {
@@ -867,6 +873,75 @@
 
 #pragma mark - Table view data source
 
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    if (scrollView == self.tableView)
+//    {
+//        CGFloat sectionHeaderHeight = 100; //sectionHeaderHeight
+//        if (scrollView.contentOffset.y<=sectionHeaderHeight&&scrollView.contentOffset.y>=0) {
+//            scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+//        } else if (scrollView.contentOffset.y>=sectionHeaderHeight) {
+//            scrollView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
+//        }
+//    }
+//}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.toZiXunShi) {
+        return self.headerH;
+    }
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+
+    NSString *name = self.userModel.name;
+    NSString *profile = self.userModel.profile;
+    NSString *cureCount = [self.userModel.cureCount stringValue];
+    
+    NSString *goodStr = @"";
+    NSArray *goodAt = self.userModel.goodAt;
+    //婚恋出轨   失恋阴影  夫妻相处  婆媳关系
+    for (int i=0; i<goodAt.count; i++) {
+        NSString *str = @"";
+        if (i==0) {
+            if ([goodAt[i] integerValue]==0) {
+                str = @"婚恋出轨";
+            }else if ([goodAt[i] integerValue]==1) {
+                str = @"失恋阴影";
+            }else if ([goodAt[i] integerValue]==2) {
+                str = @"夫妻相处";
+            }else if ([goodAt[i] integerValue]==3) {
+                str = @"婆媳关系";
+            }
+            
+        }else{
+            if ([goodAt[i] integerValue]==0) {
+                str = [NSString stringWithFormat:@"、%@",@"婚恋出轨"];
+            }else if ([goodAt[i] integerValue]==1) {
+                str = [NSString stringWithFormat:@"、%@",@"失恋阴影"];
+            }else if ([goodAt[i] integerValue]==2) {
+                str = [NSString stringWithFormat:@"、%@",@"夫妻相处"];
+            }else if ([goodAt[i] integerValue]==3) {
+                str = [NSString stringWithFormat:@"、%@",@"婆媳关系"];
+            }
+        }
+       goodStr = [goodStr stringByAppendingString:str];
+    }
+    
+    NSString *introStr = [NSString stringWithFormat:@"你好，我是%@ 心理咨询专家，资深婚恋情感咨询师,%@。 擅长%@类的问题，已经在伐开心中成功治愈了%@人，在这里聆听解决你的烦恼，给出中肯的建议",name,profile,goodStr,cureCount];
+    
+    FKXChatV *view = [FKXChatV creatChat];
+    
+    view.introL.text = self.introStr;
+//    [view.introL sizeToFit];
+//    CGFloat height1 = CGRectGetHeight(view.introL.frame);
+//    CGFloat height = 150+10+20+height1;
+    [view.headImgV sd_setImageWithURL:[NSURL URLWithString:self.userModel.head] placeholderImage:[UIImage imageNamed:@""]];
+//    headerH = height;
+    view.frame = CGRectMake(0, 0, kScreenWidth, self.headerH);
+    return view;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -876,61 +951,68 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
+//    if (section == 0) {
+//        return 1;
+//    }
     return [self.dataArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id object = [self.dataArray objectAtIndex:indexPath.row];
     
-    //时间cell
-    if ([object isKindOfClass:[NSString class]]) {
-        NSString *TimeCellIdentifier = [EaseMessageTimeCell cellIdentifier];
-        EaseMessageTimeCell *timeCell = (EaseMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:TimeCellIdentifier];
+        id object = [self.dataArray objectAtIndex:indexPath.row];
         
-        if (timeCell == nil) {
-            timeCell = [[EaseMessageTimeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TimeCellIdentifier];
-            timeCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        
-        timeCell.title = object;
-        return timeCell;
-    }
-    else{
-        id<IMessageModel> model = object;
-        if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:cellForMessageModel:)]) {
-            UITableViewCell *cell = [_delegate messageViewController:tableView cellForMessageModel:model];
-            if (cell) {
-                if ([cell isKindOfClass:[EaseMessageCell class]]) {
-                    EaseMessageCell *emcell= (EaseMessageCell*)cell;
-                    if (emcell.delegate == nil) {
-                        emcell.delegate = self;
-                    }
-                }
-                return cell;
+        //时间cell
+        if ([object isKindOfClass:[NSString class]]) {
+            NSString *TimeCellIdentifier = [EaseMessageTimeCell cellIdentifier];
+            EaseMessageTimeCell *timeCell = (EaseMessageTimeCell *)[tableView dequeueReusableCellWithIdentifier:TimeCellIdentifier];
+            
+            if (timeCell == nil) {
+                timeCell = [[EaseMessageTimeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TimeCellIdentifier];
+                timeCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
+            
+            timeCell.title = object;
+            return timeCell;
         }
-        
-        NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
-        
-        EaseBaseMessageCell *sendCell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        
-        // Configure the cell...
-        if (sendCell == nil) {
-            sendCell = [[EaseBaseMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
-            sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            sendCell.delegate = self;
+        else{
+            id<IMessageModel> model = object;
+            if (_delegate && [_delegate respondsToSelector:@selector(messageViewController:cellForMessageModel:)]) {
+                UITableViewCell *cell = [_delegate messageViewController:tableView cellForMessageModel:model];
+                if (cell) {
+                    if ([cell isKindOfClass:[EaseMessageCell class]]) {
+                        EaseMessageCell *emcell= (EaseMessageCell*)cell;
+                        if (emcell.delegate == nil) {
+                            emcell.delegate = self;
+                        }
+                    }
+                    return cell;
+                }
+            }
+            
+            NSString *CellIdentifier = [EaseMessageCell cellIdentifierWithModel:model];
+            
+            EaseBaseMessageCell *sendCell = (EaseBaseMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            
+            // Configure the cell...
+            if (sendCell == nil) {
+                sendCell = [[EaseBaseMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier model:model];
+                sendCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                sendCell.delegate = self;
+            }
+            
+            sendCell.model = model;
+            return sendCell;
         }
-        
-        sendCell.model = model;
-        return sendCell;
-    }
+
+    
 }
 
 #pragma mark - Table view delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     id object = [self.dataArray objectAtIndex:indexPath.row];
     if ([object isKindOfClass:[NSString class]]) {
         return self.timeCellHeight;
@@ -945,6 +1027,7 @@
         }
         return [EaseBaseMessageCell cellHeightWithModel:model];
     }
+
 }
 
 #pragma mark - UIImagePickerControllerDelegate

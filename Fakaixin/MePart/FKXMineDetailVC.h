@@ -18,4 +18,6 @@ typedef NS_ENUM(NSInteger, MyDetailType) {
 
 @property(nonatomic,assign) MyDetailType type;
 
+@property(nonatomic,copy)NSString *myhead;
+
 @end

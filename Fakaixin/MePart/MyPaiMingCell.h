@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class FKXPaiHangModel;
 @interface MyPaiMingCell : UITableViewCell
 
 
@@ -32,5 +32,9 @@
 
 //个数
 @property (weak, nonatomic) IBOutlet UILabel *countL;
+
+@property (strong,nonatomic) FKXPaiHangModel *model;
+
+@property (assign,nonatomic) NSInteger type;
 
 @end

@@ -8,6 +8,8 @@
 
 #import "AFRequest.h"
 
+@class CommodityFrame;
+
 
 @interface FKXUserInfoModel : AFRequest
 
@@ -67,4 +69,24 @@
 
 @property (nonatomic, strong) NSNumber<Optional>           *cureCount;   //治愈的人数
 @property   (nonatomic,strong)NSNumber<Optional> *searchType;//搜索的类型：1，心事；2，享问；3，专家；4，文章
+
+
+
+//@property (nonatomic,assign)CGFloat headerH;
+//@property (nonatomic,copy)NSString * introStr;
+//
+//
+//@property (nonatomic,strong) CommodityFrame *commodityFrame;
+
+- (FKXUserInfoModel *)initCommodityWithModel:(FKXUserInfoModel *)model andFrame:(CGFloat)frame;
+
+@end
+
+@interface CommodityFrame : NSObject
+
+
++ (CommodityFrame *)commodityFrameWithModel:(FKXUserInfoModel *)model andFrame:(CGFloat)frame;
+
+- (CommodityFrame *)initCommodityModel:(FKXUserInfoModel *)model andFrame:(CGFloat)frame;
+
 @end

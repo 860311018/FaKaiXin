@@ -7,7 +7,7 @@
 //
 
 #import "EaseRefreshTableViewController.h"
-
+#import "FKXChatV.h"
 #import "MJRefresh.h"
 
 @interface EaseRefreshTableViewController ()
@@ -39,6 +39,8 @@
     }
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) style:self.style];
+    [_tableView registerNib:[UINib nibWithNibName:@"FKXChatCell" bundle:nil] forCellReuseIdentifier:@"FKXChatCell"];
+
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -134,33 +136,31 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (section == 0) {
-        return 1;
-    }
+//    if (section == 0) {
+//        return 1;
+//    }
     return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        static NSString *CellIdentifier = @"ChatIntroduce";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        cell.backgroundColor = [UIColor blueColor];
-        return cell;
-    }else {
+//    if (indexPath.section == 0) {
+//        FKXChatCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXChatCell" forIndexPath:indexPath];
+//        return cell;
+//    }else {
         static NSString *CellIdentifier = @"UITableViewCell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         // Configure the cell...
         
         return cell;
-    }
+//    }
 
 }
 
@@ -168,9 +168,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return 100;
-    }
+//    if (indexPath.section == 0) {
+//        return 100;
+//    }
     return KCELLDEFAULTHEIGHT;
 }
 

@@ -81,8 +81,8 @@ typedef enum : NSUInteger {
     
     self.navTitle = @"详情";
     self.myWebView.backgroundColor = kColorBackgroundGray;
-    NSAttributedString *attS = [[NSAttributedString alloc] initWithString:_labReward.text attributes:@{NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
-    [_labReward setAttributedText:attS];
+//    NSAttributedString *attS = [[NSAttributedString alloc] initWithString:_labReward.text attributes:@{NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
+//    [_labReward setAttributedText:attS];
     //设置支付代理
     [BeeCloud setBeeCloudDelegate:self];
 
@@ -95,10 +95,20 @@ typedef enum : NSUInteger {
     //赋值
     _userName.text = _secondModel.listenerNickName;
     [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",_secondModel.listenerHead,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+    [_userIcon addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickHead:)]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
 }
+
+#pragma mark - 点击头像
+- (void)clickHead:(UITapGestureRecognizer *)tap {
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = _secondModel.listenerId;
+//    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)goBack
 {
     if (_isShowAlert) {

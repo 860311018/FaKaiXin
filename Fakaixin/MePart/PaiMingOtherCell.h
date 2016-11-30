@@ -28,4 +28,7 @@
 
 //用户名
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
+
+@property (nonatomic,strong)NSDictionary *dic;
+
 @end

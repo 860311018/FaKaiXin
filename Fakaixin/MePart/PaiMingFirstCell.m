@@ -21,6 +21,15 @@
 
 }
 
+
+- (void)setDic:(NSDictionary *)dic {
+    _dic = dic;
+    NSString *headStr = dic[@"head"];
+    [self.headImgV sd_setImageWithURL:[NSURL URLWithString:headStr] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+    NSString *nameStr = dic[@"nickname"];
+    self.nameL.text = nameStr;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

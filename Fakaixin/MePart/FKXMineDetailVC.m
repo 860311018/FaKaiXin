@@ -13,7 +13,9 @@
 #import "MyPaiMingCell.h"
 
 #import "PaiMingRegularV.h"
+#import "FKXPaiHangModel.h"
 
+#import "FKXProfessionInfoVC.h"
 
 #define btnW     (kScreenWidth-16-2)/3
 
@@ -21,6 +23,10 @@
 {
     UIView *transViewRemind;//透明图
     PaiMingRegularV *mindRemindV;//每日提醒界面
+    
+    UIButton *btn1;
+    UIButton *btn2;
+    UIButton *btn3;
 }
 
 
@@ -28,6 +34,15 @@
 
 @property (nonatomic,strong)UIView *lineW;
 
+@property (nonatomic,strong)FKXPaiHangModel *myModel;
+
+@property (nonatomic,strong)NSArray *dayArr;
+@property (nonatomic,strong)NSArray *WeekArr;
+@property (nonatomic,strong)NSArray *MonthArr;
+
+@property (nonatomic,strong)NSArray *paihangArr;
+
+@property (nonatomic,strong)NSNumber *timeType;
 
 
 @end
@@ -37,19 +52,90 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    self.dayArr = [NSArray array];
+    self.WeekArr = [NSArray array];
+    self.MonthArr = [NSArray array];
+    self.paihangArr = [NSArray array];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     if (self.type == MyDetailTypeHelp) {
         self.navTitle = @"神评榜";
     }else if (self.type == MyDetailTypeZan) {
         self.navTitle = @"热赞榜";
     }
-    
+    self.timeType = @1;
     [self setUpNav];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"PaiMingFirstCell" bundle:nil] forCellReuseIdentifier:@"PaiMingFirstCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"PaiMingOtherCell" bundle:nil] forCellReuseIdentifier:@"PaiMingOtherCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"MyPaiMingCell" bundle:nil] forCellReuseIdentifier:@"MyPaiMingCell"];
     
+    [self loadData];
+    
+}
+
+- (void)loadData {
+    NSDictionary *params = @{@"type":@(self.type),@"timeType":@1};
+    [AFRequest sendPostRequestTwo:@"user/rankingHot" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"praiseComment"];
+             self.myModel = [[FKXPaiHangModel alloc] initWithDictionary:dic error:nil];
+            NSArray *listArr = data[@"data"][@"list"];
+            if (listArr) {
+                self.dayArr = listArr;
+                self.paihangArr = self.dayArr;
+                [self.tableView reloadData];
+            }
+        }else{
+//            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+//        [self showHint:@"网络出错"];
+    }];
+    
+    NSDictionary *params2 = @{@"type":@(self.type),@"timeType":@2};
+    [AFRequest sendPostRequestTwo:@"user/rankingHot" param:params2 success:^(id data) {
+        [self hideHud];
+
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"praiseComment"];
+            self.myModel = [[FKXPaiHangModel alloc] initWithDictionary:dic error:nil];
+            NSArray *listArr = data[@"data"][@"list"];
+            if (listArr) {
+                self.WeekArr = listArr;
+            }
+        }else{
+//            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+//        [self showHint:@"网络出错"];
+    }];
+    
+    NSDictionary *params3 = @{@"type":@(self.type),@"timeType":@3};
+    [AFRequest sendPostRequestTwo:@"user/rankingHot" param:params3 success:^(id data) {
+        [self hideHud];
+
+        if ([data[@"code"] integerValue] == 0) {
+//            [self.lineW removeFromSuperview];
+//            [self.paihangArr removeAllObjects];
+            
+            NSDictionary *dic = data[@"data"][@"praiseComment"];
+            self.myModel = [[FKXPaiHangModel alloc] initWithDictionary:dic error:nil];
+            NSArray *listArr2 = data[@"data"][@"list"];
+            if (listArr2) {
+                self.MonthArr = listArr2;
+            }
+        }else{
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
 }
 
 - (void)setUpNav {
@@ -104,12 +190,37 @@
     }];
 }
 
+#pragma mark - 点击头像
+- (void)clickHead:(UITapGestureRecognizer *)tap {
+    NSInteger tag = tap.view.tag-200;
+    NSDictionary *dic = self.paihangArr[tag];
+    NSNumber *uid = dic[@"uid"];
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = uid;
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark - 点击排行
-- (void)selectPaiHang:(UIButton *)button {
-    
-    [self.lineW removeFromSuperview];
-    [button addSubview:self.lineW];
+
+- (void)selectDay:(UIButton *)btn {
+    self.timeType = @1;
+    self.paihangArr = self.dayArr;
+    [self.tableView reloadData];
+}
+
+- (void)selectWeek:(UIButton *)btn {
+    self.timeType = @2;
+    self.paihangArr = self.WeekArr;
+    NSLog(@"%@",self.WeekArr);
+    [self.tableView reloadData];
+}
+
+- (void)selectMonth:(UIButton *)btn {
+    self.timeType = @3;
+    self.paihangArr = self.MonthArr;
+    NSLog(@"%@",self.MonthArr);
+    [self.tableView reloadData];
 }
 
 
@@ -133,6 +244,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section ==0) {
+        if (self.paihangArr.count <= 3) {
+            return self.paihangArr.count;
+        }
         return 3;
     }else if (section == 1) {
         return 1;
@@ -170,34 +284,43 @@
         [backImgV addSubview:line1];
         [backImgV addSubview:line2];
         
-        for (int i=0; i<3; i++) {
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake((btnW +1)*i, 0, btnW, 50);
-            button.titleLabel.font = [UIFont systemFontOfSize:16];
-            [button setTitleColor:[UIColor colorWithRed:116/255.0 green:116/255.0 blue:116/255.0 alpha:1] forState:UIControlStateNormal];
-            button.userInteractionEnabled = YES;
-            [button addTarget:self action:@selector(selectPaiHang:) forControlEvents:UIControlEventTouchUpInside];
-            
-            button.tag = 100+i;
-            
-            if (i==0) {
-                [button setTitle:@"日榜" forState:UIControlStateNormal];
-                button.selected = YES;
-                [button addSubview:self.lineW];
-            }else if (i==1) {
-                [button setTitle:@"周榜" forState:UIControlStateNormal];
-                
-            }else if (i==2) {
-                [button setTitle:@"月榜" forState:UIControlStateNormal];
-                
-            }
-            
-            [button setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0,0, 0)];
-            
-            [backImgV addSubview:button];
+        btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn1.frame = CGRectMake(0, 0, btnW, 50);
+        btn1.titleLabel.font = [UIFont systemFontOfSize:16];
+        [btn1 setTitleColor:[UIColor colorWithRed:116/255.0 green:116/255.0 blue:116/255.0 alpha:1] forState:UIControlStateNormal];
+        btn1.tag = 101;
+        [btn1 setTitle:@"日榜" forState:UIControlStateNormal];
+        [btn1 addTarget:self action:@selector(selectDay:) forControlEvents:UIControlEventTouchUpInside];
+        [btn1 setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0,0, 0)];
+        [backImgV addSubview:btn1];
+        
+        btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn2.frame = CGRectMake((btnW +1), 0, btnW, 50);
+        btn2.titleLabel.font = [UIFont systemFontOfSize:16];
+        [btn2 setTitleColor:[UIColor colorWithRed:116/255.0 green:116/255.0 blue:116/255.0 alpha:1] forState:UIControlStateNormal];
+        btn2.tag = 102;
+        [btn2 setTitle:@"周榜" forState:UIControlStateNormal];
+        [btn2 addTarget:self action:@selector(selectWeek:) forControlEvents:UIControlEventTouchUpInside];
+        [btn2 setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0,0, 0)];
+        [backImgV addSubview:btn2];
+        
+        btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn3.frame = CGRectMake((btnW +1)*2, 0, btnW, 50);
+        btn3.titleLabel.font = [UIFont systemFontOfSize:16];
+        [btn3 setTitleColor:[UIColor colorWithRed:116/255.0 green:116/255.0 blue:116/255.0 alpha:1] forState:UIControlStateNormal];
+        btn3.tag = 103;
+        [btn3 setTitle:@"月榜" forState:UIControlStateNormal];
+        [btn3 addTarget:self action:@selector(selectMonth:) forControlEvents:UIControlEventTouchUpInside];
+        [btn3 setTitleEdgeInsets:UIEdgeInsetsMake(-5, 0,0, 0)];
+        [backImgV addSubview:btn3];
+        
+        if ([self.timeType integerValue] ==1) {
+            [btn1 addSubview:self.lineW];
+        }else if ([self.timeType integerValue] ==2) {
+            [btn2 addSubview:self.lineW];
+        }else if ([self.timeType integerValue] ==3) {
+            [btn3 addSubview:self.lineW];
         }
-        
-        
         
         return view;
         
@@ -212,37 +335,53 @@
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     if (indexPath.section == 0) {
         //排名第一
         if (indexPath.row == 0) {
             PaiMingFirstCell * cell =[tableView dequeueReusableCellWithIdentifier:@"PaiMingFirstCell" forIndexPath:indexPath];
             cell.backgroundColor = [UIColor whiteColor];
-            cell.headImgV.backgroundColor = [UIColor blackColor];
             if (self.type == MyDetailTypeHelp) {
                 cell.paiMingName.text = @"天下无双";
             }else {
                 cell.paiMingName.text = @"内涵狂魔";
+            }
+            [cell.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickHead:)]];
+            if (self.paihangArr.count >0) {
+                NSDictionary *dic = self.paihangArr[0];
+                cell.dic = dic;
             }
             return cell;
         }
         //其他排名
         else {
             PaiMingOtherCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PaiMingOtherCell" forIndexPath:indexPath];
-            cell.backgroundColor = [UIColor whiteColor];
+            [cell.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickHead:)]];
+
             if (indexPath.row == 1) {
+                cell.headImgV.tag = 201;
+                cell.paiMingL.text = @"NO.2";
                 cell.headIcon.image = [UIImage imageNamed:@"mine_King2"];
                 
                 cell.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack2"];
                 
                 cell.paiMingName.textColor = [UIColor colorWithRed:212/255.0 green:212/255.0 blue:213/255.0 alpha:1];
-
+                
                 if (self.type == MyDetailTypeHelp) {
                     cell.paiMingName.text = @"无冕之王";
                 }else {
                     cell.paiMingName.text = @"脑洞大开";
                 }
+                
+                if (self.paihangArr.count >1) {
+                    NSDictionary *dic = self.paihangArr[1];
+                    cell.dic = dic;
+                }
             }
             else if (indexPath.row == 2) {
+                cell.headImgV.tag = 202;
+                cell.paiMingL.text = @"NO.3";
+
                 cell.headIcon.image = [UIImage imageNamed:@"mine_King3"];
                 
                 cell.paiMingBackImgV.image = [UIImage imageNamed:@"mine_mingciBack3"];
@@ -254,6 +393,11 @@
                 }else {
                     cell.paiMingName.text = @"热赞达人";
                 }
+                
+                if (self.paihangArr.count >2) {
+                    NSDictionary *dic = self.paihangArr[2];
+                    cell.dic = dic;
+                }
             }
             
             return cell;
@@ -261,12 +405,18 @@
         
     }
     //我的排名
-    else if (indexPath.section == 1) {
+    else {
         MyPaiMingCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyPaiMingCell" forIndexPath:indexPath];
         cell.backgroundColor = [UIColor whiteColor];
+        cell.model = self.myModel;
+        if (self.type == MyDetailTypeHelp) {
+            cell.type = 0;
+        }else if (self.type == MyDetailTypeZan) {
+            cell.type = 1;
+        }
+        [cell.headImgV sd_setImageWithURL:[NSURL URLWithString:self.myhead] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
         return cell;
     }
-    return nil;
 }
 
 
@@ -293,7 +443,6 @@
     }
     return _lineW;
 }
-
 
 
 - (void)didReceiveMemoryWarning {

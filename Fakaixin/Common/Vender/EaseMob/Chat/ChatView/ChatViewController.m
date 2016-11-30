@@ -108,7 +108,7 @@
     
     //单聊判断聊天是否结束
     if (self.conversation.conversationType == eConversationTypeChat) {
-        [self validTalkIsFinish];//加载是否显示举报
+//        [self validTalkIsFinish];//加载是否显示举报
        
     }
     

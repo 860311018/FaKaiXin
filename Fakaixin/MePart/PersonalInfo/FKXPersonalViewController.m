@@ -581,10 +581,10 @@
 - (void)goToBangZhuVC {
     
     //判断身份
-    if ([[FKXUserManager getUserInfoModel].role integerValue]) {
-
+    if ([FKXUserManager isUserPattern]) {
         FKXMineDetailVC *detail = [[FKXMineDetailVC alloc]init];
         detail.type = MyDetailTypeHelp;
+        detail.myhead = [NSString stringWithFormat:@"%@%@",userModel.head, cropImageW];
         [detail setHidesBottomBarWhenPushed:YES];
 
         [self.navigationController pushViewController:detail animated:YES];
@@ -592,9 +592,10 @@
 }
 
 - (void)goToZanVC {
-    if ([[FKXUserManager getUserInfoModel].role integerValue]) {
+    if ([FKXUserManager isUserPattern]) {
         FKXMineDetailVC *detail = [[FKXMineDetailVC alloc]init];
         detail.type = MyDetailTypeZan;
+        detail.myhead = [NSString stringWithFormat:@"%@%@",userModel.head, cropImageW];
         [detail setHidesBottomBarWhenPushed:YES];
         [self.navigationController pushViewController:detail animated:YES];
     }

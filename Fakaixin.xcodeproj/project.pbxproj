@@ -23,6 +23,10 @@
 		180916301DDBFF9D000694F6 /* FKXFreeYuYueVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1809162F1DDBFF9D000694F6 /* FKXFreeYuYueVC.xib */; };
 		181B994E1DED29E10061F0B6 /* FKXZiXunShiV.m in Sources */ = {isa = PBXBuildFile; fileRef = 181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */; };
 		181B99501DED29F80061F0B6 /* FKXZiXunShiV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */; };
+		188C49D01DEED1FD0013AB62 /* FKXChatV.m in Sources */ = {isa = PBXBuildFile; fileRef = 188C49CF1DEED1FD0013AB62 /* FKXChatV.m */; };
+		188C49D21DEED20F0013AB62 /* FKXChatV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188C49D11DEED20F0013AB62 /* FKXChatV.xib */; };
+		188C49D51DEEE3670013AB62 /* FKXLisOrderV.m in Sources */ = {isa = PBXBuildFile; fileRef = 188C49D41DEEE3670013AB62 /* FKXLisOrderV.m */; };
+		188C49D71DEEE37D0013AB62 /* FKXLisOrderV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188C49D61DEEE37D0013AB62 /* FKXLisOrderV.xib */; };
 		189D2DD51DEC11E6003FDF99 /* FKXChatTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D2DD41DEC11E6003FDF99 /* FKXChatTitleView.m */; };
 		189D2DD71DEC11FE003FDF99 /* FKXChatTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189D2DD61DEC11FE003FDF99 /* FKXChatTitleView.xib */; };
 		189D2DDA1DEC2FA1003FDF99 /* FKXRegularView.m in Sources */ = {isa = PBXBuildFile; fileRef = 189D2DD91DEC2FA1003FDF99 /* FKXRegularView.m */; };
@@ -73,6 +77,7 @@
 		18CD3ABC1DE59F4300D8E167 /* FKXMyOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */; };
 		18CD3ABF1DE59FD000D8E167 /* FKXMyOderDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */; };
 		18CE1E271DD89C050014FE12 /* DDTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CE1E261DD89C050014FE12 /* DDTagButton.m */; };
+		18E379EC1DEEA28D002E9BC4 /* FKXPaiHangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */; };
 		18EAA0BA1DE453B70051E46E /* ScrllTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EAA0B91DE453B70051E46E /* ScrllTitleView.m */; };
 		18EAA0BC1DE453C60051E46E /* ScrllTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EAA0BB1DE453C60051E46E /* ScrllTitleView.xib */; };
 		18EDC85E1DDDB1D400D10356 /* FKXBindPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EDC85D1DDDB1D300D10356 /* FKXBindPhone.m */; };
@@ -524,6 +529,12 @@
 		181B994C1DED29E10061F0B6 /* FKXZiXunShiV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXZiXunShiV.h; sourceTree = "<group>"; };
 		181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXZiXunShiV.m; sourceTree = "<group>"; };
 		181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXZiXunShiV.xib; sourceTree = "<group>"; };
+		188C49CE1DEED1FD0013AB62 /* FKXChatV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXChatV.h; sourceTree = "<group>"; };
+		188C49CF1DEED1FD0013AB62 /* FKXChatV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatV.m; sourceTree = "<group>"; };
+		188C49D11DEED20F0013AB62 /* FKXChatV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXChatV.xib; sourceTree = "<group>"; };
+		188C49D31DEEE3670013AB62 /* FKXLisOrderV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXLisOrderV.h; sourceTree = "<group>"; };
+		188C49D41DEEE3670013AB62 /* FKXLisOrderV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXLisOrderV.m; sourceTree = "<group>"; };
+		188C49D61DEEE37D0013AB62 /* FKXLisOrderV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXLisOrderV.xib; sourceTree = "<group>"; };
 		189D2DD31DEC11E6003FDF99 /* FKXChatTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXChatTitleView.h; sourceTree = "<group>"; };
 		189D2DD41DEC11E6003FDF99 /* FKXChatTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatTitleView.m; sourceTree = "<group>"; };
 		189D2DD61DEC11FE003FDF99 /* FKXChatTitleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXChatTitleView.xib; sourceTree = "<group>"; };
@@ -600,6 +611,8 @@
 		18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXMyOderDetailVC.m; sourceTree = "<group>"; };
 		18CE1E251DD89C050014FE12 /* DDTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTagButton.h; sourceTree = "<group>"; };
 		18CE1E261DD89C050014FE12 /* DDTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTagButton.m; sourceTree = "<group>"; };
+		18E379EA1DEEA28D002E9BC4 /* FKXPaiHangModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPaiHangModel.h; sourceTree = "<group>"; };
+		18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPaiHangModel.m; sourceTree = "<group>"; };
 		18EAA0B81DE453B70051E46E /* ScrllTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrllTitleView.h; sourceTree = "<group>"; };
 		18EAA0B91DE453B70051E46E /* ScrllTitleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrllTitleView.m; sourceTree = "<group>"; };
 		18EAA0BB1DE453C60051E46E /* ScrllTitleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ScrllTitleView.xib; sourceTree = "<group>"; };
@@ -1399,6 +1412,7 @@
 			children = (
 				18008FFE1DD050B500FE8551 /* FKXMineDetailVC.h */,
 				18008FFF1DD050B500FE8551 /* FKXMineDetailVC.m */,
+				18E379E91DEEA275002E9BC4 /* Model */,
 				180090011DD0517F00FE8551 /* View */,
 			);
 			name = "帮助和点赞";
@@ -1576,6 +1590,15 @@
 				18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		18E379E91DEEA275002E9BC4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				18E379EA1DEEA28D002E9BC4 /* FKXPaiHangModel.h */,
+				18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		18EDC85B1DDDB18A00D10356 /* 绑定手机 */ = {
@@ -1834,6 +1857,9 @@
 		6164B4811D387D8500A1990F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				188C49D31DEEE3670013AB62 /* FKXLisOrderV.h */,
+				188C49D41DEEE3670013AB62 /* FKXLisOrderV.m */,
+				188C49D61DEEE37D0013AB62 /* FKXLisOrderV.xib */,
 				181B994C1DED29E10061F0B6 /* FKXZiXunShiV.h */,
 				181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */,
 				181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */,
@@ -3116,6 +3142,9 @@
 				189D2DD31DEC11E6003FDF99 /* FKXChatTitleView.h */,
 				189D2DD41DEC11E6003FDF99 /* FKXChatTitleView.m */,
 				189D2DD61DEC11FE003FDF99 /* FKXChatTitleView.xib */,
+				188C49CE1DEED1FD0013AB62 /* FKXChatV.h */,
+				188C49CF1DEED1FD0013AB62 /* FKXChatV.m */,
+				188C49D11DEED20F0013AB62 /* FKXChatV.xib */,
 				6188AFAC1C3513A5002801D2 /* Category */,
 				B3B02F301BCFBA05001A5557 /* Macro */,
 				B3B02F321BCFBA05001A5557 /* Tools */,
@@ -3418,6 +3447,7 @@
 				18A1BEA11DCC734D00F621A6 /* My.storyboard in Resources */,
 				617F53F71C43A73B00CCD8AB /* VoiceSearchFeedback002@2x.png in Resources */,
 				18C87AE11DD950EF00A83CC9 /* FKXYuYueProCell.xib in Resources */,
+				188C49D71DEEE37D0013AB62 /* FKXLisOrderV.xib in Resources */,
 				611CFBCF1CD33A9700057605 /* FKXTimeWarning.xib in Resources */,
 				617F53EB1C43A73B00CCD8AB /* chatBar_moreSelected@2x.png in Resources */,
 				189FBC931DDAF96B001BC1E6 /* FKXMyOrdersCell.xib in Resources */,
@@ -3484,6 +3514,7 @@
 				61A2E6201C8D5DA40081AA61 /* Localizable.strings in Resources */,
 				18A1BE9D1DCC6E5700F621A6 /* FKXMind.storyboard in Resources */,
 				189D2DD71DEC11FE003FDF99 /* FKXChatTitleView.xib in Resources */,
+				188C49D21DEED20F0013AB62 /* FKXChatV.xib in Resources */,
 				61B9CCD21DAB3CF8002E431D /* Letter.storyboard in Resources */,
 				6164B4861D387F4800A1990F /* MindRemindView.xib in Resources */,
 				617F53F11C43A73B00CCD8AB /* messageToolbarBg@2x.png in Resources */,
@@ -3601,6 +3632,7 @@
 				617F53991C43A73B00CCD8AB /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				617F53951C43A73B00CCD8AB /* UIImage+EMWebP.m in Sources */,
 				18B3B2841DE28FA0000E1939 /* FKXdynamicsCommentCell.m in Sources */,
+				188C49D51DEEE3670013AB62 /* FKXLisOrderV.m in Sources */,
 				617F536B1C43A73B00CCD8AB /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				189FBC991DDAFEAE001BC1E6 /* FKXConfirmView.m in Sources */,
 				617F53661C43A73B00CCD8AB /* EaseUI.m in Sources */,
@@ -3823,6 +3855,7 @@
 				18A1BEA51DCC73B700F621A6 /* FKXPersonalViewController.m in Sources */,
 				18B3AC451DD415AA00831BCD /* FKXPsyCommentCell.m in Sources */,
 				61C60AF11CBDE967003429EE /* FKXSameMindImgCell.m in Sources */,
+				188C49D01DEED1FD0013AB62 /* FKXChatV.m in Sources */,
 				618BF1151D66AD9400EED6E6 /* FKXAboutMeVC.m in Sources */,
 				617F53701C43A73B00CCD8AB /* EMVoiceConverter.mm in Sources */,
 				617F53B61C43A73B00CCD8AB /* EaseEmotionEscape.m in Sources */,
@@ -3878,6 +3911,7 @@
 				617F536C1C43A73B00CCD8AB /* EMCDDeviceManager+Remind.m in Sources */,
 				617F537B1C43A73B00CCD8AB /* MJRefreshLegendFooter.m in Sources */,
 				1800900F1DD0519B00FE8551 /* PaiMingOtherCell.m in Sources */,
+				18E379EC1DEEA28D002E9BC4 /* FKXPaiHangModel.m in Sources */,
 				613D57E81D87F3210085DA52 /* FKXShopModel.m in Sources */,
 				617F538C1C43A73B00CCD8AB /* EMSDWebImageDownloader.m in Sources */,
 				619D9FA91C579C17007E36AE /* SecurityUtil.m in Sources */,
