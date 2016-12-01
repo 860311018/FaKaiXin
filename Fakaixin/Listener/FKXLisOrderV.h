@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface FKXLisOrderV : UIView
+@property (weak, nonatomic) IBOutlet UIButton *btnClose;
 
 @end

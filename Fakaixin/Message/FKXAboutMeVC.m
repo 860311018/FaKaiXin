@@ -15,6 +15,7 @@
 #import "FKXCommitHtmlViewController.h"
 #import "FKXCustomAcceptHtmlVC.h"
 #import "FKXReplyLetterVC.h"
+#import "ChatViewController.h"
 
 @interface FKXAboutMeVC ()<FKXAboutMeCellDelegate>
 {
@@ -273,6 +274,24 @@
             FKXReplyLetterVC *vc = [[UIStoryboard storyboardWithName:@"Letter" bundle:nil]instantiateViewControllerWithIdentifier:@"FKXReplyLetterVC"];
             vc.dynamicModel = dyModel;
             [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 7:
+        {
+
+//            NSArray *array = [[FKXUserManager shareInstance] caluteHeight:model];
+//            ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
+//            chatController.title = model.name;
+//            
+//            chatController.toZiXunShi = YES;
+//            chatController.userModel = model;
+//            
+//            chatController.headerH = [array[1] floatValue];
+//            chatController.introStr = array[0];
+//            
+//            chatController.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:chatController animated:YES];
+
         }
             break;
         default:

@@ -371,4 +371,59 @@
     [tap.view removeFromSuperview];
 }
 
+
+- (NSArray *)caluteHeight:(FKXUserInfoModel *)model {
+    NSString *name = model.name;
+    NSString *profile = model.profile;
+    NSString *cureCount = [model.cureCount stringValue];
+    
+    NSString *goodStr = @"";
+    NSArray *goodAt = model.goodAt;
+    //婚恋出轨   失恋阴影  夫妻相处  婆媳关系
+    for (int i=0; i<goodAt.count; i++) {
+        NSString *str = @"";
+        if (i==0) {
+            if ([goodAt[i] integerValue]==0) {
+                str = @"婚恋出轨";
+            }else if ([goodAt[i] integerValue]==1) {
+                str = @"失恋阴影";
+            }else if ([goodAt[i] integerValue]==2) {
+                str = @"夫妻相处";
+            }else if ([goodAt[i] integerValue]==3) {
+                str = @"婆媳关系";
+            }
+            
+        }else{
+            if ([goodAt[i] integerValue]==0) {
+                str = [NSString stringWithFormat:@"、%@",@"婚恋出轨"];
+            }else if ([goodAt[i] integerValue]==1) {
+                str = [NSString stringWithFormat:@"、%@",@"失恋阴影"];
+            }else if ([goodAt[i] integerValue]==2) {
+                str = [NSString stringWithFormat:@"、%@",@"夫妻相处"];
+            }else if ([goodAt[i] integerValue]==3) {
+                str = [NSString stringWithFormat:@"、%@",@"婆媳关系"];
+            }
+        }
+        goodStr = [goodStr stringByAppendingString:str];
+    }
+    
+    NSString *introStr = [NSString stringWithFormat:@"你好，我是%@ 心理咨询专家，资深婚恋情感咨询师,%@。 擅长%@类的问题，已经在伐开心中成功治愈了%@人，在这里聆听解决你的烦恼，给出中肯的建议",name,profile,goodStr,cureCount];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 170, 20)];
+    label.numberOfLines = 0;
+    label.font = [UIFont systemFontOfSize:15];
+    label.text = introStr;
+    [label sizeToFit];
+    
+    CGFloat height = CGRectGetHeight(label.frame);
+    //    CGSize titleSize = [label boundingRectWithSize:CGSizeMake(170, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil].size;
+    //    NSLog(@"%f",tit)
+    //    NSLog(@"%f",height);
+//    self.headerH = height+250;
+//    self.introStr = introStr;
+    CGFloat headerH = 250+height;
+    return @[introStr,@(headerH)];
+}
+
+
 @end

@@ -42,7 +42,8 @@
 @property (nonatomic, strong) NSNumber<Optional> *listenTime;
 @property (nonatomic, strong) NSNumber<Optional> *marry;
 @property(nonatomic, copy   ) NSString<Optional> *mobile;
-@property (nonatomic, copy  ) NSString<Optional>           *name;
+@property (nonatomic, copy  ) NSString<Optional> *name;
+//@property (nonatomic, copy  ) NSString<Optional> *nickname;
 @property (nonatomic, strong) NSNumber<Optional> *praiseRate;
 @property (nonatomic, strong) NSNumber<Optional> *price;//提问费
 @property(nonatomic, strong)NSNumber<Optional> * consultingFee;//咨询费
@@ -71,6 +72,7 @@
 @property   (nonatomic,strong)NSNumber<Optional> *searchType;//搜索的类型：1，心事；2，享问；3，专家；4，文章
 
 
+@property (nonatomic,copy)NSString<Optional> *createTime;
 
 //@property (nonatomic,assign)CGFloat headerH;
 //@property (nonatomic,copy)NSString * introStr;

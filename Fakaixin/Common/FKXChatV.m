@@ -8,7 +8,17 @@
 
 #import "FKXChatV.h"
 
+@interface FKXChatV ()
+
+@end
+
 @implementation FKXChatV
+- (void)awakeFromNib {
+    [super awakeFromNib];
+//    [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"chat_receiver_bg"] stretchableImageWithLeftCapWidth:35 topCapHeight:35]];
+//    self.backImgV set
+}
+
 
 +(id)creatChat {
     return [[NSBundle mainBundle]loadNibNamed:@"FKXChatV" owner:self options:nil].lastObject;

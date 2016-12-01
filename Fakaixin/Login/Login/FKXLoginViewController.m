@@ -208,6 +208,14 @@
     NSString *versionNum = [infoDict objectForKey:@"CFBundleVersion"];
     parameters[@"channel"] = [NSString stringWithFormat:@"AppStore%@",versionNum];
 
+//    [AFRequest sendPostRequestTwo:@"user/mobilelogin" param:parameters success:^(id data) {
+//        if ([data[@"code"] integerValue ] == 0) {
+//            NSDictionary *dic = data[@"data"];
+//            FKXUserInfoModel *model = [FKXUserInfoModel ]
+//        }
+//    } failure:^(NSError *error) {
+//        
+//    }];
     [FKXUserInfoModel sendGetOrPostRequest:@"user/mobilelogin" param:parameters requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
     {
         [self hideHud];

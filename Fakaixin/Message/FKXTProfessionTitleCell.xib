@@ -70,7 +70,7 @@
                             <constraint firstAttribute="height" constant="30" id="rIb-GV-8CR"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <state key="normal" title="  关注他" image="message_guanzhu_blue">
+                        <state key="normal" title="  私信他" image="message_guanzhu_blue">
                             <color key="titleColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                         <userDefinedRuntimeAttributes>

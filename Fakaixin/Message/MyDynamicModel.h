@@ -46,6 +46,8 @@
 @property(nonatomic, strong)NSNumber<Optional> *acceptMoney;//认可的价格
 @property(nonatomic, strong)NSNumber<Optional> *isAccept;//是否已经认可
 
+@property(nonatomic, strong)NSNumber<Optional> *score;
+
 //与我相关新增的三个字段
 @property(nonatomic, strong)NSNumber<Optional> * fromId;
 @property(nonatomic, copy)NSString<Optional> * fromHead;//与我相关的来自某个人的头像

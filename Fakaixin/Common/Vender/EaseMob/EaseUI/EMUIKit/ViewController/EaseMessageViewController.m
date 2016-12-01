@@ -894,50 +894,11 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 
-    NSString *name = self.userModel.name;
-    NSString *profile = self.userModel.profile;
-    NSString *cureCount = [self.userModel.cureCount stringValue];
-    
-    NSString *goodStr = @"";
-    NSArray *goodAt = self.userModel.goodAt;
-    //婚恋出轨   失恋阴影  夫妻相处  婆媳关系
-    for (int i=0; i<goodAt.count; i++) {
-        NSString *str = @"";
-        if (i==0) {
-            if ([goodAt[i] integerValue]==0) {
-                str = @"婚恋出轨";
-            }else if ([goodAt[i] integerValue]==1) {
-                str = @"失恋阴影";
-            }else if ([goodAt[i] integerValue]==2) {
-                str = @"夫妻相处";
-            }else if ([goodAt[i] integerValue]==3) {
-                str = @"婆媳关系";
-            }
-            
-        }else{
-            if ([goodAt[i] integerValue]==0) {
-                str = [NSString stringWithFormat:@"、%@",@"婚恋出轨"];
-            }else if ([goodAt[i] integerValue]==1) {
-                str = [NSString stringWithFormat:@"、%@",@"失恋阴影"];
-            }else if ([goodAt[i] integerValue]==2) {
-                str = [NSString stringWithFormat:@"、%@",@"夫妻相处"];
-            }else if ([goodAt[i] integerValue]==3) {
-                str = [NSString stringWithFormat:@"、%@",@"婆媳关系"];
-            }
-        }
-       goodStr = [goodStr stringByAppendingString:str];
-    }
-    
-    NSString *introStr = [NSString stringWithFormat:@"你好，我是%@ 心理咨询专家，资深婚恋情感咨询师,%@。 擅长%@类的问题，已经在伐开心中成功治愈了%@人，在这里聆听解决你的烦恼，给出中肯的建议",name,profile,goodStr,cureCount];
-    
     FKXChatV *view = [FKXChatV creatChat];
     
     view.introL.text = self.introStr;
-//    [view.introL sizeToFit];
-//    CGFloat height1 = CGRectGetHeight(view.introL.frame);
-//    CGFloat height = 150+10+20+height1;
-    [view.headImgV sd_setImageWithURL:[NSURL URLWithString:self.userModel.head] placeholderImage:[UIImage imageNamed:@""]];
-//    headerH = height;
+    [view.headImgV sd_setImageWithURL:[NSURL URLWithString:self.userModel.head] placeholderImage:[UIImage imageNamed:@"avater_default"]];
+    view.backImgV.image = [[UIImage imageNamed:@"chat_recevie"] stretchableImageWithLeftCapWidth:35 topCapHeight:35];
     view.frame = CGRectMake(0, 0, kScreenWidth, self.headerH);
     return view;
 }

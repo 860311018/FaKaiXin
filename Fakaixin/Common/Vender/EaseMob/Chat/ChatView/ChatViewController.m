@@ -108,6 +108,7 @@
     
     //单聊判断聊天是否结束
     if (self.conversation.conversationType == eConversationTypeChat) {
+        [self browse];
 //        [self validTalkIsFinish];//加载是否显示举报
        
     }
@@ -1133,4 +1134,14 @@
 
 }
 
+
+- (void)browse {
+    NSInteger t = [[FKXUserManager shareInstance]currentUserId];
+    NSDictionary *params = @{@"fromId":@(t),@"toId":self.conversation.chatter};
+    [AFRequest sendGetOrPostRequest:@"user/browse" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
 @end

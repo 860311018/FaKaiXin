@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class FKXOrderModel;
 @interface FKXMyOrdersCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIImageView *headImgV;
+@property (weak, nonatomic) IBOutlet UILabel *nameL;
+@property (weak, nonatomic) IBOutlet UILabel *detailL;
+@property (weak, nonatomic) IBOutlet UILabel *priceL;
+@property (weak, nonatomic) IBOutlet UILabel *statusL;
+@property (weak, nonatomic) IBOutlet UIButton *operationBtn;
+
+@property (nonatomic,strong) FKXOrderModel *model;
+@property (nonatomic,assign) BOOL isWorkBench;
 
 @end

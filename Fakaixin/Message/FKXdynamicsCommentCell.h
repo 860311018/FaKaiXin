@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class MyDynamicModel;
 
 @interface FKXdynamicsCommentCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *headImgV;
@@ -14,5 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *receiveL;
 @property (weak, nonatomic) IBOutlet UILabel *nameL2;
 @property (weak, nonatomic) IBOutlet UILabel *pingFenL;
+
+@property (nonatomic,strong)MyDynamicModel *model;
 
 @end

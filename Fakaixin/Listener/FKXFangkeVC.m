@@ -11,7 +11,7 @@
 #import "FKXFangkeVC.h"
 #import "FKXFangkeCell.h"
 
-@interface FKXFangkeVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface FKXFangkeVC ()<UITableViewDelegate,UITableViewDataSource,FangKeDelegate>
 {
     NSInteger start;
     NSInteger size;
@@ -37,13 +37,14 @@
    
     size = kRequestSize;
 
-    self.tableData = [@[@"3",@"3",@"3"]mutableCopy];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"FKXFangkeCell" bundle:nil] forCellReuseIdentifier:@"FKXFangkeCell"];
 
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
     self.tableView.tableFooterView.frame = CGRectZero;
     [self.tableView addLegendFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
+    
+    [self headerRefreshEvent];
 }
 
 #pragma mark - seperator insets 设置
@@ -64,28 +65,38 @@
 {
     self.tableView.header.state = MJRefreshHeaderStateIdle;
     self.tableView.footer.state = MJRefreshFooterStateIdle;
-    
-//        if ([data count] < kRequestSize) {
-//            self.tableView.footer.hidden = YES;
-//        }else
-//        {
-//            self.tableView.footer.hidden = NO;
-//        }
-//        if (start == 0)
-//        {
-//            [_contentArr removeAllObjects];
-//            if ([data count] == 0) {
-//                [self createEmptyData];
-//            }else{
-//                if (emptyDataView) {
-//                    [emptyDataView removeFromSuperview];
-//                    emptyDataView = nil;
-//                }
-//            }
-//        }
-//        [_contentArr addObjectsFromArray:data];
-//        
-//        [self.tableView reloadData];
+    NSDictionary *paramDic = @{};
+    [FKXUserInfoModel sendGetOrPostRequest:@"user/browse_log"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+     {
+         [self hideHud];
+         if (data)
+         {
+             if ([data count] < kRequestSize) {
+                 self.tableView.footer.hidden = YES;
+             }else
+             {
+                 self.tableView.footer.hidden = NO;
+             }
+             if (start == 0)
+             {
+                 [self.tableData removeAllObjects];
+                 if ([data count] == 0) {
+                     [self createEmptyData];
+                 }else{
+                     if (emptyDataView) {
+                         [emptyDataView removeFromSuperview];
+                         emptyDataView = nil;
+                     }
+                 }
+             }
+             [self.tableData addObjectsFromArray:data];
+             [self.tableView reloadData];
+         } else if (errorModel)
+         {
+            [self showHint:errorModel.message];
+        
+         }
+     }];
 }
 
 
@@ -96,11 +107,23 @@
         emptyDataView = [[NSBundle mainBundle] loadNibNamed:@"FKXEmptyData" owner:nil options:nil][0];
         emptyDataView.frame = CGRectMake(0, 0, self.tableView.width, self.tableView.height);
         emptyDataView.btnDeal.hidden = YES;
-        emptyDataView.titleLab.text = @"还没有来信";
+        emptyDataView.titleLab.text = @"还没有访客";
         [self.tableView addSubview:emptyDataView];
     }
 }
 
+#pragma mark - 私信
+- (void)toChatView:(NSNumber *)uid {
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    FKXUserInfoModel *model = self.tableData[indexPath.row];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 70;
+}
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
@@ -110,11 +133,10 @@
 }
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  
+    FKXUserInfoModel *model = self.tableData[indexPath.row];
     FKXFangkeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXFangkeCell" forIndexPath:indexPath];
-//    cell.isVip = isVip;
-//    cell.model = model;
-
+    cell.delegate = self;
+    cell.model = model;
     return cell;
 }
 

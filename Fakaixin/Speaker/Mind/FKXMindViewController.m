@@ -31,6 +31,8 @@
 #import "FKXConsulterPageVC.h"
 #import "FKXFreeYuYueVC.h"
 #import "FKXQingsuVC.h"
+#import "FKXProfessionInfoVC.h"
+
 @interface FKXMindViewController ()<SDCycleScrollViewDelegate,
     UIScrollViewDelegate, UISearchBarDelegate,UINavigationControllerDelegate>
 {
@@ -474,12 +476,13 @@
 //循环滚动视图点击代理方法
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index
 {
-    //0:专题  1:分享会; 2: 课程; 3:心事; 4:相同心情评论页面;
+    //0:专题  1:分享会; 2: 课程; 3:心事; 4:相同心情评论页面; 5专家
     FKXBannerModel *bannerM = bannerArrays[index];
-    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
     switch ([bannerM.type integerValue]) {
         case 0:
         {
+            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+
             FKXCourseModel *model = [[FKXCourseModel alloc] init];
             model.keyId = bannerM.attachEventId;
             model.background = bannerM.bannerUrl;
@@ -487,10 +490,14 @@
             vc.pageType = MyPageType_nothing;
             vc.urlString = [NSString stringWithFormat:@"%@front/QA_q_detail.html?topicId=%@&uid=%ld&token=%@",kServiceBaseURL, model.keyId,(long)[FKXUserManager shareInstance].currentUserId, [FKXUserManager shareInstance].currentUserToken];
             vc.courseModel = model;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 1:
         {
+            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+
             FKXCourseModel *model = [[FKXCourseModel alloc] init];
             model.keyId = bannerM.attachEventId;
             model.background = bannerM.bannerUrl;
@@ -499,10 +506,14 @@
             vc.pageType = MyPageType_nothing;
             vc.urlString = [NSString stringWithFormat:@"%@front/discovery.html?keyId=%@&uid=%@&token=%@",kServiceBaseURL,model.keyId, model.uid, [FKXUserManager shareInstance].currentUserToken];
             vc.courseModel = model;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 2:
         {
+            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+
             FKXCourseModel *model = [[FKXCourseModel alloc] init];
             model.keyId = bannerM.attachEventId;
             model.background = bannerM.bannerUrl;
@@ -511,10 +522,14 @@
             vc.urlString = [NSString stringWithFormat:@"%@front/course.html?keyId=%@&uid=%@&token=%@",kServiceBaseURL, model.keyId,model.uid, [FKXUserManager shareInstance].currentUserToken];
             vc.courseModel = model;
             vc.pageType = MyPageType_course;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 3:
         {
+            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+
             FKXResonance_homepage_model *model = [[FKXResonance_homepage_model alloc] init];
             model.hotId = [bannerM.attachEventId stringValue];
             model.url = bannerM.bannerUrl;
@@ -523,10 +538,14 @@
             vc.urlString = [NSString stringWithFormat:@"%@front/mind_detail.html?shareId=%@&uid=%ld&token=%@",kServiceBaseURL, model.hotId, (long)[FKXUserManager shareInstance].currentUserId,[FKXUserManager shareInstance].currentUserToken];
             vc.pageType = MyPageType_hot;
             vc.resonanceModel = model;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 4:
         {
+            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+
             FKXSameMindModel *model = [[FKXSameMindModel alloc] init];
             model.worryId = bannerM.attachEventId;
             model.head = bannerM.bannerUrl;
@@ -534,13 +553,21 @@
             vc.shareType = @"comment";
             vc.urlString = [NSString stringWithFormat:@"%@front/comment.html?worryId=%@&uid=%ld&token=%@",kServiceBaseURL,model.worryId, (long)[FKXUserManager shareInstance].currentUserId,  [FKXUserManager shareInstance].currentUserToken];
             vc.sameMindModel = model;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+        case 5:
+        {
+            FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+            vc.userId = bannerM.attachEventId;
+            [vc setHidesBottomBarWhenPushed:YES];
+            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         default:
             break;
     }
-    [vc setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark - UIScrollViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView

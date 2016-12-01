@@ -43,6 +43,9 @@
 //是否需要登录
 +(BOOL)needShowLoginVC;
 
+//
+-(NSArray *)caluteHeight:(FKXUserInfoModel *)model;
+
 /**
  *  是否登录
  *

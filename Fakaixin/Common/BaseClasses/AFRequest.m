@@ -291,6 +291,7 @@
             
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSLog(@"\n接口:%@\n参数:%@\n返回的数据:%@",url,param, responseObject);
+            
             [self hanleResponseData:responseObject class:[self class] handleBlock:block];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             hudWithStr(@"网络出错");

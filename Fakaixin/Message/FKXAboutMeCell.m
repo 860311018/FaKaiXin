@@ -41,7 +41,14 @@
     [_userIcon sd_setBackgroundImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", model.fromHead,cropImageW]] forState:UIControlStateNormal placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     _labTime.text = model.createTime;
     _userName.text = model.fromNickname;
+    
     _labDetail.text = model.replyText;
+    
+    if ([model.type integerValue] == 7) {
+        _labDetail.text = @"查看详情";
+        _labDetail.textAlignment = NSTextAlignmentCenter;
+    }
+    
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.lineSpacing = 5;
     switch ([model.type integerValue]) {
@@ -65,6 +72,9 @@
             break;
         case 6:
             _labContent.text = [NSString stringWithFormat:@"%@回复了你的信件",model.fromNickname];
+            break;
+        case 7:
+            _labContent.text = [NSString stringWithFormat:@"%@浏览了你,TA也许能够解决你的困惑哦",model.fromNickname];
             break;
         default:
             break;

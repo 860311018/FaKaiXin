@@ -19,16 +19,21 @@
 #import "FKXdynamicsCell.h"
 #import "FKXdynamicsTextCell.h"
 #import "FKXdynamicsVoiceCell.h"
+#import "FKXdynamicsCommentCell.h"
+#import "FKXVoiceResponseCell.h"
 
 #import "MyDynamicModel.h"
 #import "FKXPayView.h"
+
+#import "FKXCustomAcceptHtmlVC.h"
+#import "FKXCommitHtmlViewController.h"
 
 @interface FKXProfessionInfoVC ()<UITableViewDelegate,UITableViewDataSource,BeeCloudDelegate>
 {
     NSInteger start;
     NSInteger size;
     CGFloat oneLineH;   //一行的高度
-    FKXUserInfoModel *myUserInfoModel;
+    FKXUserInfoModel *proUserInfoModel;
     NSDictionary *userD;
     NSDictionary *userEvaluate;//用户评价
     
@@ -43,20 +48,12 @@
 @property (nonatomic,strong) NSMutableArray *dongTaiArr ;
 
 
-@property (nonatomic,copy) NSString *userName;
-@property (nonatomic,copy) NSString *userhead;
-@property (nonatomic,copy) NSString *userProfession;
-@property (nonatomic,copy) NSString *userDesc;
-
-@property (nonatomic,copy) NSString *phonePrice;
-@property (nonatomic,copy) NSString *chatPrice;
-@property (nonatomic,copy) NSString *tuwenPrice;
 @property (nonatomic,copy) NSString *phonePingFen;
 @property (nonatomic,copy) NSString *chatPingFen;
 @property (nonatomic,copy) NSString *tuwenPingFen;
 
-@property (nonatomic,copy) NSString *jianjieID;
-@property (nonatomic,copy) NSString *jianjie;
+//@property (nonatomic,copy) NSString *jianjieID;
+//@property (nonatomic,copy) NSString *jianjie;
 
 @property (nonatomic,copy) NSString *userOfEvaIcon;
 @property (nonatomic,copy) NSString *userOfEvaName;
@@ -75,6 +72,11 @@
     size = kRequestSize;
     start = 0;
 
+    if (_userId != [FKXUserManager getUserInfoModel].uid)
+    {
+        [self browse];
+    }
+    
     self.navTitle = @"个人主页";
     
     [self.view addSubview:self.bottomView];
@@ -107,38 +109,15 @@
             
             userD = data[@"data"][@"users"];//当前这个人的信息
             userEvaluate = [data[@"data"][@"commentList"] firstObject];//第一个评价
-            myUserInfoModel = [[FKXUserInfoModel alloc] init];
-            myUserInfoModel.uid = _userId;
-            myUserInfoModel.name = userD[@"nickname"];
-            myUserInfoModel.head = userD[@"head"];
-            myUserInfoModel.role = userD[@"role"];
-            myUserInfoModel.price = userD[@"price"];
-            myUserInfoModel.consultingFee = userD[@"consultingFee"];
-//            myUserInfoModel.phonePrice = userD[@"consultingFee"];
-            myUserInfoModel.clientNum = userD[@"clientNum"];
-            self.role =[myUserInfoModel.role integerValue];
+            proUserInfoModel = [[FKXUserInfoModel alloc] initWithDictionary:userD error:nil];
 
-#pragma mark - 个人title
-            self.userhead = [NSString stringWithFormat:@"%@%@", userD[@"head"],cropImageW];
-            self.userName = userD[@"nickname"];
-            self.userProfession = [NSString stringWithFormat:@"  %@  ",userD[@"profession"]];
-            self.userDesc = [NSString stringWithFormat:@"治愈了%@人，好评%@%@",userD[@"cureCount"],userD[@"praiseRate"],@"%"];
+            self.role =[proUserInfoModel.role integerValue];
+//            self.phonePingFen = [NSString stringWithFormat:@"评分："];
             
-#pragma mark - 服务
-            self.phonePrice = [NSString stringWithFormat:@"￥%ld/小时", [userD[@"consultingFee"] integerValue]/100];
-            self.phonePingFen = [NSString stringWithFormat:@"评分："];
+//            self.chatPingFen = [NSString stringWithFormat:@"评分："];
             
-            self.chatPrice = [NSString stringWithFormat:@"￥%ld/次", [userD[@"price"] integerValue]/100];
-            self.chatPingFen = [NSString stringWithFormat:@"评分："];
-            
-            self.tuwenPrice = [NSString stringWithFormat:@"￥%ld/小时", [userD[@"consultingFee"] integerValue]/100];
-            self.tuwenPingFen = [NSString stringWithFormat:@"评分："];
-            
-#pragma mark - 标签
+//            self.tuwenPingFen = [NSString stringWithFormat:@"评分："];
 
-#pragma mark - 简介
-//            self.jianjieID = [NSString stringWithFormat:@"ID: %@",userD[@"nickname"]];
-            self.jianjie = userD[@"profile"];
 #pragma mark - 评价
             self.userOfEvaName = userEvaluate[@"nickName"];
             self.userOfEvaIcon = userEvaluate[@"headUrl"];
@@ -226,51 +205,33 @@
     vc.shareType = @"user_center_yu_yue";//预约
     vc.pageType = MyPageType_consult;
     vc.urlString = [NSString stringWithFormat:@"%@front/user_center.html?uid=%@&token=%@",kServiceBaseURL, _userId, [FKXUserManager shareInstance].currentUserToken];
-    vc.userModel = myUserInfoModel;
+    vc.userModel = proUserInfoModel;
     //push的时候隐藏tabbar
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];
 
 }
 
+
+
 #pragma mark - 点击头像
 - (void)tapHead {
-    
-    if ([myUserInfoModel.role integerValue]) {
-        return;
-    }
-    if (!_userId) {
-        return;
-    }
-    //保存接收方的信息
-    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
-    receiverMessage.to = [_userId stringValue];
-    receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
-    receiverMessage.ext = @{
-                            @"head" : myUserInfoModel.head,
-                            @"name": myUserInfoModel.name,
-                            };
-    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
-    
-    //    //进入聊天
-    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[_userId stringValue]  conversationType:eConversationTypeChat];
-    chatController.title = myUserInfoModel.name;
-    [self.navigationController pushViewController:chatController animated:YES];
+    [self toChatVC];
 }
 
 #pragma mark - 关注
 - (void)guanzhu {
-    
+    [self toChatVC];
 }
 
 #pragma mark - 预约
 - (void)yuyue {
-    [self bookConsultService];
+    [self callOrder];
 }
 
 #pragma mark - 选择咨询服务
 - (void)selectTelHelp {
-    
+    [self callOrder];
 }
 
 - (void)selectAskToMe {
@@ -283,13 +244,13 @@
     }
     FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
     vc.pageType = MyPageType_people;
-    if ([myUserInfoModel.role integerValue] == 1) {
+    if ([proUserInfoModel.role integerValue] == 1) {
         vc.shareType = @"user_center_jinpai";
     }else{
         vc.shareType = @"user_center_xinli";
     }
     vc.urlString = [NSString stringWithFormat:@"%@front/QA_home.html?uid=%@&loginUserId=%ld&token=%@",kServiceBaseURL, _userId, [FKXUserManager shareInstance].currentUserId, [FKXUserManager shareInstance].currentUserToken];
-    vc.userModel = myUserInfoModel;
+    vc.userModel = proUserInfoModel;
     //push的时候隐藏tabbar
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];
@@ -297,6 +258,36 @@
 
 - (void)selectTuwenHelp {
     [self bookConsultService];
+}
+
+#pragma mark - 聊天
+- (void)toChatVC {
+    if ([proUserInfoModel.role integerValue]) {
+        return;
+    }
+    if (!_userId) {
+        return;
+    }
+    //保存接收方的信息
+    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
+    receiverMessage.to = [_userId stringValue];
+    receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+    receiverMessage.ext = @{
+                            @"head" : proUserInfoModel.head,
+                            @"name": proUserInfoModel.name,
+                            };
+    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+    
+    //    //进入聊天
+    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[_userId stringValue]  conversationType:eConversationTypeChat];
+    chatController.title = proUserInfoModel.name;
+    [self.navigationController pushViewController:chatController animated:YES];
+    
+}
+
+#pragma mark - 电话订单
+- (void)callOrder {
+    
 }
 
 #pragma mark - 点击动态
@@ -322,7 +313,6 @@
                 [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
-            case 5:
             case 3:
             {
                 FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
@@ -355,6 +345,98 @@
                 //push的时候隐藏tabbar
                 [vc setHidesBottomBarWhenPushed:YES];
                 [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+                
+            case 5:
+            {
+            //跳到评价页
+                FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+                vc.shareType = @"user_center_yu_yue";//预约
+                vc.pageType = MyPageType_consult;
+                vc.urlString = [NSString stringWithFormat:@"%@front/user_center.html?uid=%@&token=%@",kServiceBaseURL, _userId, [FKXUserManager shareInstance].currentUserToken];
+                vc.userModel = proUserInfoModel;
+                //push的时候隐藏tabbar
+                [vc setHidesBottomBarWhenPushed:YES];
+                [self.navigationController pushViewController:vc animated:YES];
+
+            }
+                break;
+            case 6:
+            {
+              //跳到待认可页
+                //判断 如果没有认可 隐藏
+                FKXSecondAskModel *model = [[FKXSecondAskModel alloc] init];
+                model.worryId = dyModel.worryId;
+                model.topicId = dyModel.topicId;
+                model.text = dyModel.replyText;
+                model.userHead = dyModel.toHead;
+                model.userNickName = dyModel.toNickname;
+                model.listenerNickName = dyModel.fromNickname;
+                model.listenerHead = dyModel.fromHead;
+                model.listenerId = dyModel.fromId;
+                model.voiceId = dyModel.voiceId;
+                model.acceptMoney = dyModel.acceptMoney;
+                model.isAccept = dyModel.isAccept;
+                
+                if ([model.isAccept integerValue] == 0) {//需要展示认可
+                    FKXCustomAcceptHtmlVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXCustomAcceptHtmlVC"];
+                    vc.isHidenM = YES;
+                    NSString *paraStr = @"worryId";//默认传worryId
+                    NSNumber *paraId;
+                    if (model.worryId) {
+                        paraId = model.worryId;
+                    }
+                    if (model.topicId) {
+                        paraStr = @"topicId";
+                        paraId = model.topicId;
+                    }
+                    if (model.lqId) {
+                        paraStr = @"lqId";
+                        paraId = model.lqId;
+                    }
+                    vc.urlString = [NSString stringWithFormat:@"%@front/QA_a_detail.html?%@=%@&uid=%ld&voiceId=%@&IsAgree=%d&token=%@",kServiceBaseURL,paraStr, paraId, (long)[FKXUserManager shareInstance].currentUserId, model.voiceId,0, [FKXUserManager shareInstance].currentUserToken];
+                    vc.secondModel = model;
+                
+                    //传相关的支付需要的参数
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                    dic[@"voiceId"] = model.voiceId;
+                    vc.payParameterDic = dic;
+                    
+                    vc.isShowAlert = [model.isAccept integerValue] ? NO : YES;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }else{
+                    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+                    vc.isNeedTwoItem = YES;
+                    vc.pageType = MyPageType_agree;
+                    vc.shareType = @"second_ask";
+                    NSString *paraStr = @"worryId";//默认传worryId
+                    NSNumber *paraId;
+                    if (model.worryId) {
+                        paraId = model.worryId;
+                    }
+                    if (model.topicId) {
+                        paraStr = @"topicId";
+                        paraId = model.topicId;
+                    }
+                    if (model.lqId) {
+                        paraStr = @"lqId";
+                        paraId = model.lqId;
+                    }
+                    NSInteger agree = 1;
+                    if ([model.isAccept integerValue] == -1 ||[model.isAccept integerValue] == -2) {
+                        agree = 0;
+                    }
+                    vc.urlString = [NSString stringWithFormat:@"%@front/QA_a_detail.html?%@=%@&uid=%ld&voiceId=%@&IsAgree=%ld&token=%@",kServiceBaseURL,paraStr, paraId, (long)[FKXUserManager shareInstance].currentUserId, model.voiceId,agree, [FKXUserManager shareInstance].currentUserToken];
+                    vc.secondModel = model;
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+            }
+                break;
+            case 7:
+            {
+                //跳到私信页
+                [self toChatVC];
             }
                 break;
             default:
@@ -491,15 +573,20 @@
     if (indexPath.section == 0) {
         FKXTProfessionTitleCell * cell =[tableView dequeueReusableCellWithIdentifier:@"FKXTProfessionTitleCell" forIndexPath:indexPath];
         
-        cell.nameL.text = self.userName;
-        cell.profession.text = self.userProfession;
-        [cell.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",self.userhead,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+        cell.nameL.text = userD[@"name"];
+//        cell.nameL.text = proUserInfoModel.nickname;
+        
+        [cell.guanzhuBtn addTarget:self action:@selector(toChatVC) forControlEvents:UIControlEventTouchUpInside];
+        
+        cell.profession.text = [NSString stringWithFormat:@"  %@  ",proUserInfoModel.profession];
+        [cell.headImgV sd_setImageWithURL:[NSURL URLWithString:proUserInfoModel.head] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
         [cell.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHead)]];
         
-        if (self.userDesc) {
-            NSMutableAttributedString *helpAtt = [[NSMutableAttributedString alloc] initWithString:self.userDesc];
-            [helpAtt addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:[self.userDesc rangeOfString:[NSString stringWithFormat:@"%@", userD[@"cureCount"]]]];
-            [helpAtt addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:[self.userDesc rangeOfString:[NSString stringWithFormat:@"%@%@", userD[@"praiseRate"],@"%"]]];
+        NSString *userDesc = [NSString stringWithFormat:@"治愈了%@人，好评%@%@",proUserInfoModel.cureCount,proUserInfoModel.praiseRate,@"%"];
+        if (userDesc) {
+            NSMutableAttributedString *helpAtt = [[NSMutableAttributedString alloc] initWithString:userDesc];
+            [helpAtt addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:[userDesc rangeOfString:[NSString stringWithFormat:@"%@", proUserInfoModel.cureCount]]];
+            [helpAtt addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:[userDesc rangeOfString:[NSString stringWithFormat:@"%@%@", proUserInfoModel.praiseRate,@"%"]]];
             
             [cell.zhiyuL setAttributedText:helpAtt];
  
@@ -514,23 +601,23 @@
         if (indexPath.row == 0) {
             cell.phoneIcon.hidden = NO;
             cell.helpName.text = @"电话咨询";
-            cell.priceL.text = self.phonePrice;
-            cell.pingFenL.text = self.phonePingFen;
+            cell.priceL.text = [NSString stringWithFormat:@"￥%ld/小时", [proUserInfoModel.phonePrice integerValue]/100];;
+//            cell.pingFenL.text = self.phonePingFen;
             [cell.helpBackV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectTelHelp)]];
             
             
         }else if (indexPath.row == 1) {
             cell.phoneIcon.hidden = YES;
             cell.helpName.text = @"向我提问";
-            cell.priceL.text = self.chatPrice;
-            cell.pingFenL.text = self.chatPingFen;
+            cell.priceL.text = [NSString stringWithFormat:@"￥%ld/次", [proUserInfoModel.price integerValue]/100];
+//            cell.pingFenL.text = self.chatPingFen;
             [cell.helpBackV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectAskToMe)]];
             
         }else {
             cell.phoneIcon.hidden = YES;
             cell.helpName.text = @"图文咨询";
-            cell.priceL.text = self.tuwenPrice;
-            cell.pingFenL.text = self.tuwenPingFen;
+            cell.priceL.text = [NSString stringWithFormat:@"￥%ld/小时", [proUserInfoModel.consultingFee integerValue]/100];
+//            cell.pingFenL.text = self.tuwenPingFen;
             [cell.helpBackV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectTuwenHelp)]];
             
         }
@@ -550,7 +637,7 @@
         }else {
             FKXJianjieCell * cell =[tableView dequeueReusableCellWithIdentifier:@"FKXJianjieCell" forIndexPath:indexPath];
 //            cell.jianjieID.text = self.jianjieID;
-            cell.jianjie.text = self.jianjie;
+            cell.jianjie.text = proUserInfoModel.profile;
             [cell.zhankaiImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(openJianjie)]];
             return cell;
         }
@@ -570,7 +657,7 @@
         //根据数据中的type 确定cell
         if (self.dongTaiArr.count >0) {
             MyDynamicModel *model = [self.dongTaiArr objectAtIndex:indexPath.row];
-            // //  1评论     2抱    3 偷听    4 赞  5语音回复 6收到回信
+            // //  1评论     2抱    3 偷听    4 赞   5评价 6我语音回复  7 购买电话服务
             switch ([model.type integerValue]) {
                 case 1:
                 {
@@ -590,6 +677,21 @@
                 case 4:
                 {
                     FKXdynamicsCell * cell =[tableView dequeueReusableCellWithIdentifier:@"FKXdynamicsCell" forIndexPath:indexPath];
+                    cell.model = model;
+                    return cell;
+                }
+                    break;
+                case 5:
+                case 7:
+                {
+                    FKXdynamicsCommentCell * cell =[tableView dequeueReusableCellWithIdentifier:@"FKXdynamicsCommentCell" forIndexPath:indexPath];
+                    cell.model = model;
+                    return cell;
+                }
+                    break;
+                case 6:
+                {
+                    FKXVoiceResponseCell * cell =[tableView dequeueReusableCellWithIdentifier:@"FKXVoiceResponseCell" forIndexPath:indexPath];
                     cell.model = model;
                     return cell;
                 }
@@ -690,6 +792,8 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"FKXdynamicsCell" bundle:nil] forCellReuseIdentifier:@"FKXdynamicsCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"FKXdynamicsTextCell" bundle:nil] forCellReuseIdentifier:@"FKXdynamicsTextCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"FKXdynamicsVoiceCell" bundle:nil] forCellReuseIdentifier:@"FKXdynamicsVoiceCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FKXdynamicsCommentCell" bundle:nil] forCellReuseIdentifier:@"FKXdynamicsCommentCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"FKXVoiceResponseCell" bundle:nil] forCellReuseIdentifier:@"FKXVoiceResponseCell"];
 
 }
 
@@ -906,6 +1010,17 @@
             NSLog(@"%@", @"不是支付响应的回调");
             break;
     }
+}
+
+
+- (void)browse {
+    NSInteger t = [[FKXUserManager shareInstance]currentUserId];
+    NSDictionary *params = @{@"fromId":@(t),@"toId":self.userId};
+    [AFRequest sendGetOrPostRequest:@"user/browse" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 /*
 #pragma mark - Navigation

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class MyDynamicModel;
 @interface FKXVoiceResponseCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UIImageView *headImgV;
@@ -22,4 +22,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *voiceImgV;
 
 @property (weak, nonatomic) IBOutlet UILabel *contentL;
+
+@property (nonatomic,strong) MyDynamicModel *model;
+
 @end

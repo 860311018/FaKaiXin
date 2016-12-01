@@ -426,7 +426,6 @@ static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88
                                       stringByReplacingOccurrencesOfString: @"<" withString: @""]
                                      stringByReplacingOccurrencesOfString: @">" withString: @""]
                                     stringByReplacingOccurrencesOfString: @" " withString: @""];
-    NSLog(@"%@",deviceTokenString);
     [FKXUserManager shareInstance].deviceTokenString = deviceTokenString;
     NSLog(@"deviceTokenString:%@", deviceTokenString);
 

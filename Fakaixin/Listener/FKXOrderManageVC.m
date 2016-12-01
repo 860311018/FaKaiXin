@@ -164,10 +164,10 @@
 #pragma mark - FKXOrderCellDelegate
 - (void)goToDynamicVC:(FKXOrderModel*)cellModel sender:(UIButton*)sender
 {
-    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
-    vc.userId = cellModel.userId;
-    [vc setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:vc animated:YES];
+//    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+//    vc.userId = cellModel.userId;
+//    [vc setHidesBottomBarWhenPushed:YES];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 // 0 拒绝 1接受
 - (void)rejectOrAcceptOrder:(FKXOrderModel*)cellModel sender:(UIButton *)sender
@@ -219,15 +219,15 @@
                     FKXUserInfoModel *meInfo = [FKXUserManager getUserInfoModel];
                     
                     //保存接收方的信息
-                    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[meInfo.uid stringValue] bodies:nil];
-                    receiverMessage.from = [cellModel.userId stringValue];
-                    receiverMessage.to = [meInfo.uid stringValue];
-                    receiverMessage.ext = @{
-                                            @"head" : cellModel.headUrl,
-                                            @"name": cellModel.nickName,
-                                            @"stop":@(NO)
-                                            };
-                    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+//                    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[meInfo.uid stringValue] bodies:nil];
+//                    receiverMessage.from = [cellModel.userId stringValue];
+//                    receiverMessage.to = [meInfo.uid stringValue];
+//                    receiverMessage.ext = @{
+//                                            @"head" : cellModel.headUrl,
+//                                            @"name": cellModel.nickName,
+//                                            @"stop":@(NO)
+//                                            };
+//                    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
                     
                     NSArray *textArray = @[@"亲，我来了~在伐开心里可以无压力的倾诉心事，安抚您内心的小怪兽",@"身为伐开心的倾听者，能够倾听帮助您解决烦心事是我义不容辞的责任~",@"您的烦心事尽管告诉我，我会尽我所能帮助您的",@"不开心？来伐开心，我都在这陪伴倾听着你",@"我在呢~每当您有烦心事我都会第一时间出现在您身边的"];
                     NSInteger radom = arc4random()%textArray.count;
@@ -239,12 +239,12 @@
                                              @"name": meInfo.name,
                                              };
                     
-                    [EaseSDKHelper sendTextMessage:welcomeMessage to:[cellModel.userId stringValue] messageType:eMessageTypeChat requireEncryption:NO messageExt:dicExt];
+//                    [EaseSDKHelper sendTextMessage:welcomeMessage to:[cellModel.userId stringValue] messageType:eMessageTypeChat requireEncryption:NO messageExt:dicExt];
                     
                     //进入聊天
-                    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[cellModel.userId stringValue] conversationType:eConversationTypeChat];
-                    chatController.title = cellModel.nickName;
-                    [self.navigationController pushViewController:chatController animated:YES];
+//                    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[cellModel.userId stringValue] conversationType:eConversationTypeChat];
+//                    chatController.title = cellModel.nickName;
+//                    [self.navigationController pushViewController:chatController animated:YES];
                 }else if ([data[@"code"] integerValue] == 4)
                 {
                     [self showAlertViewWithTitle:data[@"message"]];
@@ -265,16 +265,16 @@
             if ([sender.titleLabel.text isEqualToString:@"服务"])
             {
                 //进入聊天
-                ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[cellModel.userId stringValue] conversationType:eConversationTypeChat];
-                chatController.title = cellModel.nickName;
-                [self.navigationController pushViewController:chatController animated:YES];
+//                ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[cellModel.userId stringValue] conversationType:eConversationTypeChat];
+//                chatController.title = cellModel.nickName;
+//                [self.navigationController pushViewController:chatController animated:YES];
             }else
             {//查看评价,进个人主页
                 FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
                 vc.shareType = @"user_center";
                 vc.urlString = [NSString stringWithFormat:@"%@front/user_center.html?uid=%ld&token=%@",kServiceBaseURL,(long)[FKXUserManager shareInstance].currentUserId, [FKXUserManager shareInstance].currentUserToken];
                 FKXUserInfoModel *userM = [[FKXUserInfoModel alloc] init];
-                userM.uid = cellModel.userId;
+//                userM.uid = cellModel.userId;
                 userM.head = cellModel.headUrl;
                 userM.name = cellModel.nickName;
                 vc.userModel = userM;

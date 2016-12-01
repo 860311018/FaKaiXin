@@ -13,6 +13,7 @@
 #import "FKXServiceVC.h"
 #import "FKXTouGaoVC.h"
 #import "FKXFangkeVC.h"
+#import "FKXMyOrderVC.h"
 
 @interface FKXWorkBenchViewController ()<UITableViewDelegate>
 {
@@ -98,8 +99,12 @@
 
 //查看订单
 - (IBAction)lookData:(UIButton *)sender {
-    FKXOrderManageController *vc = [[UIStoryboard storyboardWithName:@"FKXCare" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXOrderManageController"];
-    [vc setHidesBottomBarWhenPushed:YES];
+//    FKXOrderManageController *vc = [[UIStoryboard storyboardWithName:@"FKXCare" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXOrderManageController"];
+//    [vc setHidesBottomBarWhenPushed:YES];
+//    [self.navigationController pushViewController:vc animated:YES];
+    FKXMyOrderVC *vc = [[FKXMyOrderVC alloc]init];
+    vc.hidesBottomBarWhenPushed = YES;
+    vc.isWorkBench = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

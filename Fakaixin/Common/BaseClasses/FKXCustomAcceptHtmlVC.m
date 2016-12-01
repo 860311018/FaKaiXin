@@ -50,6 +50,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *btnPayAccept;
 
 @property (weak, nonatomic) IBOutlet UIView *phoneView;
+@property (weak, nonatomic) IBOutlet UIView *renkeView;
 
 @end
 
@@ -58,7 +59,9 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    if (self.isHidenM) {
+        self.renkeView.hidden = YES;
+    }
     //电话动效
     [self.phoneView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(call)]];
     self.phoneView.transform = CGAffineTransformScale(self.phoneView.transform, 0.8, 0.8);

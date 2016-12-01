@@ -51,6 +51,8 @@
 		18A1BE9F1DCC6ED200F621A6 /* FKXRecommendListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1BE9E1DCC6ED200F621A6 /* FKXRecommendListener.m */; };
 		18A1BEA11DCC734D00F621A6 /* My.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18A1BEA01DCC734D00F621A6 /* My.storyboard */; };
 		18A1BEA51DCC73B700F621A6 /* FKXPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1BEA41DCC73B700F621A6 /* FKXPersonalViewController.m */; };
+		18B03AFE1DF032B7009DE6DD /* FKXMyOderDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B03AFC1DF032B7009DE6DD /* FKXMyOderDetailVC.m */; };
+		18B03AFF1DF032B7009DE6DD /* FKXMyOderDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B03AFD1DF032B7009DE6DD /* FKXMyOderDetailVC.xib */; };
 		18B3AC451DD415AA00831BCD /* FKXPsyCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B3AC431DD415AA00831BCD /* FKXPsyCommentCell.m */; };
 		18B3AC461DD415AA00831BCD /* FKXPsyCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B3AC441DD415AA00831BCD /* FKXPsyCommentCell.xib */; };
 		18B3AC4A1DD4183400831BCD /* FKXPsyNoCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B3AC481DD4183400831BCD /* FKXPsyNoCommentCell.m */; };
@@ -75,7 +77,6 @@
 		18C87AE11DD950EF00A83CC9 /* FKXYuYueProCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18C87ADF1DD950EF00A83CC9 /* FKXYuYueProCell.xib */; };
 		18C87AED1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C87AEB1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m */; };
 		18CD3ABC1DE59F4300D8E167 /* FKXMyOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */; };
-		18CD3ABF1DE59FD000D8E167 /* FKXMyOderDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */; };
 		18CE1E271DD89C050014FE12 /* DDTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CE1E261DD89C050014FE12 /* DDTagButton.m */; };
 		18E379EC1DEEA28D002E9BC4 /* FKXPaiHangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */; };
 		18EAA0BA1DE453B70051E46E /* ScrllTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EAA0B91DE453B70051E46E /* ScrllTitleView.m */; };
@@ -569,6 +570,9 @@
 		18A1BE9E1DCC6ED200F621A6 /* FKXRecommendListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXRecommendListener.m; sourceTree = "<group>"; };
 		18A1BEA01DCC734D00F621A6 /* My.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = My.storyboard; sourceTree = "<group>"; };
 		18A1BEA41DCC73B700F621A6 /* FKXPersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPersonalViewController.m; sourceTree = "<group>"; };
+		18B03AFB1DF032B7009DE6DD /* FKXMyOderDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXMyOderDetailVC.h; sourceTree = "<group>"; };
+		18B03AFC1DF032B7009DE6DD /* FKXMyOderDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXMyOderDetailVC.m; sourceTree = "<group>"; };
+		18B03AFD1DF032B7009DE6DD /* FKXMyOderDetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXMyOderDetailVC.xib; sourceTree = "<group>"; };
 		18B3AC421DD415AA00831BCD /* FKXPsyCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPsyCommentCell.h; sourceTree = "<group>"; };
 		18B3AC431DD415AA00831BCD /* FKXPsyCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPsyCommentCell.m; sourceTree = "<group>"; };
 		18B3AC441DD415AA00831BCD /* FKXPsyCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXPsyCommentCell.xib; sourceTree = "<group>"; };
@@ -607,8 +611,6 @@
 		18C87AEB1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXFreeYuYueVC.m; sourceTree = "<group>"; };
 		18CD3ABA1DE59F4300D8E167 /* FKXMyOrderVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXMyOrderVC.h; sourceTree = "<group>"; };
 		18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXMyOrderVC.m; sourceTree = "<group>"; };
-		18CD3ABD1DE59FD000D8E167 /* FKXMyOderDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXMyOderDetailVC.h; sourceTree = "<group>"; };
-		18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXMyOderDetailVC.m; sourceTree = "<group>"; };
 		18CE1E251DD89C050014FE12 /* DDTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTagButton.h; sourceTree = "<group>"; };
 		18CE1E261DD89C050014FE12 /* DDTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTagButton.m; sourceTree = "<group>"; };
 		18E379EA1DEEA28D002E9BC4 /* FKXPaiHangModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPaiHangModel.h; sourceTree = "<group>"; };
@@ -1507,6 +1509,15 @@
 			name = "订单cell";
 			sourceTree = "<group>";
 		};
+		18B03AFA1DF0213B009DE6DD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				617273521D5DCE040071836F /* FKXOrderModel.h */,
+				617273531D5DCE040071836F /* FKXOrderModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		18B3B2861DE2967E000E1939 /* 我的投稿 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1586,8 +1597,10 @@
 			children = (
 				18CD3ABA1DE59F4300D8E167 /* FKXMyOrderVC.h */,
 				18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */,
-				18CD3ABD1DE59FD000D8E167 /* FKXMyOderDetailVC.h */,
-				18CD3ABE1DE59FD000D8E167 /* FKXMyOderDetailVC.m */,
+				18B03AFB1DF032B7009DE6DD /* FKXMyOderDetailVC.h */,
+				18B03AFC1DF032B7009DE6DD /* FKXMyOderDetailVC.m */,
+				18B03AFD1DF032B7009DE6DD /* FKXMyOderDetailVC.xib */,
+				18B03AFA1DF0213B009DE6DD /* Model */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1915,8 +1928,6 @@
 				6172734F1D5DCE040071836F /* FKXOrderManageController.m */,
 				617273501D5DCE040071836F /* FKXOrderManageVC.h */,
 				617273511D5DCE040071836F /* FKXOrderManageVC.m */,
-				617273521D5DCE040071836F /* FKXOrderModel.h */,
-				617273531D5DCE040071836F /* FKXOrderModel.m */,
 			);
 			name = Order;
 			sourceTree = "<group>";
@@ -3436,6 +3447,7 @@
 				18FF65751DD2FE20001EA9B7 /* FKXZixunHelpCell.xib in Resources */,
 				617F53F81C43A73B00CCD8AB /* VoiceSearchFeedback003@2x.png in Resources */,
 				18B3B28B1DE296BE000E1939 /* FKXTouGaoVC.xib in Resources */,
+				18B03AFF1DF032B7009DE6DD /* FKXMyOderDetailVC.xib in Resources */,
 				617F53E11C43A73B00CCD8AB /* chatBar_colorMore_photoSelected@2x.png in Resources */,
 				610B5D761D6EDC3D005715A5 /* FKXSignInView.xib in Resources */,
 				613B3D3D1D48B23500ECD48D /* iTunesArtwork@2x in Resources */,
@@ -3688,6 +3700,7 @@
 				61C60AEB1CBDE143003429EE /* MJPhotoToolbar.m in Sources */,
 				617F53CA1C43A73B00CCD8AB /* EaseChatToolbarItem.m in Sources */,
 				617F53891C43A73B00CCD8AB /* EMSDImageCache.m in Sources */,
+				18B03AFE1DF032B7009DE6DD /* FKXMyOderDetailVC.m in Sources */,
 				B3666D781BC9629900D48822 /* FKXBaseViewController.m in Sources */,
 				617F53A71C43A73B00CCD8AB /* EaseSDKHelper.m in Sources */,
 				61AE06F31DC1DE37000AB0C2 /* FKXUserInfoModel.m in Sources */,
@@ -3877,7 +3890,6 @@
 				61C60AFD1CBE45F3003429EE /* FKXConsulterCell.m in Sources */,
 				18B4DFED1DDE95FA00845451 /* FKXLiXianView.m in Sources */,
 				617F53D31C43A73B00CCD8AB /* EMGifImage.m in Sources */,
-				18CD3ABF1DE59FD000D8E167 /* FKXMyOderDetailVC.m in Sources */,
 				617F538A1C43A73B00CCD8AB /* EMSDWebImageCompat.m in Sources */,
 				61AE07031DC1E5DF000AB0C2 /* FKXCustomAcceptHtmlVC.m in Sources */,
 				61701F231D22137D00D239E0 /* FKXSecondAskModel.m in Sources */,

@@ -24,4 +24,6 @@
 - (void)goToPersonalDynamicPageWithUid:(NSNumber *)uid;
 @property(nonatomic, assign) BOOL isShowAlert;//未认可的才展示
 
+@property (nonatomic,assign) BOOL isHidenM;
+
 @end
