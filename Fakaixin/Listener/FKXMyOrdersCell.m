@@ -31,9 +31,25 @@
     }
     
     if (self.isWorkBench) {
-        
+        if ([model.status integerValue] == 0) {
+            
+        }else if ([model.status integerValue] == 1) {
+            
+        }else if ([model.status integerValue] == 3) {
+            
+        }else if ([model.status integerValue] == 4) {
+            
+        }
     }else {
-        
+        if ([model.status integerValue] == 0) {
+            
+        }else if ([model.status integerValue] == 1) {
+            
+        }else if ([model.status integerValue] == 2) {
+            
+        }else if ([model.status integerValue] == 3) {
+            
+        }
     }
     
 }

@@ -25,14 +25,14 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sna-Fd-DgB">
-                    <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                    <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fmg-Zc-oix">
-                            <rect key="frame" x="215" y="7.5" width="130" height="35"/>
+                            <rect key="frame" x="160" y="7.5" width="130" height="35"/>
                             <color key="backgroundColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="130" id="IO7-Pa-taH"/>
@@ -74,7 +74,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cZN-Oi-Iwh">
-                    <rect key="frame" x="-1" y="10" width="377" height="32"/>
+                    <rect key="frame" x="-1" y="10" width="322" height="32"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="预约时间：" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bdV-Sr-Gqh">
                             <rect key="frame" x="10" y="0.0" width="76.5" height="32"/>
@@ -83,7 +83,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHM-P8-KSy">
-                            <rect key="frame" x="329.5" y="0.0" width="37.5" height="32"/>
+                            <rect key="frame" x="274.5" y="0.0" width="37.5" height="32"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.31764705879999999" green="0.70980392160000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -112,7 +112,7 @@
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bNd-XL-7rC">
-                    <rect key="frame" x="-1" y="62" width="377" height="214"/>
+                    <rect key="frame" x="-1" y="62" width="322" height="354"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YDS-it-LSh">
                             <rect key="frame" x="12" y="10" width="40" height="40"/>
@@ -148,7 +148,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NIQ-wl-rrV" userLabel="lineH">
-                            <rect key="frame" x="16" y="89" width="345" height="2"/>
+                            <rect key="frame" x="16" y="89" width="290" height="2"/>
                             <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="DNQ-zC-pJV"/>
@@ -168,14 +168,101 @@
                             <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eV3-04-NN9">
-                            <rect key="frame" x="15" y="119" width="347" height="18"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eV3-04-NN9">
+                            <rect key="frame" x="15" y="119" width="292" height="230"/>
+                            <attributedString key="attributedText">
+                                <fragment content="1.">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="如果订单正在进行中，您可以直接点击下方的咨询按钮直接打电话给咨询师。在您下单后会由随机系统电话向您拨出，请及时接听">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <string key="content">2.</string>
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="如果由于各种原因导致通话中断，请在我的订单">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="-">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="点击联系专家再次联系专家。切勿再次回拨之前的电话">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <string key="content">3.</string>
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="如果您的订单正在等待咨询师确认，请耐心等待，咨询师确认后就会马上联系您的">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <string key="content">4.</string>
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="如果您的订单没有被确认，">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="48">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" metaFont="system" size="15"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="小时后会退款到您的账户">
+                                    <attributes>
+                                        <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="15" name=".PingFangSC-Regular"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="5" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClT-2R-RT1">
-                            <rect key="frame" x="272" y="28" width="80" height="33"/>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ClT-2R-RT1">
+                            <rect key="frame" x="217" y="28" width="80" height="33"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="33" id="EbT-kn-wy9"/>
@@ -206,7 +293,6 @@
                         <constraint firstAttribute="trailing" secondItem="eV3-04-NN9" secondAttribute="trailing" constant="15" id="K5E-sk-KiQ"/>
                         <constraint firstItem="rdf-Vc-EbJ" firstAttribute="leading" secondItem="bNd-XL-7rC" secondAttribute="leading" id="KU4-rC-JXL"/>
                         <constraint firstAttribute="trailing" secondItem="ClT-2R-RT1" secondAttribute="trailing" constant="25" id="MKZ-UD-jfA"/>
-                        <constraint firstAttribute="height" constant="214" id="XHj-sX-e92"/>
                         <constraint firstItem="JAP-g9-vNe" firstAttribute="top" secondItem="NIQ-wl-rrV" secondAttribute="bottom" constant="5" id="Yqp-lC-Rvj"/>
                         <constraint firstItem="MkI-y0-Y1V" firstAttribute="leading" secondItem="YDS-it-LSh" secondAttribute="trailing" constant="8" id="alu-YS-7dT"/>
                         <constraint firstItem="Nfp-L7-4bI" firstAttribute="top" secondItem="YDS-it-LSh" secondAttribute="bottom" constant="12" id="azj-uk-Zpr"/>
@@ -217,6 +303,7 @@
                         <constraint firstItem="YDS-it-LSh" firstAttribute="top" secondItem="bNd-XL-7rC" secondAttribute="top" constant="10" id="iJJ-2R-8gM"/>
                         <constraint firstItem="eV3-04-NN9" firstAttribute="leading" secondItem="JAP-g9-vNe" secondAttribute="leading" id="j1B-2b-kCv"/>
                         <constraint firstItem="eV3-04-NN9" firstAttribute="top" secondItem="JAP-g9-vNe" secondAttribute="bottom" constant="5" id="m1S-Hl-c4F"/>
+                        <constraint firstAttribute="bottom" secondItem="eV3-04-NN9" secondAttribute="bottom" constant="5" id="tZr-MA-dQc"/>
                         <constraint firstItem="JAP-g9-vNe" firstAttribute="leading" secondItem="Nfp-L7-4bI" secondAttribute="leading" id="u9H-GC-IBZ"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
@@ -241,6 +328,7 @@
                 <constraint firstAttribute="bottom" secondItem="Sna-Fd-DgB" secondAttribute="bottom" id="tSi-Jh-eca"/>
                 <constraint firstAttribute="trailing" secondItem="bNd-XL-7rC" secondAttribute="trailing" constant="-1" id="zSJ-60-xRe"/>
             </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="33.5" y="139.5"/>
         </view>
     </objects>
