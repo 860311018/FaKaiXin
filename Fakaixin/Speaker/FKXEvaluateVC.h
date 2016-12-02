@@ -13,4 +13,5 @@
 
 @property(nonatomic, strong)FKXNotifcationModel * model;
 
+
 @end

@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *priceL;
 @property (weak, nonatomic) IBOutlet UILabel *statusL;
 @property (weak, nonatomic) IBOutlet UIButton *operationBtn;
+@property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 
 @property (nonatomic,strong) FKXOrderModel *model;
 @property (nonatomic,assign) BOOL isWorkBench;

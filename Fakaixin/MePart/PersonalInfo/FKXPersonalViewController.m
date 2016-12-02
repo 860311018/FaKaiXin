@@ -398,46 +398,28 @@
              [_imgIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",userModel.head, cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
              _labUserName.text = userModel.name;
              
-             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-             style.lineSpacing = 8;
+             _viewAboutMe.hidden = YES;
+             UIView *view = self.tableView.tableHeaderView;
+             view.height = 233 + 41;
+             [self.tableView setTableHeaderView:view];
+             
              if ([[FKXUserManager getUserInfoModel].role integerValue] == 0)
              {
-                 _viewAboutMe.hidden = YES;
-                 UIView *view = self.tableView.tableHeaderView;
-                 view.height = 233 + 41;
-                 [self.tableView setTableHeaderView:view];
-                 
                  [self setUpPaiHang:NO];
                  _paiHangImgV.image = [UIImage imageNamed:@"mine_paiHang_blue"];
-                 
                  _paiMing.textColor = kColorMainBlue;
                  
                  _bangzhuL.textColor = kColorMainBlue;
                  _zanL.textColor = kColorMainBlue;
-                 
-                 _paiMing.text = @"排\n名";
-                 
-                 _downImgV.image = [UIImage imageNamed:@"mine_paiHang_down"];
-                 _upImgV.image = [UIImage imageNamed:@"mine_paiHang_up"];
-                 
-                 _bangzhuL.text = @"100";
-                 _zanL.text = @"100";
-                 
-//                 NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"让你智慧的价值变现。\n回答被认可后即可持续获得收入。"] attributes:@{NSParagraphStyleAttributeName:style}];
-//                 [_labContent setAttributedText:attStr
-//                  ];
                  _labContent.textAlignment = NSTextAlignmentCenter;
                  [_btnOpenAsk setTitle:@"成为心理关怀师" forState:UIControlStateNormal];
-                 
-             }else
-             {
+             }else {
                  _viewAboutMe.hidden = YES;
                  UIView *view = self.tableView.tableHeaderView;
                  view.height = 233 + 41;
                  [self.tableView setTableHeaderView:view];
                  
                  [self setUpPaiHang:NO];
-                 
                  //倾诉模式
                  if ([FKXUserManager isUserPattern]) {
                      _paiHangImgV.image = [UIImage imageNamed:@"mine_paiHang_blue"];
@@ -446,53 +428,68 @@
                      
                      _bangzhuL.textColor = kColorMainBlue;
                      _zanL.textColor = kColorMainBlue;
-                     
-                     _paiMing.text = @"排\n名";
-                     
-                     _downImgV.image = [UIImage imageNamed:@"mine_paiHang_down"];
-                     _upImgV.image = [UIImage imageNamed:@"mine_paiHang_up"];
-                     
-                     _bangzhuL.text = @"100";
-                     _zanL.text = @"100";
-                     
-                 }
-                 //关怀模式
-                 else {
+                 }else {
                      _paiHangImgV.image = [UIImage imageNamed:@"mine_paiHang_red"];
                      
                      _paiMing.textColor = kColorMainRed;
                      
                      _bangzhuL.textColor = kColorMainRed;
                      _zanL.textColor = kColorMainRed;
-                    
+                     
                      _paiMing.text = @"";
                      _downCount.text = @"";
                      _upCount.text = @"";
                      
-                     _bangzhuL.text = @"100";
+                     _bangzhuL.text = [userModel.cureCount stringValue];
                      _bLabel.text = @"治愈人数";
-
-                     _zanL.text = @"100";
-                     _zLabel.text = @"总收入";
                      
+                     _zanL.text = [NSString stringWithFormat:@"%.2f", [userModel.inCome doubleValue]/100];
+
+                     _zLabel.text = @"总收入";
                  }
-                 
-                 //
-                 
-//                 NSString *str = [NSString stringWithFormat:@"治愈了%@人，总收入%.2f元。",userModel.cureCount, [userModel.inCome doubleValue]/100];
-//                 NSRange range = [str rangeOfString:@"总收入"];
-//                 NSString * str2 = [NSString stringWithFormat:@"%.2f",[userModel.inCome doubleValue]/100];
-//                 NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:str];
-//                 [attStr addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:NSMakeRange(range.location + range.length, str2.length)];
-//                 
-//                 NSRange range2 = [str rangeOfString:@"治愈了"];
-//                 NSMutableAttributedString *attStr2 = [[NSMutableAttributedString alloc] initWithString:str];
-//                 [attStr2 addAttribute:NSForegroundColorAttributeName value:kColorMainRed range:NSMakeRange(range2.location + range2.length, [userModel.questions stringValue].length)];
-//                 
-//                 [attStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, str.length - 1)];
-//                 [_labContent setAttributedText:attStr];
-//                 _labContent.textAlignment = NSTextAlignmentCenter;
              }
+             
+             
+             NSDictionary *params = @{};
+
+             [AFRequest sendPostRequestTwo:@"user/ranking" param:params success:^(id data) {
+                 [self hideHud];
+                 if ([data[@"code"] integerValue] == 0) {
+                     if ([[FKXUserManager getUserInfoModel].role integerValue] == 0 || [FKXUserManager isUserPattern])
+                     {
+                         _paiMing.text = @"排\n名";
+                         _bLabel.text = @"帮助人数";
+                         _zLabel.text = @"点赞人数";
+
+                         if ([data[@"data"][@"commentFloat"] integerValue] >0) {
+                             _downImgV.image = [UIImage imageNamed:@"mine_paiHang_up"];
+                             _downCount.text = [data[@"data"][@"commentDistance"] stringValue];
+                         }else if([data[@"data"][@"commentFloat"] integerValue] <0){
+                             _downImgV.image = [UIImage imageNamed:@"mine_paiHang_down"];
+                             _downCount.text = [data[@"data"][@"commentDistance"] stringValue];
+                         }
+                         
+                         if ([data[@"data"][@"praiseFloat"] integerValue] >0) {
+                             _upImgV.image = [UIImage imageNamed:@"mine_paiHang_up"];
+                             _upCount.text = [data[@"data"][@"praiseDistance"] stringValue];
+                             
+                         }else if([data[@"data"][@"praiseFloat"] integerValue] <0){
+                             _upImgV.image = [UIImage imageNamed:@"mine_paiHang_down"];
+                             _upCount.text = [data[@"data"][@"praiseDistance"] stringValue];
+                         }
+                         
+                         
+                         _bangzhuL.text =[data[@"data"][@"commentNum"] stringValue];
+                         _zanL.text =[data[@"data"][@"praiseNum"] stringValue];
+    
+                     }
+                 }else{
+                     [self showHint:data[@"message"]];
+                 }
+             } failure:^(NSError *error) {
+                 [self hideHud];
+                [self showHint:@"网络出错"];
+             }];
              
              [self.tableView reloadData];
             //加载与我相关的条数

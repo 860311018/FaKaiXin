@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+@class FKXOrderModel;
 
 @interface FKXMyOderDetailVC : FKXBaseViewController
+
+@property (nonatomic,assign) BOOL isWorkBench;
+
+@property (nonatomic,strong) FKXOrderModel *model;
+
 
 @end

@@ -15,6 +15,10 @@
 
 #import "FKXMyOderDetailVC.h"
 
+#import "FKXEvaluateVC.h"
+#import "FKXCommitHtmlViewController.h"
+#import "FKXNotifcationModel.h"
+
 @interface FKXMyOrderVC ()<UITableViewDelegate,UITableViewDataSource>
 {
     
@@ -84,11 +88,6 @@
         urlStr = @"listener/orderByUser";
     }
     
-//    [AFRequest sendPostRequestTwo:urlStr param:paramDic success:^(id data) {
-//        NSLog(@"%@",data);
-//    } failure:^(NSError *error) {
-//        
-//    }];
     [FKXOrderModel sendGetOrPostRequest:urlStr param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
      {
          [self hideHud];
@@ -136,10 +135,158 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+#pragma mark - 操作订单（拒绝、接受）
+- (void)operationOrder:(FKXOrderModel *)model status:(NSNumber *)status {
+    NSNumber *type = @0;
+    if (model.callLength && [model.callLength integerValue]!=0) {
+        type = @1;
+    }
+    NSDictionary *params = @{@"orderId":model.orderId,@"type":type,@"status":status};
+    
+    [AFRequest sendGetOrPostRequest:@"listener/updateOrders" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue]==0) {
+            model.status = status;
+            [self.tableView reloadData];
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+
+#pragma mark - 电话咨询（已经付款）
+- (void)toCall:(FKXOrderModel *)model {
+
+}
+
+#pragma mark - 图文咨询（聊天页，已确认订单）
+- (void)toTuWen:(FKXOrderModel *)model {
+    
+}
+
+#pragma mark - 下电话订单 （再次预约）
+- (void)callOrder:(FKXOrderModel *)model {
+    
+}
+
+#pragma mark - 下图文订单 （再次预约）
+- (void)tuwenOrder:(FKXOrderModel *)model {
+    
+}
+
+#pragma mark - 私信（未确认订单）
+- (void)toChatVC:(FKXOrderModel *)model {
+    
+}
+
+#pragma mark - 去评价
+- (void)toComment:(FKXOrderModel *)model {
+    FKXEvaluateVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXEvaluateVC"];
+    FKXNotifcationModel *noModel = [[FKXNotifcationModel alloc]init];
+    noModel.fromId =model.listenerId;
+    noModel.fromHeadUrl = model.headUrl;
+    noModel.fromNickname = model.nickName;
+    if (model.callLength && [model.callLength integerValue]!=0) {
+        noModel.type = @2;
+    }else {
+        noModel.type = @1;
+    }
+    vc.model = noModel;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 去看评价
+- (void)toCommenViewt:(FKXOrderModel *)model {
+    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+    vc.shareType = @"user_center_yu_yue";//预约
+    vc.pageType = MyPageType_consult;
+    FKXUserInfoModel *userModel = [FKXUserManager getUserInfoModel];
+    vc.urlString = [NSString stringWithFormat:@"%@front/user_center.html?uid=%@&token=%@",kServiceBaseURL, userModel.uid, [FKXUserManager shareInstance].currentUserToken];
+    vc.userModel = userModel;
+    //push的时候隐藏tabbar
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 查看详情
+- (void)toDetailVC:(FKXOrderModel *)model {
     FKXMyOderDetailVC *vc = [[FKXMyOderDetailVC alloc]initWithNibName:@"FKXMyOderDetailVC" bundle:nil];
     vc.hidesBottomBarWhenPushed = YES;
+    vc.isWorkBench = self.isWorkBench;
+    vc.model = model;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark - 点击按钮
+- (void)cancel:(UIButton *)btn {
+    FKXOrderModel *model = self.tableData[btn.tag-2000];
+    //拒绝订单
+    [self operationOrder:model status:@3];
+}
+
+- (void)operation :(UIButton *)btn {
+    FKXOrderModel *model = self.tableData[btn.tag-1000];
+    if (self.isWorkBench) {
+        if ([model.status integerValue] == 0){
+            //确认订单
+            [self operationOrder:model status:@1];
+        }else if ([model.status integerValue] == 1){
+            //去服务
+            if (model.callLength && [model.callLength integerValue]!=0) {
+                //电话咨询
+                [self toCall:model];
+            }else {
+                //图文咨询
+                [self toTuWen:model];
+            }
+        }else if ([model.status integerValue] == 2){
+            //查看详情
+            [self toDetailVC:model];
+        }else if ([model.status integerValue] == 3){
+            //查看详情
+            [self toDetailVC:model];
+        }else if ([model.status integerValue] == 4){
+            //去看评价
+            [self toCommenViewt:model];
+        }
+    }else{
+        if ([model.status integerValue] == 0){
+            //私信TA
+            [self toChatVC:model];
+        }else if ([model.status integerValue] == 1){
+            //立即咨询
+            if (model.callLength && [model.callLength integerValue]!=0) {
+                //电话咨询
+                [self toCall:model];
+            }else {
+                //图文咨询
+                [self toTuWen:model];
+            }
+        }else if ([model.status integerValue] == 2){
+            //立即评价
+            [self toComment:model];
+        }else if ([model.status integerValue] == 3){
+            //查看详情
+            [self toDetailVC:model];
+        }else if ([model.status integerValue] == 4){
+            //再次预约
+            if (model.callLength && [model.callLength integerValue]!=0) {
+                //电话咨询
+                [self callOrder:model];
+            }else {
+                //图文咨询
+                [self tuwenOrder:model];
+            }
+        }
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    FKXOrderModel *model = self.tableData[indexPath.row];
+    [self toDetailVC:model];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -158,6 +305,10 @@
     FKXMyOrdersCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXMyOrdersCell" forIndexPath:indexPath];
     cell.isWorkBench = self.isWorkBench;
     cell.model = model;
+    cell.operationBtn.tag = 1000+indexPath.row;
+    [cell.operationBtn addTarget:self action:@selector(operation:) forControlEvents:UIControlEventTouchUpInside];
+    cell.cancelBtn.tag = 2000+indexPath.row;
+    [cell.cancelBtn addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 

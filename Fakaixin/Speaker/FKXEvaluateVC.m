@@ -134,6 +134,10 @@
     [paraDic setValue:_model.fromId forKey:@"listenerId"];
     [paraDic setValue:string forKey:@"text"];
     [paraDic setValue:@(score) forKey:@"score"];
+    if (_model.type) {
+        [paraDic setValue:_model.type forKey:@"type"];
+    }
+    
     [AFRequest sendGetOrPostRequest:@"listener/comment"param:paraDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
      {
          [self hideHud];

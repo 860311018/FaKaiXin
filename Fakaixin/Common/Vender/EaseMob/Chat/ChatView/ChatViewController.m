@@ -15,6 +15,9 @@
 #import "FKXChatTitleView.h"
 #import "EMTextMessageBody.h"
 
+#import "FKXChatGroupModel.h"
+#import "FKXEChatModel.h"
+
 @interface ChatViewController ()<UIAlertViewDelegate, EaseMessageViewControllerDelegate, EaseMessageViewControllerDataSource,
     UIActionSheetDelegate,
     EMChatManagerChatDelegate,
@@ -211,13 +214,14 @@
 - (void)loadHistory {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
     [paramDic setValue:self.conversation.chatter forKey:@"groupId"];
-    [AFRequest sendGetOrPostRequest:@"/user/groupChatMessage"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+    [FKXChatGroupModel sendGetOrPostRequest:@"user/groupChatMessage"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
      {
          [self hideHud];
          if (data)
          {
-//             FKXUserInfoModel *model = data;
-//             ownerName = model.name;
+             FKXChatGroupModel *groupM = [[FKXChatGroupModel alloc]init];
+//             groupM.payload
+             NSLog(@"%@",data);
          } else if (errorModel)
          {
              NSInteger index = [errorModel.code integerValue];

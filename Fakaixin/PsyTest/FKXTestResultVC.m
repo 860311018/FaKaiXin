@@ -49,7 +49,7 @@
         NSDictionary *dic = data[@"data"];
         [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[dic objectForKey:@"testBackground"]] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
         
-        self.resultTitleStr = [dic objectForKey:@"result"];
+        self.resultTitleStr = [dic objectForKey:@"text"];
         
         self.resultTitle.text = self.resultTitleStr;
 

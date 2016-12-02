@@ -31,6 +31,8 @@
 
 @property (nonatomic, strong) NSNumber<Optional> *listenerId;
 
+@property (nonatomic, strong) NSNumber<Optional> *userId;
+
 @property (nonatomic, copy) NSString <Optional> *nickName;
 
 @property (nonatomic, strong) NSNumber<Optional> *orderId;

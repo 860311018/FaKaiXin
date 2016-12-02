@@ -300,8 +300,8 @@
         if ([NSString isEmpty:title]) {
             [self showHint:@"请输入头衔"];
             return;
-        }else if (title.length<10) {
-            [self showHint:@"头衔的字数要大于10"];
+        }else if (title.length<5 || title.length>50) {
+            [self showHint:@"头衔的字数在5到50之间"];
             return;
         }
         else if ([NSString isEmpty:profile]) {

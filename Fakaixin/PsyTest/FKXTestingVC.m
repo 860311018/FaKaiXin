@@ -121,6 +121,7 @@
 {
     [self.navigationController popViewControllerAnimated:NO];
 }
+
 #pragma mark - clickEvent
 - (IBAction)goBackPreTest:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:NO];
