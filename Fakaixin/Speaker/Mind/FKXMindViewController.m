@@ -952,7 +952,24 @@
                 //push的时候隐藏tabbar
                 [vc setHidesBottomBarWhenPushed:YES];
                 [self.navigationController pushViewController:vc animated:YES];
-            }else{
+            }else if (indexPath.row == 2) {
+                
+                FKXBeginTestVC *vc = [[UIStoryboard storyboardWithName:@"Letter" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXBeginTestVC"];
+            
+                FKXResonance_homepage_model *model = [self.contentArrArticle objectAtIndex:indexPath.row];
+                FKXPsyListModel *course = [[FKXPsyListModel alloc] init];
+                course.testBackground = model.testBackground;
+                course.testTitle = model.testTitle;
+                course.psyId = model.testId;
+                course.testNum = model.testNum;
+                course.praiseNum = model.testPraiseNum;
+                
+                vc.listModel = course;
+                //push的时候隐藏tabbar
+                [vc setHidesBottomBarWhenPushed:YES];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            else{
                 FKXResonance_homepage_model *model = [self.contentArrArticle objectAtIndex:indexPath.row];
                 
                 FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];

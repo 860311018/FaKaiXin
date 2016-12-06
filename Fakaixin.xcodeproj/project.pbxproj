@@ -79,6 +79,7 @@
 		18C87AED1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C87AEB1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m */; };
 		18CD3ABC1DE59F4300D8E167 /* FKXMyOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */; };
 		18CE1E271DD89C050014FE12 /* DDTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CE1E261DD89C050014FE12 /* DDTagButton.m */; };
+		18CF651E1DF6BDA300B92444 /* FKXScrTitelModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CF651D1DF6BDA300B92444 /* FKXScrTitelModel.m */; };
 		18D902D01DF17AC40078AA49 /* FKXChatGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D902CF1DF17AC40078AA49 /* FKXChatGroupModel.m */; };
 		18D902D31DF17B9F0078AA49 /* FKXEChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D902D21DF17B9F0078AA49 /* FKXEChatModel.m */; };
 		18E379EC1DEEA28D002E9BC4 /* FKXPaiHangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */; };
@@ -618,6 +619,8 @@
 		18CD3ABB1DE59F4300D8E167 /* FKXMyOrderVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXMyOrderVC.m; sourceTree = "<group>"; };
 		18CE1E251DD89C050014FE12 /* DDTagButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTagButton.h; sourceTree = "<group>"; };
 		18CE1E261DD89C050014FE12 /* DDTagButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTagButton.m; sourceTree = "<group>"; };
+		18CF651C1DF6BDA300B92444 /* FKXScrTitelModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXScrTitelModel.h; sourceTree = "<group>"; };
+		18CF651D1DF6BDA300B92444 /* FKXScrTitelModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXScrTitelModel.m; sourceTree = "<group>"; };
 		18D902CE1DF17AC30078AA49 /* FKXChatGroupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXChatGroupModel.h; sourceTree = "<group>"; };
 		18D902CF1DF17AC40078AA49 /* FKXChatGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatGroupModel.m; sourceTree = "<group>"; };
 		18D902D11DF17B9F0078AA49 /* FKXEChatModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXEChatModel.h; sourceTree = "<group>"; };
@@ -1589,6 +1592,7 @@
 		18C87AE41DD9B44000A83CC9 /* 倾诉(一键咨询) */ = {
 			isa = PBXGroup;
 			children = (
+				18CF651B1DF6BD7800B92444 /* Model */,
 				189FBC851DDAAD72001BC1E6 /* FKXQingsuVC.h */,
 				189FBC861DDAAD72001BC1E6 /* FKXQingsuVC.m */,
 				18EAA0B81DE453B70051E46E /* ScrllTitleView.h */,
@@ -1612,6 +1616,15 @@
 				18B03AFA1DF0213B009DE6DD /* Model */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		18CF651B1DF6BD7800B92444 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				18CF651C1DF6BDA300B92444 /* FKXScrTitelModel.h */,
+				18CF651D1DF6BDA300B92444 /* FKXScrTitelModel.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		18D902D41DF182FF0078AA49 /* 电话订单 */ = {
@@ -3791,6 +3804,7 @@
 				618BF1081D64318800EED6E6 /* FKXMyDynamicVC.m in Sources */,
 				617F538B1C43A73B00CCD8AB /* EMSDWebImageDecoder.m in Sources */,
 				B3666D261BC7441000D48822 /* main.m in Sources */,
+				18CF651E1DF6BDA300B92444 /* FKXScrTitelModel.m in Sources */,
 				617F53B71C43A73B00CCD8AB /* EaseEmotionManager.m in Sources */,
 				617F53861C43A73B00CCD8AB /* MWTapDetectingView.m in Sources */,
 				61BD78DC1C3CB1DF00F872E8 /* FKXNotificationCenterTableViewController.m in Sources */,

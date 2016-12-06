@@ -310,26 +310,54 @@ typedef enum : NSUInteger {
 
 #pragma mark - 聊天
 - (void)toChatVC {
-    if ([proUserInfoModel.role integerValue]) {
-        return;
-    }
+
     if (!_userId) {
         return;
     }
-    //保存接收方的信息
-    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
-    receiverMessage.to = [_userId stringValue];
-    receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
-    receiverMessage.ext = @{
-                            @"head" : proUserInfoModel.head,
-                            @"name": proUserInfoModel.name,
-                            };
-    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
     
-    //    //进入聊天
-    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[_userId stringValue]  conversationType:eConversationTypeChat];
+    if ([_userId integerValue] == [FKXUserManager shareInstance].currentUserId) {
+        [self showHint:@"不可以私信自己哟"];
+        return;
+    }
+    
+    //保存接收方的信息
+    
+    //进入聊天
+    //    EaseMessageViewController *vc = [[EaseMessageViewController alloc]initWithConversationChatter:[model.uid stringValue] conversationType:eConversationTypeChat];
+    //    vc.toZiXunShi = YES;
+    NSArray *array = [[FKXUserManager shareInstance] caluteHeight:proUserInfoModel];
+    ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[proUserInfoModel.uid stringValue]  conversationType:eConversationTypeChat];
     chatController.title = proUserInfoModel.name;
+    
+    chatController.toZiXunShi = YES;
+    chatController.userModel = proUserInfoModel;
+    
+    chatController.headerH = [array[1] floatValue];
+    chatController.introStr = array[0];
+    
+    chatController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:chatController animated:YES];
+    
+//    if ([proUserInfoModel.role integerValue]) {
+//        return;
+//    }
+//    if (!_userId) {
+//        return;
+//    }
+//    //保存接收方的信息
+//    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
+//    receiverMessage.to = [_userId stringValue];
+//    receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+//    receiverMessage.ext = @{
+//                            @"head" : proUserInfoModel.head,
+//                            @"name": proUserInfoModel.name,
+//                            };
+//    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+//    
+//    //    //进入聊天
+//    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:[_userId stringValue]  conversationType:eConversationTypeChat];
+//    chatController.title = proUserInfoModel.name;
+//    [self.navigationController pushViewController:chatController animated:YES];
     
 }
 
@@ -1063,12 +1091,15 @@ typedef enum : NSUInteger {
 
 - (void)browse {
     NSInteger t = [[FKXUserManager shareInstance]currentUserId];
-    NSDictionary *params = @{@"fromId":@(t),@"toId":self.userId};
-    [AFRequest sendGetOrPostRequest:@"user/browse" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
-        
-    } failure:^(NSError *error) {
-        
-    }];
+    if (_userId) {
+        NSDictionary *params = @{@"fromId":@(t),@"toId":_userId};
+        [AFRequest sendGetOrPostRequest:@"user/browse" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+            
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+   
 }
 
 #pragma mark - 电话订单

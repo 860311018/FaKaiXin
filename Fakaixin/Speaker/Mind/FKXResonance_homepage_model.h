@@ -26,4 +26,12 @@
 @property   (nonatomic,strong)NSNumber<Optional> *keyId;
 @property(nonatomic, copy)NSString<Optional> * startTime;   //会议开始时间
 @property   (nonatomic,strong)NSNumber<Optional> *uid;
+
+@property   (nonatomic,strong)NSNumber<Optional> *testId;
+@property   (nonatomic,strong)NSNumber<Optional> *testNum;
+@property   (nonatomic,strong)NSNumber<Optional> *testPraiseNum;
+@property   (nonatomic,strong)NSString<Optional> *testTitle;
+@property   (nonatomic,strong)NSString<Optional> *testBackground;
+
+
 @end
