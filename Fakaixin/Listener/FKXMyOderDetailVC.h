@@ -15,5 +15,7 @@
 
 @property (nonatomic,strong) FKXOrderModel *model;
 
+@property (nonatomic,strong) FKXUserInfoModel *userModel;
+@property (nonatomic,strong) FKXUserInfoModel *proModel;
 
 @end

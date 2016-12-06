@@ -25,6 +25,12 @@
 
 #import "NSString+Extension.h"
 
+typedef enum : NSUInteger {
+    PayType_weChat,
+    PayType_Ali,
+} PayType;
+
+
 @interface FKXConsultViewController ()<CallProDelegate,ConfirmDelegate,BindPhoneDelegate,UITableViewDelegate,UITableViewDataSource,BeeCloudDelegate>//<FKXConsulterCellDelegate>
 {
     NSInteger start;
@@ -32,6 +38,9 @@
     BOOL isVip;
 
 //    FKXGrayView *order;
+    
+    FKXUserInfoModel *professionModel;
+
     CGFloat keyboardHeight;
     
     FKXConfirmView *order;
@@ -43,7 +52,6 @@
     NSInteger times;
     NSTimer * timer;
     
-    FKXUserInfoModel *professionModel;
     
     FKXLiXianView *lixian;
     UIView *view3;
@@ -61,12 +69,14 @@
 
 @property (nonatomic,copy) NSString *mobile;
 @property (nonatomic,copy) NSString *clientNum;
+
 @property (nonatomic,assign) NSInteger yanzhengCode;
 
 @property (nonatomic,copy) NSString *requestClientNum;
 @property (nonatomic,copy) NSString *requestClientPwd;
 
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
+@property (nonatomic,assign) PayType payType;
 
 
 @end
@@ -330,7 +340,7 @@
     order.name = proModel.name;
     order.status = proModel.status;
     order.listenerId = proModel.uid;
-    
+
     if (self.mobile) {
         order.phoneStr = self.mobile;
     }
@@ -618,6 +628,7 @@
 }
 
 
+
 #pragma mark - 其他操作
 - (void)tapHide {
     [UIView animateWithDuration:0.6 animations:^{
@@ -666,6 +677,14 @@
             [lianjie removeFromSuperview];
         }
     }];
+}
+
+- (void)clickHead:(NSNumber *)listenId {
+    [self tapHide];
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = listenId;
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

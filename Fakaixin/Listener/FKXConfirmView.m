@@ -43,6 +43,9 @@
     
     self.weiXinPay.selected = YES;
     self.zhiFuPay.selected = NO;
+   
+    [self.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHead:)]];
+
 }
 
 - (void)layoutSubviews {
@@ -79,6 +82,10 @@
 
 + (id)creatOrder {
     return [[NSBundle mainBundle]loadNibNamed:@"FKXConfirmView" owner:self options:nil].lastObject;
+}
+
+- (void)tapHead:(UITapGestureRecognizer *)tap {
+    [_confirmDelegate clickHead:self.listenerId];
 }
 
 - (IBAction)descMinutes:(id)sender {
@@ -131,6 +138,7 @@
     NSInteger total = [totalStr integerValue]*100;
     [_confirmDelegate confirm:self.listenerId time:@(minutes) totals:@(total)];
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

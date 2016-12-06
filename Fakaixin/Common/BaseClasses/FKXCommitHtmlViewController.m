@@ -205,7 +205,7 @@
     vc.userId = uid;
     [self.navigationController pushViewController:vc animated:YES];
 }
-#pragma mark - 事件
+#pragma mark - 购买课程
 - (void)goToPayCourse
 {
     if ([FKXUserManager needShowLoginVC])
@@ -226,6 +226,7 @@
         {
             //进入群组
             ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
+            chatController.isNewGroup = NO;
             [self.navigationController pushViewController:chatController animated:YES];
         }else{
              [self buyCourse];
@@ -270,6 +271,8 @@
          [self showHint:@"网络出错"];
      }];
 }
+
+#pragma mark - 购买分享会
 - (void)goToSession
 {
     if ([FKXUserManager needShowLoginVC])
@@ -285,6 +288,7 @@
         {
             //进入群组
             ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
+            chatController.isNewGroup = NO;
             [self.navigationController pushViewController:chatController animated:YES];
         }else{
             [self meetingValidation];
@@ -308,6 +312,7 @@
              {
                  //进入群组
                  ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
+                 chatController.isNewGroup = NO;
                  [self.navigationController pushViewController:chatController animated:YES];
              }else{
                  //支付爱心值或者分享朋友圈
@@ -455,6 +460,7 @@
              {
                  //进入群组
                  ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
+                 chatController.isNewGroup = YES;
                  [self.navigationController pushViewController:chatController animated:YES];
              }
          }
@@ -854,7 +860,7 @@
                                                   
                                                   //进入群组
                                                   ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
-                                                  chatController.title = groupInfo.groupSubject;
+                                                  chatController.isNewGroup = YES;      chatController.title = groupInfo.groupSubject;
                                                   [self.navigationController pushViewController:chatController animated:YES];
                                               }
                                           }
@@ -989,7 +995,7 @@
                                                   
                                                   //进入群组
                                                   ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
-                                                  chatController.title = groupInfo.groupSubject;
+                                                  chatController.isNewGroup = YES;     chatController.title = groupInfo.groupSubject;
                                                   [self.navigationController pushViewController:chatController animated:YES];
                                               }
                                           }
@@ -1452,6 +1458,7 @@
                              //进入群组
                              ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
                              chatController.title = groupInfo.groupSubject;
+                             chatController.isNewGroup = YES;
                              [self.navigationController pushViewController:chatController animated:YES];
                          }
                      }
@@ -1508,6 +1515,7 @@
                                  
                                  //进入群组
                                  ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
+                                 chatController.isNewGroup = YES;
                                  chatController.title = groupInfo.groupSubject;
                                  [self.navigationController pushViewController:chatController animated:YES];
                              }
@@ -1652,6 +1660,7 @@
                             //进入群组
                             ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:groupId conversationType:eConversationTypeGroupChat];
                             chatController.title = groupInfo.groupSubject;
+                            chatController.isNewGroup = YES;
                             [self.navigationController pushViewController:chatController animated:YES];
                         }
                     }

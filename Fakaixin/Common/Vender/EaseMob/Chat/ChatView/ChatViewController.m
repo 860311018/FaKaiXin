@@ -39,6 +39,8 @@
     UIView *transparentView;
     BOOL isOpening; //工具条是否是展开的
     BOOL canShowEndBtn;//是否展示结束对话
+    BOOL canShowPay;//是否展示购买提示框
+
     EMGroup *groupInfo;
     UILabel *labWarnOfEndingTalk;   //群组结束会话，用来挡住输入框
     NSString *ownerName;    //创建者名字
@@ -47,8 +49,15 @@
     
     FKXChatTitleView *titleView;
     CGFloat keyboardHeight;
+
+    NSMutableArray *modelArr;
 }
+
+@property (nonatomic,strong) NSMutableArray *historyArr;
+
 @end
+
+
 
 @implementation ChatViewController
 -(void)dealloc
@@ -105,40 +114,41 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+   
+    modelArr = [[NSMutableArray alloc]init];
     //对方结束会话的通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
+    
+    
+    //    //删除聊天记录
+    //    [[EaseMob sharedInstance].chatManager removeConversationsByChatters:@[self.conversation.chatter] deleteMessages:YES append2Chat:YES];
+    
+    
     
     //单聊判断聊天是否结束
     if (self.conversation.conversationType == eConversationTypeChat) {
         [self browse];
-//        [self validTalkIsFinish];//加载是否显示举报
-       
-    }
-    
-//    //删除聊天记录
-//    [[EaseMob sharedInstance].chatManager removeConversationsByChatters:@[self.conversation.chatter] deleteMessages:YES append2Chat:YES];
+        
+        if (self.toZiXunShi) {
+            //ui设置
+            CGPoint origin = self.tableView.origin;
+            origin.y = origin.y+150;
+            self.tableView.origin = origin;
+            
+            CGSize size = self.tableView.size;
+            size.height = size.height-150;
+            self.tableView.size = size;
+            
+            titleView = [FKXChatTitleView creatChatTitle];
+            titleView.frame = CGRectMake(0, 0, kScreenWidth, 150);
+            [self.view addSubview:titleView];
+            
+            [self validTalkIsFinish];//加载是否显示举报
 
-    
-    if (self.toZiXunShi) {
-        //ui设置
-        CGPoint origin = self.tableView.origin;
-        origin.y = origin.y+150;
-        self.tableView.origin = origin;
-        
-        CGSize size = self.tableView.size;
-        size.height = size.height-150;
-        self.tableView.size = size;
-        
-        titleView = [FKXChatTitleView creatChatTitle];
-        titleView.frame = CGRectMake(0, 0, kScreenWidth, 150);
-        [self.view addSubview:titleView];
-        
-        self.chatToolbar.inputTextView.placeHolder = @"今天您还能免费聊5句";
-        
-//        [self setUpChatView];
+            
+        }
     }
-    
+
     //发送方,接收方赋值
     senderUser = [FKXUserManager getUserInfoModel];
     NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
@@ -196,13 +206,15 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
-    
-    //通过会话管理者获取已收发消息,这个方法是处理聊天记录的
-    [self tableViewDidTriggerHeaderRefresh];
+   
+   
     
     if (self.conversation.conversationType == eConversationTypeGroupChat) {
         [self loadHistory];
     }
+    
+    //通过会话管理者获取已收发消息,这个方法是处理聊天记录的
+    [self tableViewDidTriggerHeaderRefresh];
     
     EaseEmotionManager *manager= [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:[EaseEmoji allEmoji]];
     [self.faceView setEmotionManagers:@[manager]];
@@ -211,7 +223,32 @@
    
 }
 
+
+- (void)talkIsContinue {
+    NSDictionary *params = @{@"":@"",@"":@""};
+    [AFRequest sendPostRequestTwo:@"" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSInteger canSend = [data[@"data"][@"canSend"] integerValue];
+            if (canSend == 1) {
+                
+                NSInteger chatCount = [data[@"data"][@"surplus"] integerValue];
+                self.chatToolbar.inputTextView.placeHolder = [NSString stringWithFormat:@"今天您还能免费聊%ld句",chatCount];
+
+            }else {
+                canShowPay = YES;
+            }
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+
 - (void)loadHistory {
+    [modelArr removeAllObjects];
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
     [paramDic setValue:self.conversation.chatter forKey:@"groupId"];
     [FKXChatGroupModel sendGetOrPostRequest:@"user/groupChatMessage"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
@@ -219,9 +256,10 @@
          [self hideHud];
          if (data)
          {
-             FKXChatGroupModel *groupM = [[FKXChatGroupModel alloc]init];
-//             groupM.payload
-             NSLog(@"%@",data);
+             modelArr = data;
+             
+             [self setUphistoryMessage];
+
          } else if (errorModel)
          {
              NSInteger index = [errorModel.code integerValue];
@@ -295,14 +333,18 @@
              }else{
                  if ([data[@"data"][@"isFinish"] integerValue])
                  {
-                     canShowEndBtn = NO;
-                     [self setUpLabelWarnOfEndingTalk];
+                     canShowEndBtn = YES;
+                     [self talkIsContinue];
+//                     [self setUpLabelWarnOfEndingTalk];
                  }
                  if ([data[@"data"][@"canFinish"] integerValue] && ![data[@"data"][@"isFinish"] integerValue]) {
                      canShowEndBtn = YES;
-                 }else{
-                     canShowEndBtn = NO;
+                     [self talkIsContinue];
+
                  }
+//                 else{
+//                     canShowEndBtn = NO;
+//                 }
              }
          }else if ([data[@"code"] integerValue] == 4)
          {
@@ -689,7 +731,7 @@
                                      };
             
             [EaseSDKHelper sendTextMessage:@"对话已结束，请到我的消息-通知中对我的服务进行评价。满意的话欢迎下次再来找我哦" to:self.conversation.chatter messageType:eMessageTypeChat requireEncryption:NO messageExt:dicExt];
-            [self setUpLabelWarnOfEndingTalk];
+//            [self setUpLabelWarnOfEndingTalk];
         }else if ([data[@"code"] integerValue] == 4)
         {
             [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
@@ -730,22 +772,40 @@
         if (i<=0) {
             return;
         }
-        self.chatToolbar.inputTextView.placeHolder = [NSString stringWithFormat:@"今天您还能免费聊%d句",i];
         
     }
-    
-    //将自己的信息发送给对方
-    ext = @{
-            @"head" : senderUser.head,
-            @"name": senderUser.name,
-            };
-    EMMessage *message = [EaseSDKHelper sendTextMessage:text
-                                                     to:self.conversation.chatter
-                                            messageType:[self _messageTypeFromConversationType]
-                                      requireEncryption:NO
-                                             messageExt:ext];
-    [self addMessageToDataSource:message
-                        progress:nil];
+    if (canShowPay) {
+        //调图文咨询支付
+    }else {
+        if (self.toZiXunShi) {
+            NSDictionary *params = @{};
+            [AFRequest sendPostRequestTwo:@"" param:params success:^(id data) {
+                if ([data[@"code"] integerValue] == 0) {
+                    [self talkIsContinue];
+                }else {
+                    
+                }
+            } failure:^(NSError *error) {
+                
+            }];
+        }else {
+            //将自己的信息发送给对方
+            ext = @{
+                    @"head" : senderUser.head,
+                    @"name": senderUser.name,
+                    };
+            EMMessage *message = [EaseSDKHelper sendTextMessage:text
+                                                             to:self.conversation.chatter
+                                                    messageType:[self _messageTypeFromConversationType]
+                                              requireEncryption:NO
+                                                     messageExt:ext];
+            [self addMessageToDataSource:message
+                                progress:nil];
+        }
+        
+       
+    }
+   
 }
 
 - (EMMessageType)_messageTypeFromConversationType
@@ -895,6 +955,14 @@
     id<IMessageModel> model = nil;
 
     model = [[EaseMessageModel alloc] initWithMessage:message];
+    NSDictionary *ext = message.ext;
+    
+    if ([message.from isEqualToString:[[FKXUserManager getUserInfoModel].uid stringValue]]) {
+        ((EaseMessageModel *)model).isSender = YES;
+    }else {
+        ((EaseMessageModel *)model).isSender = NO;
+    }
+    
     if (((EaseMessageModel *)model).isSender)
     {
         ((EaseMessageModel *)model).avatarURLPath = senderUser.head;
@@ -902,20 +970,24 @@
     }else
     {
         if (self.conversation.conversationType == eConversationTypeGroupChat) {
-            NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
-            [fetchRequest setReturnsObjectsAsFaults:NO];
-            NSError *fetchError;
-            NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
-            for (ChatUser *user in usersArray)
-            {
-                //接受方信息赋值
-                if ([user.userId isEqualToString:message.groupSenderName])
-                {
-                    ((EaseMessageModel *)model).avatarURLPath = user.avatar;
-                    ((EaseMessageModel *)model).nickname = user.nick;
-                    break;
-                }
-            }
+//            NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
+//            [fetchRequest setReturnsObjectsAsFaults:NO];
+//            NSError *fetchError;
+//            NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+//            NSLog(@"%@",usersArray);
+//            for (ChatUser *user in usersArray)
+//            {
+//                //接受方信息赋值
+//                if ([user.userId isEqualToString:message.groupSenderName])
+//                {
+//                    ((EaseMessageModel *)model).avatarURLPath = user.avatar;
+//                    ((EaseMessageModel *)model).nickname = user.nick;
+//                    break;
+//                }
+//            }
+            ((EaseMessageModel *)model).avatarURLPath = ext[@"head"];
+            ((EaseMessageModel *)model).nickname = ext[@"name"];
+            
         }else if (self.conversation.conversationType == eConversationTypeChat)
         {
             ((EaseMessageModel *)model).avatarURLPath = receiverUser.avatar;
@@ -1147,5 +1219,74 @@
     } failure:^(NSError *error) {
         
     }];
+}
+
+- (void)setUphistoryMessage {
+
+    for (FKXChatGroupModel *officalSources in modelArr) {
+        NSDictionary *dic = officalSources.payload[@"bodies"][0];
+        FKXEChatModel * model =  [[FKXEChatModel alloc] initWithDictionary:dic error:nil];
+        NSDictionary *dic2 = officalSources.payload[@"ext"];
+
+        if ([model.type isEqualToString:@"txt"]) {
+            EMChatText *txtChat = [[EMChatText alloc] initWithText:model.msg];
+            EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithChatObject:txtChat];
+            
+            // 生成message
+            EMMessage *message = [[EMMessage alloc] initWithReceiver:self.conversation.chatter bodies:@[body]];
+            message.from = officalSources.from;
+            message.to = officalSources.to;
+            message.ext = dic2;
+            message.messageId = officalSources.msg_id;
+            message.timestamp = [officalSources.timestamp longLongValue];
+            message.deliveryState = eMessageDeliveryState_Delivered;
+            message.messageType = eConversationTypeGroupChat; // 设置为群聊消息
+            [[EaseMob sharedInstance].chatManager insertMessageToDB:message append2Chat:YES];
+
+            
+        }else if ([model.type isEqualToString:@"img"]) {
+            EMChatImage *imgChat = [[EMChatImage alloc] initWithUIImage:[UIImage imageNamed:model.filename] displayName:@"displayName"];
+            EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithChatObject:imgChat];
+            
+            // 生成message
+            EMMessage *message = [[EMMessage alloc] initWithReceiver:self.conversation.chatter bodies:@[body]];
+            message.from = officalSources.from;
+            message.to = officalSources.to;
+            message.ext = dic2;
+            message.messageId = officalSources.msg_id;
+            message.timestamp = [officalSources.timestamp longLongValue];
+
+            message.messageType = eConversationTypeGroupChat; // 设置为群聊消息
+            [[EaseMob sharedInstance].chatManager insertMessageToDB:message];
+            
+        }else if ([model.type isEqualToString:@"audio"]) {
+            EMChatVoice *voice = [[EMChatVoice alloc] initWithFile:model.url displayName:@"audio"];
+            voice.duration = [model.length integerValue];
+            EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithChatObject:voice];
+            
+            // 生成message
+            EMMessage *message = [[EMMessage alloc] initWithReceiver:self.conversation.chatter bodies:@[body]];
+            message.from = officalSources.from;
+            message.to = officalSources.to;
+            message.ext = dic2;
+            message.messageId = officalSources.msg_id;
+            message.timestamp = [officalSources.timestamp longLongValue];
+
+            message.messageType = eConversationTypeGroupChat; // 设置为群聊消息
+            [[EaseMob sharedInstance].chatManager insertMessageToDB:message];
+            
+        }
+    }
+    [self.conversation loadNumbersOfMessages:modelArr.count before:[[NSDate date] timeIntervalSince1970] * 1000];
+    
+//    [self.tableView setScrollsToTop:YES];
+    
+}
+
+- (NSMutableArray *)historyArr {
+    if (!_historyArr) {
+        _historyArr = [[NSMutableArray alloc]init];
+    }
+    return _historyArr;
 }
 @end

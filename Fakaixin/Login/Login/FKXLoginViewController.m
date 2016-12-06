@@ -124,6 +124,7 @@
              if (loginInfo && !error)
              {
                  NSLog(@"登录成功,用户信息:%@", loginInfo);
+                 [self loadInfo:loginInfo[@"username"]];
                  // 设置自动登录
 //                 [[EaseMob sharedInstance].chatManager setIsAutoLoginEnabled:YES];                       //设置推送设置
                  //LoginBackToConsult
@@ -296,4 +297,34 @@
         [self loginSuccessAndFetchTheError:error errorModel:errorModel data:data provider:nil];
     }];
 }
+
+//加载倾听者资料
+- (void)loadInfo:(NSString *)uidNum
+{
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    NSInteger uid = [uidNum integerValue];
+    [paramDic setValue:@(uid) forKey:@"uid"];
+    [FKXUserInfoModel sendGetOrPostRequest:@"listener/info"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+     {
+         [self hideHud];
+         if (data)
+         {
+             //保存用户信息（更新）
+             [FKXUserManager archiverUserInfo:data toUid:uidNum];
+             
+         } else if (errorModel)
+         {
+             NSInteger index = [errorModel.code integerValue];
+             if (index == 4)
+             {
+                 [self showAlertViewWithTitle:errorModel.message];
+                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+             }else
+             {
+                 [self showHint:errorModel.message];
+             }
+         }
+     }];
+}
+
 @end

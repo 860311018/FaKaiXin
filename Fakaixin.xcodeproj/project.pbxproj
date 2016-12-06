@@ -73,6 +73,7 @@
 		18B4DFF31DDE964400845451 /* FKXLianjieView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B4DFF21DDE964400845451 /* FKXLianjieView.xib */; };
 		18BA47F61DD16AF500B1E67D /* FKXLoveDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BA47F41DD16AF500B1E67D /* FKXLoveDetailCell.m */; };
 		18BA47F71DD16AF600B1E67D /* FKXLoveDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BA47F51DD16AF500B1E67D /* FKXLoveDetailCell.xib */; };
+		18C547091DF5590A00A1F33B /* FKXCallOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C547081DF5590A00A1F33B /* FKXCallOrder.m */; };
 		18C87AE01DD950EF00A83CC9 /* FKXYuYueProCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C87ADE1DD950EF00A83CC9 /* FKXYuYueProCell.m */; };
 		18C87AE11DD950EF00A83CC9 /* FKXYuYueProCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18C87ADF1DD950EF00A83CC9 /* FKXYuYueProCell.xib */; };
 		18C87AED1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C87AEB1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m */; };
@@ -80,7 +81,6 @@
 		18CE1E271DD89C050014FE12 /* DDTagButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 18CE1E261DD89C050014FE12 /* DDTagButton.m */; };
 		18D902D01DF17AC40078AA49 /* FKXChatGroupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D902CF1DF17AC40078AA49 /* FKXChatGroupModel.m */; };
 		18D902D31DF17B9F0078AA49 /* FKXEChatModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D902D21DF17B9F0078AA49 /* FKXEChatModel.m */; };
-		18D902DA1DF189EC0078AA49 /* UIViewController+FKXCallOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D902D91DF189EC0078AA49 /* UIViewController+FKXCallOrder.m */; };
 		18E379EC1DEEA28D002E9BC4 /* FKXPaiHangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */; };
 		18EAA0BA1DE453B70051E46E /* ScrllTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EAA0B91DE453B70051E46E /* ScrllTitleView.m */; };
 		18EAA0BC1DE453C60051E46E /* ScrllTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18EAA0BB1DE453C60051E46E /* ScrllTitleView.xib */; };
@@ -607,6 +607,8 @@
 		18BA47F31DD16AF500B1E67D /* FKXLoveDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXLoveDetailCell.h; sourceTree = "<group>"; };
 		18BA47F41DD16AF500B1E67D /* FKXLoveDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXLoveDetailCell.m; sourceTree = "<group>"; };
 		18BA47F51DD16AF500B1E67D /* FKXLoveDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXLoveDetailCell.xib; sourceTree = "<group>"; };
+		18C547071DF5590A00A1F33B /* FKXCallOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXCallOrder.h; sourceTree = "<group>"; };
+		18C547081DF5590A00A1F33B /* FKXCallOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXCallOrder.m; sourceTree = "<group>"; };
 		18C87ADD1DD950EF00A83CC9 /* FKXYuYueProCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXYuYueProCell.h; sourceTree = "<group>"; };
 		18C87ADE1DD950EF00A83CC9 /* FKXYuYueProCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXYuYueProCell.m; sourceTree = "<group>"; };
 		18C87ADF1DD950EF00A83CC9 /* FKXYuYueProCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXYuYueProCell.xib; sourceTree = "<group>"; };
@@ -620,8 +622,6 @@
 		18D902CF1DF17AC40078AA49 /* FKXChatGroupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatGroupModel.m; sourceTree = "<group>"; };
 		18D902D11DF17B9F0078AA49 /* FKXEChatModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXEChatModel.h; sourceTree = "<group>"; };
 		18D902D21DF17B9F0078AA49 /* FKXEChatModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXEChatModel.m; sourceTree = "<group>"; };
-		18D902D81DF189EC0078AA49 /* UIViewController+FKXCallOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+FKXCallOrder.h"; sourceTree = "<group>"; };
-		18D902D91DF189EC0078AA49 /* UIViewController+FKXCallOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+FKXCallOrder.m"; sourceTree = "<group>"; };
 		18E379EA1DEEA28D002E9BC4 /* FKXPaiHangModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPaiHangModel.h; sourceTree = "<group>"; };
 		18E379EB1DEEA28D002E9BC4 /* FKXPaiHangModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPaiHangModel.m; sourceTree = "<group>"; };
 		18EAA0B81DE453B70051E46E /* ScrllTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrllTitleView.h; sourceTree = "<group>"; };
@@ -1617,8 +1617,8 @@
 		18D902D41DF182FF0078AA49 /* 电话订单 */ = {
 			isa = PBXGroup;
 			children = (
-				18D902D81DF189EC0078AA49 /* UIViewController+FKXCallOrder.h */,
-				18D902D91DF189EC0078AA49 /* UIViewController+FKXCallOrder.m */,
+				18C547071DF5590A00A1F33B /* FKXCallOrder.h */,
+				18C547081DF5590A00A1F33B /* FKXCallOrder.m */,
 			);
 			name = "电话订单";
 			path = BaseClasses;
@@ -3811,7 +3811,6 @@
 				6136CA211C3B8268006A7ABF /* FKXLoveValueTableViewCell.m in Sources */,
 				617F53681C43A73B00CCD8AB /* EMAudioRecorderUtil.m in Sources */,
 				617F53B11C43A73B00CCD8AB /* EaseChineseToPinyin.m in Sources */,
-				18D902DA1DF189EC0078AA49 /* UIViewController+FKXCallOrder.m in Sources */,
 				61238BF51C4CCBEC00C222C3 /* FKXConsultViewController.m in Sources */,
 				61DA6C371D12A75000DE194C /* UIImage+Color.m in Sources */,
 				61D32CAF1D98FDD700D4AF7D /* FKXSearchVC.m in Sources */,
@@ -3927,6 +3926,7 @@
 				61BD78DF1C3CB28C00F872E8 /* FKXNotificationCenterTableViewCell.m in Sources */,
 				61389CAD1D32193200BD5BF2 /* FKXMyAskListCell.m in Sources */,
 				611133331CBB3BA900B92A26 /* FKXMindViewController.m in Sources */,
+				18C547091DF5590A00A1F33B /* FKXCallOrder.m in Sources */,
 				18FF65641DD2D1A6001EA9B7 /* FKXPsyListModel.m in Sources */,
 				B3B02F2C1BCF9717001A5557 /* FKXInviteCodeViewController.m in Sources */,
 				617F53AF1C43A73B00CCD8AB /* UIViewController+DismissKeyboard.m in Sources */,

@@ -769,7 +769,7 @@
             moreMessages = [weakSelf.dataSource messageViewController:weakSelf loadMessageFromTimestamp:timestamp count:count];
         }
         else{
-            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];;
+            moreMessages = [weakSelf.conversation loadNumbersOfMessages:count before:timestamp];
         }
         
         if ([moreMessages count] == 0) {
@@ -813,8 +813,11 @@
         //刷新页面
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
-            
-            [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            if (self.isNewGroup) {
+                
+            }else {
+                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            }
         });
         
         //从数据库导入时重新下载没有下载成功的附件

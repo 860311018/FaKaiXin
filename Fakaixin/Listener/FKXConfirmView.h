@@ -17,6 +17,8 @@
 - (void)weiXin;
 - (void)zhiFuBao;
 
+- (void)clickHead:(NSNumber *)listenId;
+
 - (void)confirm:(NSNumber *)listenerId time:(NSNumber *)time totals:(NSNumber *)totals;
 
 @end

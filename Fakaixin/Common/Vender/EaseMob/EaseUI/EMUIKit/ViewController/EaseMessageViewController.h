@@ -242,7 +242,13 @@ shouldSendHasReadAckForMessage:(EMMessage *)message
 -(void)addMessageToDataSource:(EMMessage *)message
                      progress:(id<IEMChatProgressDelegate>)progress;
 
+- (void)_loadMessagesBefore:(long long)timestamp
+                      count:(NSInteger)count
+                     append:(BOOL)isAppend;
+
 @property(nonatomic,assign)BOOL toZiXunShi;
+@property(nonatomic,assign)BOOL isNewGroup;
+
 @property(nonatomic,strong)FKXUserInfoModel *userModel;
 
 @property (nonatomic,assign)CGFloat headerH;
