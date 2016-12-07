@@ -15,6 +15,8 @@
 #import "FKXLiXianView.h"
 #import "FKXLianjieView.h"
 
+#import "FKXUserInfoModel.h"
+
 @interface FKXCallOrder ()
 
 @end
@@ -155,6 +157,32 @@
      }];
     
     return payParameterDic;
+}
+
+
++ (void)calling:(NSString *)callLength userModel:(FKXUserInfoModel *)userModel proModel:(FKXUserInfoModel *)proModel controller:(UIViewController *)vc {
+   NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
+        [vc hideHud];
+        NSString *respCode = data[@"resp"][@"respCode"];
+        if ([respCode isEqualToString:@"000000"]) {
+            [vc showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
+            //改变咨询师在线状态
+            NSDictionary *param = @{@"status":@2};
+            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+                NSLog(@"%@",data);
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error.description);
+
+            }];
+            
+        }else {
+            [vc showHint:@"电话线路出错"];
+        }
+    } failure:^(NSError *error) {
+        [vc hideHud];
+        [vc showHint:@"电话线路出错"];
+    }];
 }
 
 

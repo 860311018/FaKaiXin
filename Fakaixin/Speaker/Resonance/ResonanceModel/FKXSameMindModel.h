@@ -18,6 +18,9 @@
 //uid : 10001,  //发布心事的用户id
 //text : “我的小三和我的老婆私奔了”          //心事内容
 
+//新增字段
+@property(nonatomic, strong)NSNumber<Optional> *commentNum;
+
 @property(nonatomic, copy)NSString<Optional> * head;
 @property(nonatomic, strong)NSNumber<Optional> *hug;
 @property(nonatomic, copy)NSString<Optional> * nickName;

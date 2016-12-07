@@ -20,14 +20,22 @@
 
 - (void)setModel:(MyDynamicModel *)model {
     _model = model;
-    
     [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", model.head,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     self.timeL.text = model.createTime;
     self.nameL.text = model.nickname;
-    if (model.isAccept) {
+    
+    NSInteger time = [model.voiceTime integerValue];
+    NSInteger second = time%60;
+    if (second <10) {
+        self.voiceTimeL.text = [NSString stringWithFormat:@"%ld:0%ld",time/60,second];
+    }else {
+        self.voiceTimeL.text = [NSString stringWithFormat:@"%ld:%ld",time/60,second];
+    }
+    
+    if ([model.isAccept integerValue] == 1) {
         self.zhiyeL.text = @"语音回复了";
     }else {
-        self.zhiyeL.text = @"语音回复了";
+        self.zhiyeL.text = @"的语音回复被认可了";
     }
     
     NSString *contentStr = [NSString stringWithFormat:@"%@：%@",model.toNickname, model.replyText];

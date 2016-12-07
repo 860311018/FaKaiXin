@@ -16,6 +16,26 @@
     self.headImgV.layer.cornerRadius = 25;
     self.headImgV.layer.masksToBounds = YES;
     //    self.headImgV.backgroundColor = [UIColor whiteColor];
+    [self.iconImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap:)]];
+    [self.label1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap:)]];
+    [self.backView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap:)]];
+    [self.label2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap:)]];
+    
+    [self.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap2:)]];
+
+
+}
+
+- (void)tap2:(UITapGestureRecognizer *)tap {
+    if ([self.delegate respondsToSelector:@selector(toHead:)]) {
+        [self.delegate toHead:self.lisId];
+    }
+}
+
+- (void)tap:(UITapGestureRecognizer *)tap {
+    if ([self.delegate respondsToSelector:@selector(call:)]) {
+        [self.delegate call:self.callLength];
+    }
 }
 
 - (void)layoutSubviews {

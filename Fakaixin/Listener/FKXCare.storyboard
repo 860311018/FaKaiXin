@@ -245,7 +245,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="77"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E2X-0B-8KA">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="E2X-0B-8KA">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Qg-if-0vR">
@@ -454,6 +454,7 @@
                     </tableView>
                     <connections>
                         <outlet property="InfluenceNum" destination="E44-Sx-TPB" id="r08-0T-Nax"/>
+                        <outlet property="bannerImgV" destination="E2X-0B-8KA" id="HDG-2q-xX3"/>
                         <outlet property="incomeLab" destination="Ti0-hV-AQX" id="TDB-df-I7G"/>
                         <outlet property="orderNum" destination="5IZ-TJ-uTm" id="lhX-CO-c8c"/>
                         <outlet property="profileLab" destination="FvL-WS-9Eg" id="Q8c-eT-iNh"/>

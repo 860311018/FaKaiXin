@@ -64,10 +64,15 @@
     
     self.nameL.text = self.name;
     
+    self.statusL.textColor = [UIColor colorWithRed:210/255.0 green:210/255.0 blue:210/255.0 alpha:1];
+    self.statusL.layer.borderColor = [UIColor colorWithRed:210/255.0 green:210/255.0 blue:210/255.0 alpha:1].CGColor;
+    
     if ([self.status integerValue] == 0) {
         self.statusL.text = @" 离线 ";
     }else if ([self.status integerValue] == 1){
         self.statusL.text = @" 在线 ";
+        self.statusL.textColor = [UIColor colorWithRed:81/255.0 green:181/255.0 blue:255/255.0 alpha:1];
+        self.statusL.layer.borderColor = [UIColor colorWithRed:81/255.0 green:181/255.0 blue:255/255.0 alpha:1].CGColor;
     }else if ([self.status integerValue]) {
         self.statusL.text = @" 通话中 ";
     }

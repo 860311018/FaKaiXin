@@ -19,10 +19,12 @@
 {
     FKXUserInfoModel *userInfoModel;
     UILabel *unReadOrder;
+    
+    FKXResonance_homepage_model *bannerModel;
 }
 
-@property (weak, nonatomic) IBOutlet UIImageView *guangGaoImgV;
 
+@property (weak, nonatomic) IBOutlet UIImageView *bannerImgV;
 
 @property (weak, nonatomic) IBOutlet UIImageView *userIcon; //头像
 @property (weak, nonatomic) IBOutlet UILabel *userName;     //用户名
@@ -40,6 +42,9 @@
     
     [self loadInfo];
     [self loadUnreadRelMe];//界面出现就更新ui
+    
+    [self loadBanner];
+
 }
 
 - (void)viewDidLoad {
@@ -60,7 +65,12 @@
     unReadOrder.textAlignment = NSTextAlignmentCenter;
     [_viewSectionTwo addSubview:unReadOrder];
     
+//    [self loadBanner];
+    
     [self loadUnreadRelMe];//保证第一次执行（tabbarVC初始化的时候也加载）
+
+    [self.bannerImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapBanner:)]];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +78,20 @@
     // Dispose of any resources that can be recreated.
 }
 #pragma mark - 点击事件
+
+//点击banner
+- (void)tapBanner:(UITapGestureRecognizer *)tap {
+    
+    FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+    vc.shareType = @"mind";
+    vc.urlString = [NSString stringWithFormat:@"%@?shareId=%@&uid=%ld&token=%@",bannerModel.url, bannerModel.hotId, (long)[FKXUserManager shareInstance].currentUserId,[FKXUserManager shareInstance].currentUserToken];
+    vc.pageType = MyPageType_hot;
+    vc.resonanceModel = bannerModel;
+    //push的时候隐藏tabbar
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 //查看服务
 - (IBAction)lookService:(UIButton *)sender {
     FKXServiceVC *vc = [[UIStoryboard storyboardWithName:@"FKXCare" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXServiceVC"];
@@ -150,6 +174,25 @@
 
 //加载未读的订单个数
 #pragma mark - 网络请求部分
+
+- (void)loadBanner {
+    NSDictionary *paramDic = @{@"start" : @(0), @"size": @(1)};
+    
+    [FKXResonance_homepage_model sendGetOrPostRequest:@"share/listenerShare" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+     {
+         if (data)
+         {
+             
+             bannerModel = data;
+             [self.bannerImgV sd_setImageWithURL:[NSURL URLWithString:bannerModel.background] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
+         }else if (errorModel)
+         {
+             [self showHint:errorModel.message];
+         }
+     }];
+
+}
+
 - (void)loadUnreadRelMe
 {
     NSNumber *time = [FKXUserManager shareInstance].unAcceptOrderTime ? [FKXUserManager shareInstance].unAcceptOrderTime : @(0);

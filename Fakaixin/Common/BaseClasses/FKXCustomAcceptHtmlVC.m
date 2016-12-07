@@ -19,6 +19,8 @@
 #import "FKXLiXianView.h"
 #import "FKXLianjieView.h"
 
+#import "FKXCallOrder.h"
+
 typedef enum : NSUInteger {
     ClickPayType_praise,//赞赏
     ClickPayType_accept,//付费认可
@@ -31,7 +33,7 @@ typedef enum : NSUInteger {
     PayType_Ali,
 } PayType;
 
-@interface FKXCustomAcceptHtmlVC ()<BeeCloudDelegate,ConfirmDelegate,BindPhoneDelegate>
+@interface FKXCustomAcceptHtmlVC ()<BeeCloudDelegate,ConfirmDelegate,BindPhoneDelegate,CallDelegate,LixianDelegate>
 {
     //认可支付
     UIView *transViewAcceptPay;   //认可支付的透明图
@@ -105,7 +107,7 @@ typedef enum : NSUInteger {
     userModel = [FKXUserManager getUserInfoModel];
     [self loadproData];
     //电话动效
-    [self.phoneView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(call)]];
+    [self.phoneView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(callAnimaton)]];
     self.phoneView.transform = CGAffineTransformScale(self.phoneView.transform, 0.8, 0.8);
     [UIView beginAnimations:@"bigToSmall" context:nil];
     [UIView setAnimationDuration:1];
@@ -953,7 +955,7 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - 打电话
-- (void)call {
+- (void)callAnimaton {
     myClickType = ClickPayType_call;
 
     if ([FKXUserManager needShowLoginVC]) {
@@ -1112,15 +1114,59 @@ typedef enum : NSUInteger {
     
 }
 
+- (void)loadCallLength {
+    NSDictionary *params = @{@"userId":userModel.uid,@"listenerId":proModel.uid};
+    [AFRequest sendPostRequestTwo:@"listener/allow_call_length" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSInteger callNum = [data[@"data"][@"length"] integerValue];
+            
+            lianjie = [FKXLianjieView creatZaiXian];
+            lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+            lianjie.delegate = self;
+            lianjie.lisId = proModel.uid;
+            lianjie.callLength = [NSString stringWithFormat:@"%ld",callNum*60];
+            lianjie.head = proModel.head;
+            lianjie.name = proModel.name;
+            
+            view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+            [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
+            
+            view4.alpha = 0;
+            lianjie.alpha = 0;
+            [[UIApplication sharedApplication].keyWindow addSubview:view4];
+            [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                view4.alpha = 1;
+                lianjie.alpha = 1;
+            }];
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
 - (void)showView {
     [self hideHud];
-    //离线
-    if ([proModel.status integerValue]==0) {
+    //在线
+    if ([proModel.status integerValue]==1) {
+        [self loadCallLength];
+    }else {
         lixian = [FKXLiXianView creatLiXian];
         lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
         lixian.head = proModel.head;
         lixian.name = proModel.name;
-        
+        lixian.delegate = self;
+        lixian.lisId = proModel.uid;
+        if ([proModel.status integerValue]==0) {
+            lixian.statusL.text = @" 离线 ";
+        }else if([proModel.status integerValue]==2) {
+            lixian.statusL.text = @" 通话中 ";
+        }
         view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
@@ -1134,29 +1180,6 @@ typedef enum : NSUInteger {
             view3.alpha = 1;
             lixian.alpha = 1;
         }];
-        
-        
-        
-    }else {
-        lianjie = [FKXLianjieView creatZaiXian];
-        lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
-        lianjie.head = proModel.head;
-        lianjie.name = proModel.name;
-        
-        view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-        view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
-        
-        view4.alpha = 0;
-        lianjie.alpha = 0;
-        [[UIApplication sharedApplication].keyWindow addSubview:view4];
-        [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            view4.alpha = 1;
-            lianjie.alpha = 1;
-        }];
-        
     }
     
 }
@@ -1274,6 +1297,16 @@ typedef enum : NSUInteger {
             [lianjie removeFromSuperview];
         }
     }];
+}
+
+- (void)lixiantoHead:(NSNumber *)uid {
+    [self tapHide3];
+    [self clickHead:uid];
+}
+
+- (void)toHead:(NSNumber *)uid {
+    [self tapHide4];
+    [self clickHead:uid];
 }
 
 - (void)clickHead:(NSNumber *)listenId {
@@ -1412,6 +1445,34 @@ typedef enum : NSUInteger {
          [self hideHud];
      }];
     
+}
+
+#pragma mark - 电话回拨
+- (void)call:(NSString *)callLength {
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
+        [self hideHud];
+        NSString *respCode = data[@"resp"][@"respCode"];
+        if ([respCode isEqualToString:@"000000"]) {
+            [self tapHide4];
+            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
+            //改变咨询师在线状态
+            NSDictionary *param = @{@"status":@2};
+            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+                NSLog(@"%@",data);
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error.description);
+                
+            }];
+            
+        }else {
+            [self showHint:@"电话线路出错"];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"电话线路出错"];
+    }];
+
 }
 
 

@@ -91,4 +91,9 @@
 @property   (nonatomic,strong)NSNumber<Optional> *writeId;
 @property(nonatomic, copy)NSArray<Optional> *imageArray;//写信图片
 @property(nonatomic, copy)NSString<Optional> *backText;//回信内容
+
+//
+@property   (nonatomic,strong)NSNumber<Optional> *commentNum;
+
+
 @end

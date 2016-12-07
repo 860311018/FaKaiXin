@@ -117,7 +117,7 @@
     _contentArrShare = [NSMutableArray arrayWithCapacity:1];
     _contentArrTest = [NSMutableArray arrayWithCapacity:1];
     size = kRequestSize;
-    
+   
     [_freeL addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(freeYuyue:)]];
     [_yuyueL addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(zhuanjiaYuyue:)]];
     [_qingsuL addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(qingsu:)]];
@@ -882,7 +882,24 @@
 //                FKXPsyTestCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXPsyTestCell" forIndexPath:indexPath];
 //                
 //                return cell;
-            }else
+            }else if (indexPath.row==2){
+                //文章列表第二个展示分享会的cell
+
+                FKXPsyTestCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXPsyTestCell" forIndexPath:indexPath];
+                
+                FKXResonance_homepage_model *model = [self.contentArrArticle objectAtIndex:indexPath.row];
+                FKXPsyListModel *course = [[FKXPsyListModel alloc] init];
+                
+                course.testBackground = model.testBackground;
+                course.testTitle = model.testTitle;
+                course.psyId = model.testId;
+                course.testNum = model.testNum;
+                course.praiseNum = model.testPraiseNum;
+                
+                cell.model = course;
+                return cell;
+            }
+            else
             {
                 FKXArticleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXArticleCell" forIndexPath:indexPath];
                 

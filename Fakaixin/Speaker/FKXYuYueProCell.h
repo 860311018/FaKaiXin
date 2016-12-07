@@ -15,6 +15,7 @@
 @end
 
 @interface FKXYuYueProCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIView *tapView;
 @property (weak, nonatomic) IBOutlet UIImageView *headImgV;
 @property (weak, nonatomic) IBOutlet UILabel *nameL;
 @property (weak, nonatomic) IBOutlet UILabel *desL;

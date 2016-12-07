@@ -857,6 +857,8 @@
 - (void)toVoice:(FKXSameMindModel *)cellModel {
     FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
     vc.isNeedTwoItem = YES;
+    vc.commentStr = [cellModel.commentNum stringValue];
+    
     //这里都是已经被认可的，直接传1
     vc.pageType = MyPageType_nothing;
     vc.shareType = @"second_ask";
@@ -874,7 +876,7 @@
         paraId = cellModel.lqId;
     }
     vc.urlString = [NSString stringWithFormat:@"%@front/QA_a_detail.html?%@=%@&uid=%ld&voiceId=%@&IsAgree=1&token=%@",kServiceBaseURL,paraStr, paraId, (long)[FKXUserManager shareInstance].currentUserId, cellModel.voiceId, [FKXUserManager shareInstance].currentUserToken];
-//    vc.secondModel = cellModel;
+    vc.sameMindModel = cellModel;
     //push的时候隐藏tabbar
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];

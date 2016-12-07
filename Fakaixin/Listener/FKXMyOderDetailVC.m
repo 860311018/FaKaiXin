@@ -19,7 +19,7 @@
 #import "FKXBindPhone.h"
 #import "FKXLiXianView.h"
 #import "FKXLianjieView.h"
-
+#import "FKXCallOrder.h"
 #import "NSString+Extension.h"
 
 typedef enum : NSUInteger {
@@ -28,7 +28,7 @@ typedef enum : NSUInteger {
 } PayType;
 
 
-@interface FKXMyOderDetailVC ()<ConfirmDelegate,BindPhoneDelegate,BeeCloudDelegate>
+@interface FKXMyOderDetailVC ()<ConfirmDelegate,BindPhoneDelegate,BeeCloudDelegate,CallDelegate,LixianDelegate>
 {
     CGFloat keyboardHeight;
     
@@ -73,6 +73,11 @@ typedef enum : NSUInteger {
 @end
 
 @implementation FKXMyOderDetailVC
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -281,22 +286,33 @@ typedef enum : NSUInteger {
 #pragma mark - 电话咨询（已经付款）
 - (void)toCall:(FKXOrderModel *)model {
 
-    NSDictionary * params = @{};
-    NSString *callLength = [NSString stringWithFormat:@"%ld",[model.callLength integerValue] *60];
-    if (self.proModel) {
-        params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":self.userModel.clientNum,@"to":self.proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
-    }
+    NSString *callStr = [NSString stringWithFormat:@"%ld",[model.callLength integerValue] *60];
+    [self call:callStr];
+}
+
+- (void)call:(NSString *)callLength {
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":self.userModel.clientNum,@"to":self.proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
         if ([respCode isEqualToString:@"000000"]) {
-            [self showHint:@"正在为您呼叫，请稍后"];
+            [self tapHide4];
+            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
+            //改变咨询师在线状态
+            NSDictionary *param = @{@"status":@2};
+            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+                NSLog(@"%@",data);
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error.description);
+                
+            }];
+            
         }else {
-            [self showHint:@"网络出错"];
+            [self showHint:@"电话线路出错"];
         }
     } failure:^(NSError *error) {
         [self hideHud];
-        [self showHint:@"网络出错"];
+        [self showHint:@"电话线路出错"];
     }];
 }
 
@@ -574,15 +590,61 @@ typedef enum : NSUInteger {
     }
 }
 
+- (void)loadCallLength {
+    NSDictionary *params = @{@"userId":self.userModel.uid,@"listenerId":self.proModel.uid};
+    [AFRequest sendPostRequestTwo:@"listener/allow_call_length" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSInteger callNum = [data[@"data"][@"length"] integerValue];
+            
+            lianjie = [FKXLianjieView creatZaiXian];
+            lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+            lianjie.delegate = self;
+            lianjie.lisId = self.proModel.uid;
+            lianjie.callLength = [NSString stringWithFormat:@"%ld",callNum*60];
+            lianjie.head = self.proModel.head;
+            lianjie.name = self.proModel.name;
+            
+            view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+            [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
+            
+            view4.alpha = 0;
+            lianjie.alpha = 0;
+            [[UIApplication sharedApplication].keyWindow addSubview:view4];
+            [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                view4.alpha = 1;
+                lianjie.alpha = 1;
+            }];
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+
 - (void)showView {
     [self hideHud];
-    //离线
-    if ([self.proModel.status integerValue]==0) {
+    //在线
+    if ([self.proModel.status integerValue]==1) {
+        [self loadCallLength];
+
+    }else {
         lixian = [FKXLiXianView creatLiXian];
         lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
         lixian.head = self.proModel.head;
         lixian.name = self.proModel.name;
-        
+        lixian.delegate = self;
+        lixian.lisId = self.proModel.uid;
+        if ([self.proModel.status integerValue]==0) {
+            lixian.statusL.text = @" 离线 ";
+        }else if([self.proModel.status integerValue]==2) {
+            lixian.statusL.text = @" 通话中 ";
+        }
         view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
         view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
         [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
@@ -596,29 +658,6 @@ typedef enum : NSUInteger {
             view3.alpha = 1;
             lixian.alpha = 1;
         }];
-        
-        
-        
-    }else {
-        lianjie = [FKXLianjieView creatZaiXian];
-        lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
-        lianjie.head = self.proModel.head;
-        lianjie.name = self.proModel.name;
-        
-        view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-        view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
-        
-        view4.alpha = 0;
-        lianjie.alpha = 0;
-        [[UIApplication sharedApplication].keyWindow addSubview:view4];
-        [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            view4.alpha = 1;
-            lianjie.alpha = 1;
-        }];
-        
     }
     
 }
@@ -733,6 +772,16 @@ typedef enum : NSUInteger {
             [lianjie removeFromSuperview];
         }
     }];
+}
+
+- (void)lixiantoHead:(NSNumber *)uid {
+    [self tapHide3];
+    [self clickHead:uid];
+}
+
+- (void)toHead:(NSNumber *)uid {
+    [self tapHide4];
+    [self clickHead:uid];
 }
 
 - (void)clickHead:(NSNumber *)listenId {

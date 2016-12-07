@@ -69,10 +69,19 @@
 @property (nonatomic, strong) NSNumber<Optional>           *acceptNumber;   //认可的个数
 
 @property (nonatomic, strong) NSNumber<Optional>           *cureCount;   //治愈的人数
+
+@property (nonatomic, strong) NSNumber<Optional>           *phoneCount;   //咨询师电话服务的时长
+
+@property (nonatomic, strong) NSNumber<Optional>           *consultCount;   //咨询师图文咨询的次数
+
 @property   (nonatomic,strong)NSNumber<Optional> *searchType;//搜索的类型：1，心事；2，享问；3，专家；4，文章
 
 
 @property (nonatomic,copy)NSString<Optional> *createTime;
+
+//自己加字段
+@property (nonatomic,copy)NSString<Optional> *nickname;
+
 
 //@property (nonatomic,assign)CGFloat headerH;
 //@property (nonatomic,copy)NSString * introStr;

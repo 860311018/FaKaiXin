@@ -15,7 +15,17 @@
     self.headImgV.layer.cornerRadius = 25;
     self.headImgV.layer.masksToBounds = YES;
     //    self.headImgV.backgroundColor = [UIColor whiteColor];
+    [self.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tap2:)]];
+    
+    
 }
+
+- (void)tap2:(UITapGestureRecognizer *)tap {
+    if ([self.delegate respondsToSelector:@selector(lixiantoHead:)]) {
+        [self.delegate lixiantoHead:self.lisId];
+    }
+}
+
 
 - (void)layoutSubviews {
     [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.head,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];

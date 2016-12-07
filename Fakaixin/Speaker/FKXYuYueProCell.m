@@ -24,6 +24,8 @@
     maskLayer.frame = self.tagL.bounds;
     maskLayer.path = maskPath.CGPath;
     self.tagL.layer.mask = maskLayer;
+
+    [self.tapView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(touchCall:)]];
 }
 
 - (IBAction)touchCall:(id)sender {

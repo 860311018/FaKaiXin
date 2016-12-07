@@ -19,7 +19,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="300" height="368"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_right_quotation" translatesAutoresizingMaskIntoConstraints="NO" id="5XF-bp-d3E">
-                    <rect key="frame" x="273" y="257" width="14" height="11"/>
+                    <rect key="frame" x="273" y="237" width="14" height="11"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="14" id="Y00-kR-ue8"/>
                         <constraint firstAttribute="height" constant="11" id="geK-x4-KqN"/>
@@ -54,212 +54,114 @@
                     </userDefinedRuntimeAttributes>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfJ-19-HZa">
-                    <rect key="frame" x="12" y="15" width="275" height="252"/>
+                    <rect key="frame" x="12" y="15" width="275" height="232"/>
                     <attributedString key="attributedText">
-                        <fragment content="1">
+                        <fragment content="1.如非特殊情况或者通话时长结束，">
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="4" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content=".如非特殊情况或者通话时长结束，">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="4" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="禁止先挂断">
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="4" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="用户的电话">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="4" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment>
-                            <string key="content" base64-UTF8="YES">
-DQ
-</string>
+                            <string key="content">用户的电话</string>
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" paragraphSpacing="4" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
-                        <fragment content="2">
+                        <fragment content="2.如果用户向您咨询的时间，不合适，你可以先通过">
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content=".如果用户向您咨询的时间，不合适，你可以先通过">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="私信联系用户预约确定时间">
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment>
                             <string key="content">
-3</string>
+3.如果由于各种原因导致通话中断，请在我的订单-点击联系专家再次联系专家。</string>
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content=".如果由于各种原因导致通话中断，请在我的订单">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="-">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="点击联系专家再次联系专家。">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="切勿再次回拨">
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="之前的电话">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment>
-                            <string key="content">
-4</string>
+                            <string key="content">之前的电话
+4.如果您处于</string>
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content=".如果您处于">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="在线">
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="状态，则用户可以直接向您拨打电话咨询无需预约">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment>
-                            <string key="content">
-5</string>
+                            <string key="content">状态，则用户可以直接向您拨打电话咨询无需预约
+5.如果您处于离线状态，用户购买您的服务后请及时进入产品关怀模式-工作台-</string>
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
-                        <fragment content=".如果您处于离线状态，用户购买您的服务后请及时进入产品关怀模式">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="-">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="工作台">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="-">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content="订单中去确认">
+                        <fragment>
+                            <string key="content">订单中去确认
+</string>
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment>
-                            <string key="content">
-6</string>
+                            <string key="content">6.如果您点击电话咨询后，没有电话回拨过来，请隔5分钟再次点击咨询
+7.为了保证您的隐私和收入保障，</string>
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" metaFont="system" size="14"/>
-                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                            </attributes>
-                        </fragment>
-                        <fragment content=".为了保证您的隐私和收入保障，">
-                            <attributes>
-                                <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="禁止与用户私下交换联系方式">
                             <attributes>
                                 <color key="NSColor" red="1" green="0.41960784309999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>
                         <fragment content="，违反者平台将销号处理">
                             <attributes>
                                 <color key="NSColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <font key="NSFont" size="14" name=".PingFangSC-Regular"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
                                 <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                             </attributes>
                         </fragment>

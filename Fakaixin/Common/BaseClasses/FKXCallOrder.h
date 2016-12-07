@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class FKXUserInfoModel;
+
 @class FKXConfirmView;
 
 @class FKXBindPhone;
@@ -22,5 +24,6 @@
 
 + (NSMutableDictionary *)params:(NSNumber *)listenerId time:(NSNumber *)time totals:(NSNumber *)totals andVC:(UIViewController *)vc;
 
++ (void)calling:(NSString *)callLength userModel:(FKXUserInfoModel *)userModel proModel:(FKXUserInfoModel *)proModel controller:(UIViewController *)vc;
 
 @end

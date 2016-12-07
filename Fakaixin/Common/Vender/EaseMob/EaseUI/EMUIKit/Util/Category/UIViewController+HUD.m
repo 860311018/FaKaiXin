@@ -49,8 +49,22 @@ static const void *HttpRequestHUDKey = &HttpRequestHUDKey;
     hud.removeFromSuperViewOnHide = YES;
     [hud hide:YES afterDelay:2];
 }
+- (void)showHint2:(NSString *)hint
+{
+    //显示提示信息
+    UIView *view = [[UIApplication sharedApplication].delegate window];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    hud.userInteractionEnabled = NO;
+    // Configure for text only and offset down
+    hud.mode = MBProgressHUDModeText;
+    hud.detailsLabelText = hint;
+    hud.margin = 10.f;
+    hud.yOffset = 180;
+    hud.removeFromSuperViewOnHide = YES;
+    [hud hide:YES afterDelay:4];
+}
 
-- (void)showHint:(NSString *)hint yOffset:(float)yOffset {
+- (void)showHint:(NSString * )hint yOffset:(float)yOffset {
     //显示提示信息
     UIView *view = [[UIApplication sharedApplication].delegate window];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];

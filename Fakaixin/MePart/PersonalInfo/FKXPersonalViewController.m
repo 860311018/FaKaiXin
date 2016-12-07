@@ -458,8 +458,8 @@
                      if ([[FKXUserManager getUserInfoModel].role integerValue] == 0 || [FKXUserManager isUserPattern])
                      {
                          _paiMing.text = @"排\n名";
-                         _bLabel.text = @"帮助人数";
-                         _zLabel.text = @"点赞人数";
+                         _bLabel.text = @"评论数量";
+                         _zLabel.text = @"被点赞数";
 
                          if ([data[@"data"][@"commentFloat"] integerValue] >0) {
                              _downImgV.image = [UIImage imageNamed:@"mine_paiHang_up"];

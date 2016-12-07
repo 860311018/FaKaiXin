@@ -488,10 +488,14 @@
 //        [rightBarBtn addTarget:self action:@selector(clickShare) forControlEvents:UIControlEventTouchUpInside];
         
         UIImage * image2 = [UIImage imageNamed:@"btn_comments_new"];
-        UIButton * rightBarBtn2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, image2.size.width, image2.size.height)];
+        UIButton * rightBarBtn2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, image2.size.width+20, image2.size.height)];
         [rightBarBtn2 setImage:image2 forState:UIControlStateNormal];
+        if ([self.commentStr isEqualToString:@"0"]) {
+            self.commentStr = @"";
+        }
         [rightBarBtn2 setTitle:self.commentStr forState:UIControlStateNormal];
-        rightBarBtn2.titleLabel.font = [UIFont systemFontOfSize:15];
+        rightBarBtn2.titleLabel.textAlignment = NSTextAlignmentCenter;
+        rightBarBtn2.titleLabel.font = [UIFont systemFontOfSize:14];
         [rightBarBtn2 setTitleColor:kColorMainRed forState:UIControlStateNormal];
         [rightBarBtn2 addTarget:self action:@selector(clickCommit) forControlEvents:UIControlEventTouchUpInside];
 //        UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:rightBarBtn];
@@ -516,16 +520,16 @@
 //点击评论按钮
 - (void)clickCommit
 {
-    FKXSameMindModel *model = [[FKXSameMindModel alloc] init];
-    model.worryId = _secondModel.worryId;
-    model.text = _secondModel.text;
-    model.head = _secondModel.userHead;
-    model.nickName = _secondModel.userNickName;
+//    FKXSameMindModel *model = [[FKXSameMindModel alloc] init];
+//    model.worryId = _secondModel.worryId;
+//    model.text = _secondModel.text;
+//    model.head = _secondModel.userHead;
+//    model.nickName = _secondModel.userNickName;
     
     FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
     vc.shareType = @"comment";
-    vc.urlString = [NSString stringWithFormat:@"%@front/comment.html?worryId=%@&uid=%ld&token=%@",kServiceBaseURL,model.worryId, (long)[FKXUserManager shareInstance].currentUserId,  [FKXUserManager shareInstance].currentUserToken];
-    vc.sameMindModel = model;
+    vc.urlString = [NSString stringWithFormat:@"%@front/comment.html?worryId=%@&uid=%ld&token=%@",kServiceBaseURL,self.sameMindModel.worryId, (long)[FKXUserManager shareInstance].currentUserId,  [FKXUserManager shareInstance].currentUserToken];
+    vc.sameMindModel = self.sameMindModel;
     vc.pageType = MyPageType_nothing;
     //push的时候隐藏tabbar
     [vc setHidesBottomBarWhenPushed:YES];

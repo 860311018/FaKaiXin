@@ -58,6 +58,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *articleTitle;
 @property (weak, nonatomic) IBOutlet UILabel *articleContent;
+@property (weak, nonatomic) IBOutlet UIImageView *articleImgV;
+
 @property (weak, nonatomic) IBOutlet UIView *viewSameModel1;
 @property (weak, nonatomic) IBOutlet UIView *viewSameModel2;
 @end
@@ -217,6 +219,7 @@
                  NSAttributedString *attS =[[NSAttributedString alloc] initWithString:articleModel.title?articleModel.title:@"" attributes:@{NSUnderlineStyleAttributeName:[NSNumber numberWithInteger:NSUnderlineStyleSingle]}];
                  [_articleTitle setAttributedText:attS];
                  _articleContent.text = articleModel.text;
+                 [_articleImgV sd_setImageWithURL:[NSURL URLWithString:articleModel.background] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
                  break;
              }
          }
@@ -334,6 +337,7 @@
             }
             FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
             vc.isNeedTwoItem = YES;
+            vc.commentStr = [secondModel1.commentNum stringValue];
             FKXSecondAskModel *model = secondModel1;
             //这里都是已经被认可的，直接传1
             vc.pageType = MyPageType_nothing;
@@ -364,6 +368,7 @@
             }
             FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
             vc.isNeedTwoItem = YES;
+            vc.commentStr = [secondModel2.commentNum stringValue];
             FKXSecondAskModel *model = secondModel2;
             //这里都是已经被认可的，直接传1
             vc.pageType = MyPageType_nothing;
@@ -415,9 +420,10 @@
 //            break;
             
             //点击文章
-        case 7:
+        case 5:
         {
             if (articleModel) {
+                
                 FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
                 vc.shareType = @"mind";
                 vc.urlString = [NSString stringWithFormat:@"%@?shareId=%@&uid=%ld&token=%@",articleModel.url, articleModel.hotId, (long)[FKXUserManager shareInstance].currentUserId,[FKXUserManager shareInstance].currentUserToken];

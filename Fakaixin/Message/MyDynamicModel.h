@@ -34,6 +34,9 @@
 @property(nonatomic, copy)NSString<Optional> * toHead;
 @property(nonatomic, copy)NSString<Optional> * replyText;//（在信中代表写信内容）
 @property(nonatomic, copy)NSString<Optional> * voiceUrl;
+
+@property(nonatomic, copy)NSNumber<Optional> *voiceTime;
+
 @property(nonatomic, copy)NSString<Optional> * listenerProfession;
 @property(nonatomic, strong)NSNumber<Optional> * toId;
 @property(nonatomic, strong)NSNumber<Optional> * type;

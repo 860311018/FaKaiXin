@@ -29,6 +29,9 @@
     UIMenuItem *_deleteMenuItem;
     UIMenuItem *_transpondMenuItem;
     
+    FKXUserInfoModel *proModel;
+
+    
     FKXUserInfoModel *senderUser;
     ChatUser *receiverUser;
     
@@ -125,6 +128,8 @@
     
     [BeeCloud setBeeCloudDelegate:self];
 
+    self.userModel = [FKXUserManager getUserInfoModel];
+    [self loadModel];
     //对方结束会话的通知
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
     
@@ -232,6 +237,29 @@
    
 }
 
+
+- (void)loadModel {
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    paramDic[@"userId"] = self.userModel.uid;
+    paramDic[@"listenerId"] = [NSNumber numberWithInteger:[self.conversation.chatter integerValue]];
+    [AFRequest sendPostRequestTwo:@"user/selectClient" param:paramDic success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"listenerInfo"];
+            proModel =  [[FKXUserInfoModel alloc] initWithDictionary:dic error:nil];
+            titleView.pingFen.text = [proModel.cureCount stringValue];
+            titleView.textCount.text = [proModel.consultCount stringValue];
+            titleView.tonghuaMinut.text = [proModel.phoneCount stringValue];
+            [titleView.headImgV sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@""]];
+
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
 
 - (void)talkIsContinue {
     
@@ -1208,23 +1236,23 @@
 
 - (void)setUpChatView {
     
-    NSString *name = self.userModel.name;
-    NSArray *goodsAt = self.userModel.goodAt;
-    for (NSString *goodStr in goodsAt) {
-        
-    }
-    
-    EMChatText *txt2 = [[EMChatText alloc] initWithText:@"下单流程：下单付款--等待确认--接听来电--正式咨询\n\n小贴士：您可以先通过私信联系我确定时间，如果您的问题复杂或需要长期疏导陪伴，请选择套餐【立减折扣】，方便随时联系"];
-    EMTextMessageBody *body2 = [[EMTextMessageBody alloc] initWithChatObject:txt2];
-    
-    EMMessage *message = [[EMMessage alloc] initWithReceiver:[NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId] bodies:@[body2]];
-    message.from = [self.userModel.uid stringValue];
-    message.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
-    message.ext = @{@"head":self.userModel.head,@"name":self.userModel.name};
-    message.messageType = eMessageTypeChat; // 设置为单聊消息
-    message.deliveryState = eMessageDeliveryState_Delivered;
-    [[EaseMob sharedInstance].chatManager insertMessageToDB:message];
-    [[FKXBaseViewController alloc] insertDataToTableWith:message managedObjectContext:ApplicationDelegate.managedObjectContext];
+//    NSString *name = userModel.name;
+//    NSArray *goodsAt = userModel.goodAt;
+//    for (NSString *goodStr in goodsAt) {
+//        
+//    }
+//    
+//    EMChatText *txt2 = [[EMChatText alloc] initWithText:@"下单流程：下单付款--等待确认--接听来电--正式咨询\n\n小贴士：您可以先通过私信联系我确定时间，如果您的问题复杂或需要长期疏导陪伴，请选择套餐【立减折扣】，方便随时联系"];
+//    EMTextMessageBody *body2 = [[EMTextMessageBody alloc] initWithChatObject:txt2];
+//    
+//    EMMessage *message = [[EMMessage alloc] initWithReceiver:[NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId] bodies:@[body2]];
+//    message.from = [self.userModel.uid stringValue];
+//    message.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+//    message.ext = @{@"head":self.userModel.head,@"name":self.userModel.name};
+//    message.messageType = eMessageTypeChat; // 设置为单聊消息
+//    message.deliveryState = eMessageDeliveryState_Delivered;
+//    [[EaseMob sharedInstance].chatManager insertMessageToDB:message];
+//    [[FKXBaseViewController alloc] insertDataToTableWith:message managedObjectContext:ApplicationDelegate.managedObjectContext];
 
 }
 

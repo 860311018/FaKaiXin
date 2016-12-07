@@ -56,6 +56,8 @@ typedef enum : NSUInteger {
 
 //调第三方支付前获取订单号，返回字段加入isAmple： 0余额不足，1余额充足
 @property(nonatomic, strong)NSMutableDictionary  * payParameterDic;    //支付的参数
+//评论人数
+@property (nonatomic,copy) NSString *commentStr;
 
 
 //选择金额
