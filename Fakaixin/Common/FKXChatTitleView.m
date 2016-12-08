@@ -13,6 +13,8 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
 
+//    [self.confirmOrderBtn addTarget:self action:@selector(targ) forControlEvents:UIControlEventTouchUpInside];
+//    [self.callBtn addTarget:self action:@selector(targ) forControlEvents:UIControlEventTouchUpInside];
     
 }
 

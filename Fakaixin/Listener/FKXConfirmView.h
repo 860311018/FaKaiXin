@@ -44,8 +44,11 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *confirmOrder;
 
+@property (weak, nonatomic) IBOutlet UILabel *scaleL;
 
 @property(nonatomic,weak)id<ConfirmDelegate>confirmDelegate;
+
+@property (nonatomic,assign) BOOL isTalk;
 
 @property (nonatomic,assign) NSInteger price; //单价
 @property (nonatomic,copy) NSString *phoneStr;//电话

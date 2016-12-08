@@ -168,13 +168,15 @@ typedef enum : NSUInteger {
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-   
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
     modelArr = [[NSMutableArray alloc]init];
     
     [BeeCloud setBeeCloudDelegate:self];
 
     userModel = [FKXUserManager getUserInfoModel];
-    [self loadModel];
+   
+    
     //对方结束会话的通知
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
     
@@ -187,7 +189,8 @@ typedef enum : NSUInteger {
     //单聊判断聊天是否结束
     if (self.conversation.conversationType == eConversationTypeChat) {
         [self browse];
-        
+        [self loadModel];
+
         if (self.toZiXunShi) {
             //ui设置
             CGPoint origin = self.tableView.origin;
@@ -199,13 +202,18 @@ typedef enum : NSUInteger {
             self.tableView.size = size;
             
             titleView = [FKXChatTitleView creatChatTitle];
-            titleView.frame = CGRectMake(0, 0, kScreenWidth, 110);
+            titleView.frame = CGRectMake(0, 0, kScreenWidth, 110+64);
+
             [titleView.headImgV sd_setImageWithURL:[NSURL URLWithString:self.pModel.head] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
             [titleView.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphead)]];
-           
+            [titleView.confirmOrderBtn addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(callOrder)]];
+            [titleView.callBtn addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(callOrder)]];
+            [titleView.chatBtn addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(bookConsultService)]];
+
             
             titleView.backgroundColor = [UIColor redColor];
             [self.view addSubview:titleView];
+
             
             [self validTalkIsFinish];//加载是否显示举报
 
@@ -268,8 +276,7 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleCallNotification:) name:@"callOutWithChatter" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleCallNotification:) name:@"callControllerClose" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
+   
    
    
     
@@ -287,6 +294,9 @@ typedef enum : NSUInteger {
    
 }
 
+- (void)ttt{
+    
+}
 
 
 

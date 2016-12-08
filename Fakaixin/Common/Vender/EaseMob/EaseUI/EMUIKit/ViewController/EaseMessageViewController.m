@@ -838,11 +838,15 @@
 #pragma mark - GestureRecognizer
 
 // 点击背景隐藏
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    [self.view endEditing:YES];
+//}
 -(void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
 {
     if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
         [self.chatToolbar endEditing:YES];
     }
+   
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer
@@ -908,16 +912,14 @@
 
     view.frame = CGRectMake(0, 0, kScreenWidth, self.headerH);
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(taphead:)];
     [view.headImgV addGestureRecognizer:tap];
-    [view.backImgV addGestureRecognizer:tap];
 
-//    [view.headBtn addTarget:self action:@selector(taphead:) forControlEvents:UIControlEventTouchUpInside];
 
     return view;
 }
 
-- (void)taphead:(UIButton *)btn {
+- (void)taphead:(UITapGestureRecognizer *)tap {
     FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
     vc.userId = self.pModel.uid;
     [vc setHidesBottomBarWhenPushed:YES];

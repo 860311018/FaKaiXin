@@ -88,6 +88,10 @@ typedef enum : NSUInteger {
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
 @property (nonatomic,assign) PayType payType;
 
+@property (nonatomic,assign) BOOL isKeyTalk;
+
+@property (nonatomic,copy) NSString *callStr;
+@property (nonatomic,strong) NSNumber *listenerId;
 
 @end
 
@@ -197,7 +201,40 @@ typedef enum : NSUInteger {
 
 #pragma mark - 一键倾诉
 - (void)qingsu {
+    _isKeyTalk = YES;
+    order = [FKXConfirmView creatOrder];
+    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+    order.confirmDelegate = self;
     
+    order.price = 25;
+//    order.head = ;
+    order.isTalk = YES;
+    order.name = @"推荐专家";
+    order.status = @1;
+//    order.listenerId = proModel.uid;
+    
+    if (userModel.mobile) {
+        order.phoneStr = userModel.mobile;
+    }
+    
+    if (userModel.clientNum && userModel.clientNum.length>0) {
+        order.bangDingBtn.hidden = YES;
+    }
+    
+    
+    view1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide)]];
+    
+    view1.alpha = 0;
+    order.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view1];
+    [[UIApplication sharedApplication].keyWindow addSubview:order];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view1.alpha = 1;
+        order.alpha = 1;
+    }];
 }
 
 #pragma mark - ---网络请求---
@@ -645,33 +682,66 @@ typedef enum : NSUInteger {
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
     
-    [dic setObject:listenerId forKey:@"listenerId"];
-    [dic setObject:totals forKey:@"price"];
-    [dic setObject:time forKey:@"phoneTime"];
-    
-    //    NSDictionary *paramDic = @{@"listenerId":listenerId,@"price":totals,@"phoneTime":time};
-    
-    [self showHudInView:self.view hint:@"正在提交..."];
-    [AFRequest sendGetOrPostRequest:@"listener/pay" param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
-     {
-         [self hideHud];
-         if ([data[@"code"] integerValue] == 0)
+    if (_isKeyTalk) {
+        
+        [dic setObject:totals forKey:@"price"];
+        [dic setObject:time forKey:@"phoneTime"];
+        self.callStr = [time stringValue];
+        //    NSDictionary *paramDic = @{@"listenerId":listenerId,@"price":totals,@"phoneTime":time};
+        
+        [self showHudInView:self.view hint:@"正在提交..."];
+        [AFRequest sendGetOrPostRequest:@"sys/aKeyTalk" param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
          {
-             [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
-             CGFloat money = [data[@"data"][@"money"] floatValue];
-             [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
-             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
-             [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
-             [self confirmToPay];
-         }else
+             [self hideHud];
+             if ([data[@"code"] integerValue] == 0)
+             {
+                 self.listenerId = data[@"data"][@"listenerId"];
+                 [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
+                 CGFloat money = [data[@"data"][@"money"] floatValue];
+                 [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
+//                 NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+//                 [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+                 [self confirmToPay];
+             }else
+             {
+                 [self showHint:data[@"message"]];
+                 
+             }
+         } failure:^(NSError *error) {
+             [self hideHud];
+             [self showHint:@"网络出错"];
+         }];
+    }else {
+        [dic setObject:listenerId forKey:@"listenerId"];
+        
+        [dic setObject:totals forKey:@"price"];
+        [dic setObject:time forKey:@"phoneTime"];
+        
+        //    NSDictionary *paramDic = @{@"listenerId":listenerId,@"price":totals,@"phoneTime":time};
+        
+        [self showHudInView:self.view hint:@"正在提交..."];
+        [AFRequest sendGetOrPostRequest:@"listener/pay" param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
          {
-             [self showHint:data[@"message"]];
-             
-         }
-     } failure:^(NSError *error) {
-         [self hideHud];
-         [self showHint:@"网络出错"];
-     }];
+             [self hideHud];
+             if ([data[@"code"] integerValue] == 0)
+             {
+                 [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
+                 CGFloat money = [data[@"data"][@"money"] floatValue];
+                 [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
+                 NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+                 [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+                 [self confirmToPay];
+             }else
+             {
+                 [self showHint:data[@"message"]];
+                 
+             }
+         } failure:^(NSError *error) {
+             [self hideHud];
+             [self showHint:@"网络出错"];
+         }];
+    }
+   
 }
 
 - (void)confirmToPay{
@@ -739,28 +809,30 @@ typedef enum : NSUInteger {
         [self hideHud];
         if ([data[@"code"] integerValue] == 0) {
             NSInteger callNum = [data[@"data"][@"length"] integerValue];
+            [self showZaiXian:professionModel callNum:callNum];
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+
+- (void)loadProInfo:(NSNumber *)listenerId {
+    NSDictionary *params = @{@"userId":[FKXUserManager getUserInfoModel].uid,@"listenerId":listenerId};
+    
+    [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"listenerInfo"];
+            FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            if ([pModel.status integerValue] == 1) {
+                [self showZaiXian:pModel callNum:[self.callStr integerValue]];
+            }else {
+                [self showLiXian:pModel];
+            }
             
-            lianjie = [FKXLianjieView creatZaiXian];
-            lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
-            lianjie.delegate = self;
-            lianjie.callLength = [NSString stringWithFormat:@"%ld",callNum*60];
-            lianjie.head = professionModel.head;
-            lianjie.name = professionModel.name;
-            lianjie.lisId = professionModel.uid;
-            
-            view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-            view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-            [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
-            
-            view4.alpha = 0;
-            lianjie.alpha = 0;
-            [[UIApplication sharedApplication].keyWindow addSubview:view4];
-            [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
-            
-            [UIView animateWithDuration:0.5 animations:^{
-                view4.alpha = 1;
-                lianjie.alpha = 1;
-            }];
         }else {
             [self showHint:data[@"message"]];
         }
@@ -772,38 +844,72 @@ typedef enum : NSUInteger {
 
 - (void)showView {
     [self hideHud];
-    //在线
-    if ([professionModel.status integerValue]==1) {
-        [self loadCallLength];
+    
+    if (_isKeyTalk) {
+        [self loadProInfo:self.listenerId];
     }else {
-        lixian = [FKXLiXianView creatLiXian];
-        lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
-        lixian.head = professionModel.head;
-        lixian.name = professionModel.name;
-        lixian.lisId = professionModel.uid;
-        lixian.delegate = self;
-        
-        if ([professionModel.status integerValue]==0) {
-            lixian.statusL.text = @" 离线 ";
-        }else if([professionModel.status integerValue]==2) {
-            lixian.statusL.text = @" 通话中 ";
+        if ([professionModel.status integerValue]==1) {
+            [self loadCallLength];
+        }else {
+            [self showLiXian:professionModel];
         }
-        
-        view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-        view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
-        
-        view3.alpha = 0;
-        lixian.alpha = 0;
-        [[UIApplication sharedApplication].keyWindow addSubview:view3];
-        [[UIApplication sharedApplication].keyWindow addSubview:lixian];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            view3.alpha = 1;
-            lixian.alpha = 1;
-        }];
+
     }
     
+}
+
+- (void)showZaiXian:(FKXUserInfoModel *)proModel callNum:(NSInteger)callNum{
+    lianjie = [FKXLianjieView creatZaiXian];
+    lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+    lianjie.delegate = self;
+    lianjie.callLength = [NSString stringWithFormat:@"%ld",callNum*60];
+    lianjie.head = proModel.head;
+    lianjie.name = proModel.name;
+    lianjie.lisId = proModel.uid;
+    
+    view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
+    
+    view4.alpha = 0;
+    lianjie.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view4];
+    [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view4.alpha = 1;
+        lianjie.alpha = 1;
+    }];
+}
+
+- (void)showLiXian:(FKXUserInfoModel *)proModel {
+    lixian = [FKXLiXianView creatLiXian];
+    lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+    lixian.head = proModel.head;
+    lixian.name = proModel.name;
+    lixian.lisId = proModel.uid;
+    lixian.delegate = self;
+    
+    if ([proModel.status integerValue]==0) {
+        lixian.statusL.text = @" 离线 ";
+    }else if([proModel.status integerValue]==2) {
+        lixian.statusL.text = @" 通话中 ";
+    }
+    
+    view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
+    
+    view3.alpha = 0;
+    lixian.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view3];
+    [[UIApplication sharedApplication].keyWindow addSubview:lixian];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view3.alpha = 1;
+        lixian.alpha = 1;
+    }];
+
 }
 
 #pragma mark - 绑定手机代理
@@ -922,16 +1028,25 @@ typedef enum : NSUInteger {
 
 - (void)lixiantoHead:(NSNumber *)uid {
     [self tapHide3];
+    if (!uid) {
+        return;
+    }
     [self clickHead:uid];
 }
 
 - (void)toHead:(NSNumber *)uid {
     [self tapHide4];
+    if (!uid) {
+        return;
+    }
     [self clickHead:uid];
 }
 
 - (void)clickHead:(NSNumber *)listenId {
     [self tapHide];
+    if (!listenId) {
+        return;
+    }
     FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
     vc.userId = listenId;
     [vc setHidesBottomBarWhenPushed:YES];

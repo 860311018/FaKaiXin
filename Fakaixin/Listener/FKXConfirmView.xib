@@ -382,6 +382,7 @@
                 <outlet property="nameL" destination="P7h-zN-Pjf" id="w0U-2V-HvR"/>
                 <outlet property="phoneTF" destination="l86-tr-P23" id="QyX-Ei-vd0"/>
                 <outlet property="priceL" destination="eN0-zU-ybV" id="SPG-W0-4OI"/>
+                <outlet property="scaleL" destination="PKm-XI-r1q" id="PeN-b1-MDx"/>
                 <outlet property="statusL" destination="fVf-ON-Qa5" id="mSe-y5-jTc"/>
                 <outlet property="totalL" destination="N4B-7U-RvN" id="XqG-Rn-JgE"/>
                 <outlet property="weiXinPay" destination="R3A-Cf-pJ9" id="xJ6-Ym-bGs"/>

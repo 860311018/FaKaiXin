@@ -19,13 +19,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Common/Vender/EaseMob/EaseUI/EMUIKit/ViewController/EaseMessageViewController.m"
-            timestampString = "502878824.488047"
+            filePath = "Fakaixin/Common/Vender/EaseMob/Chat/ChatView/ChatViewController.m"
+            timestampString = "502888561.941156"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "919"
-            endingLineNumber = "919"
-            landmarkName = "-taphead:"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "-ttt"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Fakaixin/Common/Vender/EaseMob/EaseUI/EMUIKit/ViewController/EaseMessageViewController.m"
+            timestampString = "502887150.174098"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "846"
+            endingLineNumber = "846"
+            landmarkName = "-keyBoardHidden:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

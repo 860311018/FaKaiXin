@@ -50,18 +50,33 @@
 
 - (void)layoutSubviews {
     
-    self.priceL.text = [NSString stringWithFormat:@"￥%ld元/15分钟",self.price];
     
     self.minutesTF.text = [NSString stringWithFormat:@"%ld",minutes];
     
-    totals = multiple *self.price;
-    if (minutes>=60) {
-        totals = multiple *self.price*0.9;
+   
+    
+    if (self.isTalk) {
+        self.statusL.hidden = YES;
+        self.scaleL.hidden = YES;
+        totals = multiple *self.price;
+        self.headImgV.image = [UIImage imageNamed:@"AppIcon"];
+        
+    }else {
+        self.scaleL.hidden = NO;
+        self.statusL.hidden = NO;
+
+        [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.head,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+        
+        totals = multiple *self.price;
+        if (minutes>=60) {
+            totals = multiple *self.price*0.9;
+        }
     }
+    
+    self.priceL.text = [NSString stringWithFormat:@"￥%ld元/15分钟",self.price];
+
     self.totalL.text = [NSString stringWithFormat:@"￥%.2f",totals];
-    
-    [self.headImgV sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@", self.head,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
-    
+
     self.nameL.text = self.name;
     
     self.statusL.textColor = [UIColor colorWithRed:210/255.0 green:210/255.0 blue:210/255.0 alpha:1];

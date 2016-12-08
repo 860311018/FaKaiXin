@@ -23,10 +23,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *chatBtn;
 @property (weak, nonatomic) IBOutlet UIButton *callBtn;
 @property (weak, nonatomic) IBOutlet UILabel *scaleL;
-@property (weak, nonatomic) IBOutlet UIButton *confirmOrderBtn;
+
 @property (weak, nonatomic) IBOutlet UIView *view2;
 
 @property (weak, nonatomic) IBOutlet UIView *view1;
+//@property (weak, nonatomic) IBOutlet UIImageView *testImg;
+@property (weak, nonatomic) IBOutlet UILabel *confirmOrderBtn;
+
+@property (weak, nonatomic) IBOutlet UILabel *test2;
 
 +(id)creatChatTitle;
 
