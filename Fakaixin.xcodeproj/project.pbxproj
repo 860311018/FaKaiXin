@@ -21,6 +21,8 @@
 		180090231DD0702400FE8551 /* FKXRichDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 180090211DD0702400FE8551 /* FKXRichDetailCell.m */; };
 		180090241DD0702400FE8551 /* FKXRichDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 180090221DD0702400FE8551 /* FKXRichDetailCell.xib */; };
 		180916301DDBFF9D000694F6 /* FKXFreeYuYueVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1809162F1DDBFF9D000694F6 /* FKXFreeYuYueVC.xib */; };
+		181B6ACC1DF9434F008C52E6 /* FKXChatOrdersV.m in Sources */ = {isa = PBXBuildFile; fileRef = 181B6ACB1DF9434F008C52E6 /* FKXChatOrdersV.m */; };
+		181B6ACE1DF94396008C52E6 /* FKXChatOrdersV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181B6ACD1DF94396008C52E6 /* FKXChatOrdersV.xib */; };
 		181B994E1DED29E10061F0B6 /* FKXZiXunShiV.m in Sources */ = {isa = PBXBuildFile; fileRef = 181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */; };
 		181B99501DED29F80061F0B6 /* FKXZiXunShiV.xib in Resources */ = {isa = PBXBuildFile; fileRef = 181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */; };
 		188C49D01DEED1FD0013AB62 /* FKXChatV.m in Sources */ = {isa = PBXBuildFile; fileRef = 188C49CF1DEED1FD0013AB62 /* FKXChatV.m */; };
@@ -531,6 +533,9 @@
 		180090211DD0702400FE8551 /* FKXRichDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXRichDetailCell.m; sourceTree = "<group>"; };
 		180090221DD0702400FE8551 /* FKXRichDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXRichDetailCell.xib; sourceTree = "<group>"; };
 		1809162F1DDBFF9D000694F6 /* FKXFreeYuYueVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXFreeYuYueVC.xib; sourceTree = "<group>"; };
+		181B6ACA1DF9434E008C52E6 /* FKXChatOrdersV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXChatOrdersV.h; sourceTree = "<group>"; };
+		181B6ACB1DF9434F008C52E6 /* FKXChatOrdersV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXChatOrdersV.m; sourceTree = "<group>"; };
+		181B6ACD1DF94396008C52E6 /* FKXChatOrdersV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXChatOrdersV.xib; sourceTree = "<group>"; };
 		181B994C1DED29E10061F0B6 /* FKXZiXunShiV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXZiXunShiV.h; sourceTree = "<group>"; };
 		181B994D1DED29E10061F0B6 /* FKXZiXunShiV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXZiXunShiV.m; sourceTree = "<group>"; };
 		181B994F1DED29F80061F0B6 /* FKXZiXunShiV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXZiXunShiV.xib; sourceTree = "<group>"; };
@@ -3192,6 +3197,9 @@
 				188C49CE1DEED1FD0013AB62 /* FKXChatV.h */,
 				188C49CF1DEED1FD0013AB62 /* FKXChatV.m */,
 				188C49D11DEED20F0013AB62 /* FKXChatV.xib */,
+				181B6ACA1DF9434E008C52E6 /* FKXChatOrdersV.h */,
+				181B6ACB1DF9434F008C52E6 /* FKXChatOrdersV.m */,
+				181B6ACD1DF94396008C52E6 /* FKXChatOrdersV.xib */,
 				6188AFAC1C3513A5002801D2 /* Category */,
 				B3B02F301BCFBA05001A5557 /* Macro */,
 				B3B02F321BCFBA05001A5557 /* Tools */,
@@ -3560,6 +3568,7 @@
 				617F53D21C43A73B00CCD8AB /* EaseUIResource.bundle in Resources */,
 				B3666D2F1BC7441000D48822 /* Main.storyboard in Resources */,
 				61F999271CEC4C6A00592DCD /* FKXEmptyData.xib in Resources */,
+				181B6ACE1DF94396008C52E6 /* FKXChatOrdersV.xib in Resources */,
 				61A2E6201C8D5DA40081AA61 /* Localizable.strings in Resources */,
 				18A1BE9D1DCC6E5700F621A6 /* FKXMind.storyboard in Resources */,
 				189D2DD71DEC11FE003FDF99 /* FKXChatTitleView.xib in Resources */,
@@ -3686,6 +3695,7 @@
 				617F536B1C43A73B00CCD8AB /* EMCDDeviceManager+ProximitySensor.m in Sources */,
 				189FBC991DDAFEAE001BC1E6 /* FKXConfirmView.m in Sources */,
 				617F53661C43A73B00CCD8AB /* EaseUI.m in Sources */,
+				181B6ACC1DF9434F008C52E6 /* FKXChatOrdersV.m in Sources */,
 				18F66F8F1DEBFA0D001C4B4B /* FKXFangkeCell.m in Sources */,
 				18B3AC4E1DD426BF00831BCD /* FKXPsyCommentModel.m in Sources */,
 				61701F171D2110F600D239E0 /* FKXSecondAskController.m in Sources */,

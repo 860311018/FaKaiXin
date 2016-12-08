@@ -17,7 +17,9 @@
     [super awakeFromNib];
 //    [[EaseBaseMessageCell appearance] setRecvBubbleBackgroundImage:[[UIImage imageNamed:@"chat_receiver_bg"] stretchableImageWithLeftCapWidth:35 topCapHeight:35]];
 //    self.backImgV set
+
 }
+
 
 
 +(id)creatChat {

@@ -11,6 +11,7 @@
 @interface FKXChatTitleView : UIView
 @property (weak, nonatomic) IBOutlet UIImageView *headImgV;
 @property (weak, nonatomic) IBOutlet UIButton *guanzhuBtn;
+@property (weak, nonatomic) IBOutlet UIView *tapOrderV;
 
 @property (weak, nonatomic) IBOutlet UILabel *tonghuaMinut;
 
@@ -24,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *scaleL;
 @property (weak, nonatomic) IBOutlet UIButton *confirmOrderBtn;
 @property (weak, nonatomic) IBOutlet UIView *view2;
+
+@property (weak, nonatomic) IBOutlet UIView *view1;
 
 +(id)creatChatTitle;
 

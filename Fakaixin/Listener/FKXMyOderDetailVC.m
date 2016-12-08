@@ -21,6 +21,9 @@
 #import "FKXLianjieView.h"
 #import "FKXCallOrder.h"
 #import "NSString+Extension.h"
+#import "FKXPayView.h"
+
+#import "ChatViewController.h"
 
 typedef enum : NSUInteger {
     PayType_weChat,
@@ -30,6 +33,9 @@ typedef enum : NSUInteger {
 
 @interface FKXMyOderDetailVC ()<ConfirmDelegate,BindPhoneDelegate,BeeCloudDelegate,CallDelegate,LixianDelegate>
 {
+    UIView *transViewPay;   //支付的透明图
+    FKXPayView *payView;    //支付界面
+    
     CGFloat keyboardHeight;
     
     FKXConfirmView *order;
@@ -68,7 +74,10 @@ typedef enum : NSUInteger {
 @property (nonatomic,copy) NSString *requestClientPwd;
 
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
+@property (nonatomic,strong) NSMutableDictionary *payParameterDic2;//图文支付参数
+
 @property (nonatomic,assign) PayType payType;
+@property (nonatomic,assign) BOOL isCall;
 
 @end
 
@@ -285,18 +294,18 @@ typedef enum : NSUInteger {
 
 #pragma mark - 电话咨询（已经付款）
 - (void)toCall:(FKXOrderModel *)model {
-
+    [self showHudInView:self.view hint:@""];
     NSString *callStr = [NSString stringWithFormat:@"%ld",[model.callLength integerValue] *60];
     [self call:callStr];
 }
 
 - (void)call:(NSString *)callLength {
+    [self tapHide4];
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":self.userModel.clientNum,@"to":self.proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
         if ([respCode isEqualToString:@"000000"]) {
-            [self tapHide4];
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
             NSDictionary *param = @{@"status":@2};
@@ -318,19 +327,57 @@ typedef enum : NSUInteger {
 
 #pragma mark - 图文咨询（聊天页，已确认订单）
 - (void)toTuWen:(FKXOrderModel *)model {
-    
+    [self toChatVC:model];
 }
 
 
 
 #pragma mark - 下图文订单 （再次预约）
 - (void)tuwenOrder:(FKXOrderModel *)model {
-    
+    self.isCall = NO;
+    [self bookConsultService:model];
 }
 
 #pragma mark - 私信（未确认订单）
 - (void)toChatVC:(FKXOrderModel *)model {
+    if (!model.listenerId) {
+        return;
+    }
     
+    if ([model.listenerId integerValue] == [FKXUserManager shareInstance].currentUserId) {
+        [self showHint:@"不可以私信自己哟"];
+        return;
+    }
+    NSDictionary *params = @{@"userId":self.userModel.uid,@"listenerId":model.listenerId};
+    
+    [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"listenerInfo"];
+            self.proModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            
+            NSArray *array = [[FKXUserManager shareInstance] caluteHeight:self.proModel];
+            ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[self.proModel.uid stringValue]  conversationType:eConversationTypeChat];
+            chatController.title = self.proModel.name;
+            
+            if ([self.proModel.role integerValue] !=0) {
+                chatController.toZiXunShi = YES;
+            }
+            
+            chatController.pModel = self.proModel;
+            chatController.headerH = [array[1] floatValue];
+            chatController.introStr = array[0];
+            
+            chatController.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:chatController animated:YES];
+            
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
 }
 
 #pragma mark - 去评价
@@ -390,7 +437,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 下电话订单 （再次预约）
 - (void)callOrder:(FKXOrderModel *)model {
-    
+    self.isCall = YES;
     if ([FKXUserManager needShowLoginVC]) {
         [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
         return;
@@ -564,31 +611,7 @@ typedef enum : NSUInteger {
     [BeeCloud sendBCReq:payReq];
 }
 
-#pragma mark - BeeCloudDelegate
-- (void)onBeeCloudResp:(BCBaseResp *)resp {
-    [self hideHud];
-    switch (resp.type) {
-        case BCObjsTypePayResp:
-        {
-            // 支付请求响应
-            BCPayResp *tempResp = (BCPayResp *)resp;
-            if (tempResp.resultCode == 0)
-            {
-                [self showHint:@"支付成功，等待对方确认"];
-                [self showView];
-            }
-            else
-            {
-                //支付取消或者支付失败,,或者取消支付都要再次提示用户购买
-                [self showAlertViewWithTitle:[NSString stringWithFormat:@"%@", tempResp.errDetail]];
-            }
-        }
-            break;
-        default:
-            NSLog(@"%@", @"不是支付响应的回调");
-            break;
-    }
-}
+
 
 - (void)loadCallLength {
     NSDictionary *params = @{@"userId":self.userModel.uid,@"listenerId":self.proModel.uid};
@@ -956,6 +979,180 @@ typedef enum : NSUInteger {
         _payParameterDic = [NSMutableDictionary dictionaryWithCapacity:1];
     }
     return _payParameterDic;
+}
+
+
+- (void)bookConsultService:(FKXOrderModel *)model
+{
+    if ([FKXUserManager needShowLoginVC])
+    {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+    }else
+    {
+        //        if (![WXApi isWXAppInstalled]) {
+        //            [self showHint:@"当前不在线"];
+        //            return;
+        //        }else
+        if (model.listenerId == [FKXUserManager getUserInfoModel].uid)
+        {
+            [self showHint:@"不能咨询自己"];
+            return;
+        }
+        
+        NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+        [paramDic setValue:model.listenerId forKey:@"uid"];
+        [self showHudInView:self.view hint:@"正在预约..."];
+        [AFRequest sendGetOrPostRequest:@"talk/pay" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+         {
+             [self hideHud];
+             if ([data[@"code"] integerValue] == 0)
+             {
+                 if (!_payParameterDic2) {
+                     _payParameterDic2 = [NSMutableDictionary dictionaryWithCapacity:1];
+                 }
+                 [_payParameterDic2 setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
+                 CGFloat money = [data[@"data"][@"money"] floatValue];
+                 [_payParameterDic2 setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
+                 NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+                 [_payParameterDic2 setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+                 //创建购买界面
+                 [self setUpTransViewPay];
+             }
+             else if ([data[@"code"] integerValue] == 4)
+             {
+                 [self showAlertViewWithTitle:data[@"message"]];
+                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+             }else
+             {
+                 [self showHint:data[@"message"]];
+                 
+             }
+         } failure:^(NSError *error) {
+             [self hideHud];
+             [self showHint:@"网络出错"];
+         }];
+    }
+}
+- (void)setUpTransViewPay
+{
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (!transViewPay)
+    {
+        //透明背景
+        transViewPay = [[UIView alloc] initWithFrame:screenBounds];
+        transViewPay.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        transViewPay.alpha = 0.0;
+        [[UIApplication sharedApplication].keyWindow addSubview:transViewPay];
+        
+        payView = [[[NSBundle mainBundle] loadNibNamed:@"FKXPayView" owner:nil options:nil] firstObject];
+        [payView.btnClose addTarget:self action:@selector(hiddentransViewPay) forControlEvents:UIControlEventTouchUpInside];
+        [payView.myPayBtn addTarget:self action:@selector(confirmToPay2) forControlEvents:UIControlEventTouchUpInside];
+        
+        if (_payParameterDic2[@"isAmple"]) {
+            if (![_payParameterDic2[@"isAmple"] integerValue]) {
+                payView.btnRemain.enabled = NO;
+                [payView.btnRemain setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            }
+        }
+        
+        [transViewPay addSubview:payView];
+        payView.center = transViewPay.center;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            transViewPay.alpha = 1.0;
+        }];
+        
+        payView.labTitle.text = @"咨询";
+        payView.labPrice.text = [NSString stringWithFormat:@"%.2f", [_payParameterDic2[@"money"] doubleValue]/100];
+    }
+}
+
+- (void)hiddentransViewPay
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        transViewPay.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [transViewPay removeFromSuperview];
+        transViewPay = nil;
+    }];
+}
+- (void)confirmToPay2
+{
+    PayChannel channel = PayChannelWxApp;
+    switch (payView.myPayChannel) {
+        case MyPayChannel_weChat:
+            channel = PayChannelWxApp;
+            break;
+        case MyPayChannel_Ali:
+            channel = PayChannelAliApp;
+            break;
+        case MyPayChannel_remain:
+        {
+            [self showHudInView:self.view hint:@"正在支付..."];
+            NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [paramDic setValue:_payParameterDic2[@"billNo"] forKey:@"billNo"];
+            NSString *methodName = @"sys/balancePay";
+            [AFRequest sendGetOrPostRequest:methodName param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+             {
+                 [self hideHud];
+                 if ([data[@"code"] integerValue] == 0)
+                 {
+                     [self showHint:@"支付成功，等待对方确认"];
+                 }
+                 else if ([data[@"code"] integerValue] == 4)
+                 {
+                     [self showAlertViewWithTitle:data[@"message"]];
+                     
+                     [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+                 }else
+                 {
+                     [self showHint:data[@"message"]];
+                 }
+             } failure:^(NSError *error) {
+                 [self showHint:@"网络出错"];
+                 [self hideHud];
+             }];
+            [self hiddentransViewPay];
+        }
+            break;
+        default:
+            break;
+    }
+    if (payView.myPayChannel == MyPayChannel_remain) {
+        return;
+    }
+    //除余额以外的支付
+    [self doPay:channel billNo:_payParameterDic2[@"billNo"] money:_payParameterDic2[@"money"]];
+    
+    [self hiddentransViewPay];
+}
+
+#pragma mark - BeeCloudDelegate
+- (void)onBeeCloudResp:(BCBaseResp *)resp {
+    [self hideHud];
+    switch (resp.type) {
+        case BCObjsTypePayResp:
+        {
+            // 支付请求响应
+            BCPayResp *tempResp = (BCPayResp *)resp;
+            if (tempResp.resultCode == 0)
+            {
+                [self showHint:@"支付成功，等待对方确认"];
+                if (self.isCall) {
+                    [self showView];
+                }
+            }
+            else
+            {
+                //支付取消或者支付失败,,或者取消支付都要再次提示用户购买
+                [self showAlertViewWithTitle:[NSString stringWithFormat:@"%@", tempResp.errDetail]];
+            }
+        }
+            break;
+        default:
+            NSLog(@"%@", @"不是支付响应的回调");
+            break;
+    }
 }
 
 @end

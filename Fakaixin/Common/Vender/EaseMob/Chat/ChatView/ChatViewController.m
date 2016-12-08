@@ -20,16 +20,32 @@
 #import "FKXChatGroupModel.h"
 #import "FKXEChatModel.h"
 
+#import "FKXProfessionInfoVC.h"
+#import "FKXConfirmView.h"
+#import "FKXBindPhone.h"
+#import "FKXLiXianView.h"
+#import "FKXLianjieView.h"
+
+#import "FKXChatOrdersV.h"
+
+#import "NSString+Extension.h"
+
+typedef enum : NSUInteger {
+    PayType_weChat,
+    PayType_Ali,
+} PayType;
+
 @interface ChatViewController ()<UIAlertViewDelegate, EaseMessageViewControllerDelegate, EaseMessageViewControllerDataSource,
     UIActionSheetDelegate,
     EMChatManagerChatDelegate,
-    UITextViewDelegate,BeeCloudDelegate>//protocolFKXRewordView
+    UITextViewDelegate,ConfirmDelegate,BindPhoneDelegate,BeeCloudDelegate,CallDelegate,LixianDelegate>//protocolFKXRewordView
 {
     UIMenuItem *_copyMenuItem;
     UIMenuItem *_deleteMenuItem;
     UIMenuItem *_transpondMenuItem;
     
     FKXUserInfoModel *proModel;
+    FKXUserInfoModel *userModel;
 
     
     FKXUserInfoModel *senderUser;
@@ -37,7 +53,7 @@
     
     UIView *transViewPay;   //支付的透明图
     FKXPayView *payView;    //支付界面
-    NSMutableDictionary *_payParameterDic;//支付参数
+    NSMutableDictionary *_payParameterDic;//图文咨询支付参数
     
     NSNotification *notificationContineueFee;
   
@@ -60,10 +76,39 @@
     CGFloat keyboardHeight;
 
     NSMutableArray *modelArr;
+    
+    FKXConfirmView *order;
+    UIView *view1;
+    
+    FKXBindPhone *phone;
+    UIView *view2;
+    
+    NSInteger times;
+    NSTimer * timer;
+    
+    
+    FKXLiXianView *lixian;
+    UIView *view3;
+    
+    FKXLianjieView *lianjie;
+    UIView *view4;
+    
+    FKXChatOrdersV *mengCeng;
+    UIView *view5;
 }
 
 @property (nonatomic,strong) NSMutableArray *historyArr;
 
+@property (nonatomic,assign) NSInteger yanzhengCode;
+
+@property (nonatomic,copy) NSString *requestClientNum;
+@property (nonatomic,copy) NSString *requestClientPwd;
+
+@property (nonatomic,strong) NSMutableDictionary *payParameterDic2;//电话支付参数
+
+@property (nonatomic,assign) PayType payType;
+
+@property (nonatomic,assign) BOOL isCall;
 @end
 
 
@@ -128,7 +173,7 @@
     
     [BeeCloud setBeeCloudDelegate:self];
 
-    self.userModel = [FKXUserManager getUserInfoModel];
+    userModel = [FKXUserManager getUserInfoModel];
     [self loadModel];
     //对方结束会话的通知
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpLabelWarnOfEndingTalk) name:@"notification_type_end_talk" object:nil];
@@ -155,6 +200,11 @@
             
             titleView = [FKXChatTitleView creatChatTitle];
             titleView.frame = CGRectMake(0, 0, kScreenWidth, 110);
+            [titleView.headImgV sd_setImageWithURL:[NSURL URLWithString:self.pModel.head] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+            [titleView.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphead)]];
+           
+            
+            titleView.backgroundColor = [UIColor redColor];
             [self.view addSubview:titleView];
             
             [self validTalkIsFinish];//加载是否显示举报
@@ -238,9 +288,11 @@
 }
 
 
+
+
 - (void)loadModel {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-    paramDic[@"userId"] = self.userModel.uid;
+    paramDic[@"userId"] = userModel.uid;
     paramDic[@"listenerId"] = [NSNumber numberWithInteger:[self.conversation.chatter integerValue]];
     [AFRequest sendPostRequestTwo:@"user/selectClient" param:paramDic success:^(id data) {
         [self hideHud];
@@ -250,8 +302,7 @@
             titleView.pingFen.text = [proModel.cureCount stringValue];
             titleView.textCount.text = [proModel.consultCount stringValue];
             titleView.tonghuaMinut.text = [proModel.phoneCount stringValue];
-            [titleView.headImgV sd_setImageWithURL:[NSURL URLWithString:@""] placeholderImage:[UIImage imageNamed:@""]];
-
+            titleView.scaleL.text = [NSString stringWithFormat:@"￥%ld起",[proModel.phonePrice integerValue]/100];
         }else {
             [self showHint:data[@"message"]];
         }
@@ -336,6 +387,17 @@
             CGSize size = self.tableView.size;
             size.height = size.height-110;
             self.tableView.size = size;
+           
+            if (keyboardHeight >0) {
+                static int i=0;
+                if (i==0) {
+                    [UIView animateWithDuration:0.5 animations:^{
+                        order.frame = CGRectMake(0, kScreenHeight-285-keyboardHeight, kScreenWidth, 285);
+                    }];
+                    i++;
+                }
+            }
+           
         }
     }
 }
@@ -352,6 +414,9 @@
             CGSize size = self.tableView.size;
             size.height = size.height-110;
             self.tableView.size = size;
+            
+            order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+
         }
     }
 }
@@ -651,6 +716,15 @@
          [self hideHud];
      }];
 }
+
+#pragma mark - 点击咨询师头像
+- (void)taphead {
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = self.pModel.uid;
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)clickSettingBtn
 {
     [self.chatToolbar endEditing:YES];
@@ -789,6 +863,18 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+//    if (alertView.tag == 250) {
+//        
+//        if (buttonIndex == 0) {
+//            [self.chatToolbar resignFirstResponder];
+//
+//            [self bookConsultService];
+//        }else if (buttonIndex == 1) {
+//            [self.chatToolbar resignFirstResponder];
+//
+//            [self callOrder];
+//        }
+//    }
     if (buttonIndex != alertView.cancelButtonIndex)
     {
         if (alertView.tag == 101) {
@@ -809,8 +895,35 @@
 {
     
     if (canShowPay) {
-        //调图文咨询支付
-        [self bookConsultService];
+        //调询问蒙层
+        [self.view endEditing:YES];
+        mengCeng = [FKXChatOrdersV creatMengCeng];
+        mengCeng.frame = CGRectMake(0, 0, 270, 110);
+        CGPoint center = self.view.center;
+        center.y = center.y -50;
+        mengCeng.center = center;
+        
+        [mengCeng.tuwenBtn addTarget:self action:@selector(bookConsultService) forControlEvents:UIControlEventTouchUpInside];
+        [mengCeng.phoneBtn addTarget:self action:@selector(callOrder) forControlEvents:UIControlEventTouchUpInside];
+
+        
+        view5 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        view5.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        [view5 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide5)]];
+        
+        view5.alpha = 0;
+        mengCeng.alpha = 0;
+        [[UIApplication sharedApplication].keyWindow addSubview:view5];
+        [[UIApplication sharedApplication].keyWindow addSubview:mengCeng];
+
+        [UIView animateWithDuration:0.3 animations:^{
+            view5.alpha = 1;
+            mengCeng.alpha = 1;
+        }];
+        
+//        [self.chatToolbar resignFirstResponder];
+
+//        [self bookConsultService];
         
     }else {
         if (self.toZiXunShi) {
@@ -887,6 +1000,7 @@
     if (![object isKindOfClass:[NSString class]]) {
         EaseMessageCell *cell = (EaseMessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
         [cell becomeFirstResponder];
+        
         self.menuIndexPath = indexPath;
         [self _showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
     }
@@ -1338,6 +1452,8 @@
 
 - (void)bookConsultService
 {
+    [self tapHide5];
+    self.isCall = NO;
     if ([FKXUserManager needShowLoginVC])
     {
         [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
@@ -1506,9 +1622,9 @@
             {
                 [self showHint:@"支付成功，等待对方确认"];
                 [self validTalkIsFinish];
-//                if (self.isCall) {
-//                    [self showView];
-//                }
+                if (self.isCall) {
+                    [self showView];
+                }
             }
             else
             {
@@ -1523,5 +1639,532 @@
     }
 }
 
+
+#pragma mark - 电话订单
+- (void)callOrder {
+    [self tapHide5];
+    self.isCall = YES;
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        return;
+    }
+    
+    if (!proModel.mobile || [NSString isEmpty:proModel.mobile] ||[NSString isEmpty:proModel.clientNum]) {
+        [self showHint:@"该咨询师暂未开通电话咨询服务"];
+        return;
+    }
+    
+    if ([proModel.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
+        [self showHint:@"不能咨询自己"];
+        return;
+    }
+    
+    order = [FKXConfirmView creatOrder];
+    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+    order.confirmDelegate = self;
+    
+    order.price = [proModel.phonePrice integerValue]/100;
+    order.head = proModel.head;
+    order.name = proModel.name;
+    order.status = proModel.status;
+    order.listenerId = proModel.uid;
+    
+    if (userModel.mobile) {
+        order.phoneStr = userModel.mobile;
+    }
+    
+    if (userModel.clientNum && userModel.clientNum.length>0) {
+        order.bangDingBtn.hidden = YES;
+    }
+    
+    
+    view1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide)]];
+    
+    view1.alpha = 0;
+    order.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view1];
+    [[UIApplication sharedApplication].keyWindow addSubview:order];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view1.alpha = 1;
+        order.alpha = 1;
+    }];
+    
+}
+
+- (void)textBeginEdit {
+    if (keyboardHeight >0) {
+        [UIView animateWithDuration:0.5 animations:^{
+            order.frame = CGRectMake(0, kScreenHeight-285-keyboardHeight, kScreenWidth, 285);
+        }];
+    }
+}
+
+- (void)bangDingPhone:(NSString *)phoneStr{
+    
+    if (![phoneStr isRealPhoneNumber]) {
+        [self showHint:@"请输入正确的手机号"];
+        return;
+    }
+    
+    phone = [FKXBindPhone creatBangDing];
+    phone.frame = CGRectMake(0, 0, 235, 345);
+    CGPoint center = self.view.center;
+    phone.center = center;
+    phone.phoneStr = phoneStr;
+    phone.bindPhoneDelegate = self;
+    
+    //已经绑定手机号，无需再设置密码
+    if (userModel.mobile) {
+        phone.pwdTF.hidden = YES;
+    }
+    
+    view2 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide2)]];
+    
+    view2.alpha = 0;
+    phone.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view2];
+    [[UIApplication sharedApplication].keyWindow addSubview:phone];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        view2.alpha = 1;
+        phone.alpha = 1;
+    }];
+    
+}
+- (void)weiXin {
+    self.payType = PayType_weChat;
+}
+
+- (void)zhiFuBao {
+    self.payType = PayType_Ali;
+}
+
+- (void)loadCallLength {
+    NSDictionary *params = @{@"userId":userModel.uid,@"listenerId":proModel.uid};
+    [AFRequest sendPostRequestTwo:@"listener/allow_call_length" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSInteger callNum = [data[@"data"][@"length"] integerValue];
+            
+            lianjie = [FKXLianjieView creatZaiXian];
+            lianjie.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+            lianjie.delegate = self;
+            lianjie.callLength = [NSString stringWithFormat:@"%ld",callNum*60];
+            lianjie.head = proModel.head;
+            lianjie.name = proModel.name;
+            
+            view4 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+            view4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+            [view4 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide4)]];
+            
+            view4.alpha = 0;
+            lianjie.alpha = 0;
+            [[UIApplication sharedApplication].keyWindow addSubview:view4];
+            [[UIApplication sharedApplication].keyWindow addSubview:lianjie];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                view4.alpha = 1;
+                lianjie.alpha = 1;
+            }];
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+- (void)showView {
+    [self hideHud];
+    //在线
+    if ([proModel.status integerValue]==1) {
+        [self loadCallLength];
+        
+    }else {
+        
+        lixian = [FKXLiXianView creatLiXian];
+        lixian.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
+        lixian.head = proModel.head;
+        lixian.name = proModel.name;
+        if ([proModel.status integerValue]==0) {
+            lixian.statusL.text = @" 离线 ";
+        }else if([proModel.status integerValue]==2) {
+            lixian.statusL.text = @" 通话中 ";
+        }
+        view3 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+        view3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+        [view3 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide3)]];
+        
+        view3.alpha = 0;
+        lixian.alpha = 0;
+        [[UIApplication sharedApplication].keyWindow addSubview:view3];
+        [[UIApplication sharedApplication].keyWindow addSubview:lixian];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            view3.alpha = 1;
+            lixian.alpha = 1;
+        }];
+    }
+    
+}
+
+#pragma mark - 绑定手机代理
+- (void)receiveCode:(NSString *)phoneStr {
+    if (![phoneStr isRealPhoneNumber]) {
+        [self showHint:@"请输入正确的手机号"];
+        return;
+    }
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    
+    if (userModel.mobile) {
+        [dic setObject:userModel.mobile forKey:@"mobile"];
+        [dic setObject:@(5) forKey:@"type"];
+        
+    }else {
+        [dic setObject:userModel.mobile forKey:@"mobile"];
+        [dic setObject:@(2) forKey:@"type"];
+    }
+    
+    [AFRequest sendGetOrPostRequest:@"sys/mobilecode"param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+     {
+         [self hideHud];
+         if ([data[@"code"] integerValue] == 0)
+         {
+             [self showAlertViewWithTitle:@"已发送至您的手机"];
+             NSInteger codeNum =[data[@"data"] integerValue];
+             self.yanzhengCode = codeNum;
+             [self startTimer];
+             
+         }else
+         {
+             [self showHint:data[@"message"]];
+         }
+         
+     } failure:^(NSError *error) {
+         [self showHint:@"网络出错"];
+         [self hideHud];
+     }];
+    
+}
+
+- (void)saveBind:(NSString *)phoneStr code:(NSString *)codeStr secret:(NSString *)secret {
+    if ([NSString isEmpty:codeStr])
+    {
+        [self showHint:@"请输入验证码"];
+        return;
+    }else if ([codeStr integerValue] != self.yanzhengCode) {
+        [self showHint:@"验证码错误！"];
+        return;
+    }
+    else if (!userModel.mobile && [NSString isEmpty:secret])
+    {
+        [self showHint:@"请输入密码"];
+        if (secret.length<6 ||secret.length>11) {
+            [self showHint:@"密码的长度为6~11位"];
+            return;
+        }
+        return;
+    }
+    
+    //开始申请client
+    [self requsetClient];
+}
+
+
+#pragma mark - 其他操作
+- (void)tapHide {
+    [UIView animateWithDuration:0.6 animations:^{
+        view1.alpha = 0;
+        order.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view1 removeFromSuperview];
+            [order removeFromSuperview];
+        }
+    }];
+}
+
+- (void)tapHide2 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view2.alpha = 0;
+        phone.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view2 removeFromSuperview];
+            [phone removeFromSuperview];
+        }
+    }];
+}
+
+- (void)tapHide3 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view3.alpha = 0;
+        lixian.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view3 removeFromSuperview];
+            [lixian removeFromSuperview];
+        }
+    }];
+}
+
+
+- (void)tapHide4 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view4.alpha = 0;
+        lianjie.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view4 removeFromSuperview];
+            [lianjie removeFromSuperview];
+        }
+    }];
+}
+- (void)tapHide5 {
+    [UIView animateWithDuration:0.6 animations:^{
+        view5.alpha = 0;
+        mengCeng.alpha = 0;
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [view5 removeFromSuperview];
+            [mengCeng removeFromSuperview];
+        }
+    }];
+}
+
+
+- (void)noOperation {
+    return;
+}
+
+
+
+
+
+-(void)startTimer
+{
+    phone.sendCodeBtn.userInteractionEnabled = YES;
+    times=60;
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        @autoreleasepool {
+            timer =  [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeload) userInfo:nil repeats:YES];
+            [timer fire];
+            [[NSRunLoop currentRunLoop]addTimer:timer forMode:NSRunLoopCommonModes];
+            [[NSRunLoop currentRunLoop]run];
+        }
+        
+    });
+}
+-(void)timeload
+{
+    
+    times=times-1;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (times>0) {
+            [phone.sendCodeBtn setTitleColor:[UIColor colorWithRed:203/255.0 green:203/255.0 blue:203/255.0 alpha:1] forState:UIControlStateNormal];
+            [phone.sendCodeBtn setTitle:[NSString stringWithFormat:@"%lds",(long)times] forState:UIControlStateNormal];
+        }else
+        {
+            [timer invalidate];
+            timer=nil;
+            [phone.sendCodeBtn setTitleColor:[UIColor colorWithRed:203/255.0 green:203/255.0 blue:203/255.0 alpha:1] forState:UIControlStateNormal];
+            [phone.sendCodeBtn setTitle:@"重新发送" forState:UIControlStateNormal];
+            phone.sendCodeBtn.userInteractionEnabled = YES;
+        }
+        
+    });
+    
+    
+}
+
+- (void)requsetClient {
+    
+    NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"charge": @"0",@"mobile":phone.phoneTF.text,@"clientType": @"0"}, @"client",nil];
+    [AFRequest sendResetPostRequest:@"Clients" param:params success:^(id data) {
+        NSString *respCode = data[@"resp"][@"respCode"];
+        if ([respCode isEqualToString:@"103114"]) {
+            //已经绑定Client 但是没有存入数据库，查询当前绑定信息
+            [self selectClient];
+        }
+        else if ([respCode isEqualToString:@"000000"]) {
+            //            [self showHint:@"绑定成功"];
+            NSDictionary *clientDic = data[@"resp"][@"client"];
+            
+            self.requestClientNum = clientDic[@"clientNum"];
+            self.requestClientPwd = clientDic[@"clientPwd"];
+            
+            [self addToData];
+        }else {
+            [self showHint:@"绑定失败"];
+        }
+    } failure:^(NSError *error) {
+        //        NSLog(@"%@",error);
+        [self showHint:@"网络出错"];
+        [self hideHud];
+        
+    }];
+}
+
+- (void)selectClient {
+    NSString *param = [NSString stringWithFormat:@"&mobile=%@&appId=%@",phone.phoneTF.text,ResetAppId];
+    [AFRequest sendResetGetRequest:@"ClientsByMobile" param:param success:^(id data) {
+        if ([data[@"resp"][@"respCode"] isEqualToString:@"000000"]) {
+            self.requestClientNum = data[@"resp"][@"client"][@"clientNumber"];
+            self.requestClientPwd = data[@"resp"][@"client"][@"clientPwd"];
+            //            self.creatTime = data[@"resp"][@"client"][@"createDate"];
+            
+            [self addToData];
+        }else {
+            [self showHint:@"绑定失败"];
+        }
+    } failure:^(NSError *error) {
+        [self showHint:@"网络出错"];
+        [self hideHud];
+    }];
+}
+
+//存入绑定手机
+- (void)addToData {
+    
+    NSDictionary *paramDic;
+    
+    //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
+    if (!userModel.mobile) {
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+    }
+    //已绑定手机号 ，只需传入clientPwd，clientNum
+    else {
+        paramDic = @{@"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+    }
+    
+    [AFRequest sendGetOrPostRequest:@"user/edit"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+     {
+         if ([data[@"code"] integerValue] == 0)
+         {
+             [self showHint:@"绑定手机成功"];
+             phone.saveBtn.enabled = NO;
+             
+             FKXUserInfoModel *model = [FKXUserManager getUserInfoModel];
+             
+             model.clientNum = self.requestClientNum;
+             model.clientPwd = self.requestClientPwd;
+             
+             if (!model.mobile) {
+                 model.mobile = phone.phoneTF.text;
+                 model.pwd = phone.pwdTF.text;
+             }
+             [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
+             
+             [self tapHide2];
+             order.bangDingBtn.hidden = YES;
+             
+         }else{
+             [self showHint:data[@"message"]];
+         }
+         [self hideHud];
+     } failure:^(NSError *error) {
+         [self showHint:@"网络出错"];
+         [self hideHud];
+     }];
+    
+}
+
+- (void)confirm:(NSNumber *)listenerId time:(NSNumber *)time totals:(NSNumber *)totals {
+    
+    
+    if (!userModel.clientNum && !self.requestClientNum) {
+        [self showHint:@"请先绑定手机号哟"];
+        return;
+    }
+    
+    [self tapHide];
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc]init];
+    if (listenerId && totals && time) {
+        [dic setObject:listenerId forKey:@"listenerId"];
+        [dic setObject:totals forKey:@"price"];
+        [dic setObject:time forKey:@"phoneTime"];
+    }
+    
+    //    NSDictionary *paramDic = @{@"listenerId":listenerId,@"price":totals,@"phoneTime":time};
+    
+    [self showHudInView:self.view hint:@"正在提交..."];
+    [AFRequest sendGetOrPostRequest:@"listener/pay" param:dic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
+     {
+         [self hideHud];
+         if ([data[@"code"] integerValue] == 0)
+         {
+             [self.payParameterDic2 setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
+             CGFloat money = [data[@"data"][@"money"] floatValue];
+             [self.payParameterDic2 setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
+             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+             [self.payParameterDic2 setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+             [self confirmToPay2];
+         }else
+         {
+             [self showHint:data[@"message"]];
+             
+         }
+     } failure:^(NSError *error) {
+         [self hideHud];
+         [self showHint:@"网络出错"];
+     }];
+}
+- (void)confirmToPay2{
+    PayChannel channel = PayChannelWxApp;
+    switch (self.payType) {
+        case PayType_weChat:
+            channel = PayChannelWxApp;
+            break;
+        case PayType_Ali:
+            channel = PayChannelAliApp;
+            break;
+        default:
+            break;
+    }
+    [self doPay:channel billNo:self.payParameterDic2[@"billNo"] money:self.payParameterDic2[@"money"]];
+    
+}
+
+#pragma mark - 电话回拨
+- (void)call:(NSString *)callLength {
+    [self tapHide4];
+    
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
+        [self hideHud];
+        NSString *respCode = data[@"resp"][@"respCode"];
+        if ([respCode isEqualToString:@"000000"]) {
+            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
+            //改变咨询师在线状态
+            NSDictionary *param = @{@"status":@2};
+            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+                NSLog(@"%@",data);
+            } failure:^(NSError *error) {
+                NSLog(@"%@",error.description);
+                
+            }];
+            
+        }else {
+            [self showHint:@"电话线路出错"];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"电话线路出错"];
+    }];
+}
+
+- (NSMutableDictionary *)payParameterDic2 {
+    if (!_payParameterDic2) {
+        _payParameterDic2 = [NSMutableDictionary dictionaryWithCapacity:1];
+    }
+    return _payParameterDic2;
+}
 
 @end

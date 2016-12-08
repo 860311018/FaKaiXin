@@ -279,18 +279,47 @@
         case 7:
         {
 
-//            NSArray *array = [[FKXUserManager shareInstance] caluteHeight:model];
-//            ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
-//            chatController.title = model.name;
-//            
-//            chatController.toZiXunShi = YES;
-//            chatController.userModel = model;
-//            
-//            chatController.headerH = [array[1] floatValue];
-//            chatController.introStr = array[0];
-//            
-//            chatController.hidesBottomBarWhenPushed = YES;
-//            [self.navigationController pushViewController:chatController animated:YES];
+            if (!dyModel.fromId) {
+                return;
+            }
+            
+            if ([dyModel.fromId integerValue] == [FKXUserManager shareInstance].currentUserId) {
+                [self showHint:@"不可以私信自己哟"];
+                return;
+            }
+            
+            NSDictionary *params = @{@"userId":[FKXUserManager getUserInfoModel].uid,@"listenerId":dyModel.fromId};
+            
+            [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
+                [self hideHud];
+                if ([data[@"code"] integerValue] == 0) {
+                    NSDictionary *dic = data[@"data"][@"listenerInfo"];
+                    FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+                    
+                    NSArray *array = [[FKXUserManager shareInstance] caluteHeight:pModel];
+                    ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[pModel.uid stringValue]  conversationType:eConversationTypeChat];
+                    chatController.title = pModel.name;
+                    
+                    if ([pModel.role integerValue] !=0) {
+                        chatController.toZiXunShi = YES;
+                    }
+                    
+                    chatController.pModel = pModel;
+                    chatController.headerH = [array[1] floatValue];
+                    chatController.introStr = array[0];
+                    
+                    chatController.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:chatController animated:YES];
+                    
+                }else {
+                    [self showHint:data[@"message"]];
+                }
+            } failure:^(NSError *error) {
+                [self hideHud];
+                [self showHint:@"网络出错"];
+            }];
+
+
 
         }
             break;

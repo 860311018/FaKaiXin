@@ -7,10 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-typedef enum : NSUInteger {
-    PayType_weChat,
-    PayType_Ali,
-} PayType;
 
 @interface FKXQingsuVC : FKXBaseViewController
 
@@ -18,6 +14,5 @@ typedef enum : NSUInteger {
 
 @property (nonatomic,assign) BOOL showBack;
 
-@property (nonatomic,assign) PayType payType;
 
 @end

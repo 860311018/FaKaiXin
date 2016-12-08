@@ -374,6 +374,10 @@
 
 - (NSArray *)caluteHeight:(FKXUserInfoModel *)model {
     NSString *name = model.name;
+
+    if (!model.name) {
+        name = model.nickname;
+    }
     NSString *profile = model.profile;
     NSString *cureCount = [model.cureCount stringValue];
     

@@ -10,6 +10,13 @@
 
 @implementation FKXChatTitleView
 
+- (void)awakeFromNib {
+    [super awakeFromNib];
+
+    
+}
+
+
 
 + (id)creatChatTitle {
     return [[NSBundle mainBundle]loadNibNamed:@"FKXChatTitleView" owner:self options:nil].lastObject;

@@ -16,6 +16,9 @@
 #import "AFRequest.h"
 #import "FKXChatV.h"
 
+#import "FKXProfessionInfoVC.h"
+
+
 #define KHintAdjustY    50
 
 @interface EaseMessageViewController ()<EaseMessageCellDelegate,EMChatManagerDelegate>
@@ -108,7 +111,7 @@
                                              selector:@selector(didBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
-    
+   
    
 }
 
@@ -900,11 +903,27 @@
     FKXChatV *view = [FKXChatV creatChat];
     
     view.introL.text = self.introStr;
-    [view.headImgV sd_setImageWithURL:[NSURL URLWithString:self.userModel.head] placeholderImage:[UIImage imageNamed:@"avater_default"]];
+    [view.headImgV sd_setImageWithURL:[NSURL URLWithString:self.pModel.head] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     view.backImgV.image = [[UIImage imageNamed:@"chat_recevie"] stretchableImageWithLeftCapWidth:35 topCapHeight:35];
+
     view.frame = CGRectMake(0, 0, kScreenWidth, self.headerH);
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
+    [view.headImgV addGestureRecognizer:tap];
+    [view.backImgV addGestureRecognizer:tap];
+
+//    [view.headBtn addTarget:self action:@selector(taphead:) forControlEvents:UIControlEventTouchUpInside];
+
     return view;
 }
+
+- (void)taphead:(UIButton *)btn {
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = self.pModel.uid;
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

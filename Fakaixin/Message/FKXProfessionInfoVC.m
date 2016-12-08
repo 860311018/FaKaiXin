@@ -330,9 +330,11 @@ typedef enum : NSUInteger {
     ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[proUserInfoModel.uid stringValue]  conversationType:eConversationTypeChat];
     chatController.title = proUserInfoModel.nickname;
     
-    chatController.toZiXunShi = YES;
-    chatController.userModel = proUserInfoModel;
-    
+    if ([proUserInfoModel.role integerValue] !=0) {
+        chatController.toZiXunShi = YES;
+    }
+   
+    chatController.pModel = proUserInfoModel;
     chatController.headerH = [array[1] floatValue];
     chatController.introStr = array[0];
     
@@ -482,6 +484,7 @@ typedef enum : NSUInteger {
                 }else{
                     FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
                     vc.isNeedTwoItem = YES;
+//                    vc.commentStr = 
                     vc.pageType = MyPageType_agree;
                     vc.shareType = @"second_ask";
                     NSString *paraStr = @"worryId";//默认传worryId
@@ -1603,12 +1606,13 @@ typedef enum : NSUInteger {
 
 #pragma mark - 电话回拨
 - (void)call:(NSString *)callLength {
+    [self tapHide4];
+
     NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proUserInfoModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
         if ([respCode isEqualToString:@"000000"]) {
-            [self tapHide4];
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
             NSDictionary *param = @{@"status":@2};

@@ -488,11 +488,12 @@
 //        [rightBarBtn addTarget:self action:@selector(clickShare) forControlEvents:UIControlEventTouchUpInside];
         
         UIImage * image2 = [UIImage imageNamed:@"btn_comments_new"];
-        UIButton * rightBarBtn2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, image2.size.width+20, image2.size.height)];
+        UIButton * rightBarBtn2 = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, image2.size.width+40, image2.size.height)];
         [rightBarBtn2 setImage:image2 forState:UIControlStateNormal];
-        if ([self.commentStr isEqualToString:@"0"]) {
+        if ([self.commentStr isEqualToString:@"0"] || !self.commentStr) {
             self.commentStr = @"";
         }
+        self.commentStr = [NSString stringWithFormat:@"  %@",self.commentStr];
         [rightBarBtn2 setTitle:self.commentStr forState:UIControlStateNormal];
         rightBarBtn2.titleLabel.textAlignment = NSTextAlignmentCenter;
         rightBarBtn2.titleLabel.font = [UIFont systemFontOfSize:14];

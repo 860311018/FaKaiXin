@@ -30,6 +30,8 @@
         self.detailL.text = @"图文咨询";
     }
     
+    self.shengyiTime.hidden = YES;
+    
     if (self.isWorkBench) {
         switch ([model.status integerValue]) {
             case 0:
@@ -57,6 +59,9 @@
                 self.operationBtn.layer.borderColor = [UIColor colorWithRed:244/255.0 green:143/255.0 blue:141/255.0 alpha:1].CGColor;
                 
                 self.cancelBtn.hidden = YES;
+                
+                self.shengyiTime.hidden = NO;
+                self.shengyiTime.text = @"";
             }
                 break;
             case 2:
@@ -128,6 +133,9 @@
                 self.operationBtn.layer.borderColor = [UIColor colorWithRed:244/255.0 green:143/255.0 blue:141/255.0 alpha:1].CGColor;
                 
                 self.cancelBtn.hidden = YES;
+                
+                self.shengyiTime.hidden = NO;
+                self.shengyiTime.text = @"";
 
             }
                 break;

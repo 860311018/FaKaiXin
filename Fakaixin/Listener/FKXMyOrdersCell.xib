@@ -141,9 +141,16 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Lu-MW-ukN">
+                                <rect key="frame" x="196" y="69" width="33" height="25"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.83137254900000002" green="0.83137254900000002" blue="0.83529411760000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="6Lu-MW-ukN" firstAttribute="bottom" secondItem="6s3-Ld-H7E" secondAttribute="bottom" id="4Tj-Nm-B6U"/>
                             <constraint firstItem="gsk-wD-w8n" firstAttribute="centerY" secondItem="6s3-Ld-H7E" secondAttribute="centerY" id="DjI-rR-IiY"/>
                             <constraint firstItem="gsk-wD-w8n" firstAttribute="leading" secondItem="6s3-Ld-H7E" secondAttribute="trailing" constant="15" id="FAf-DS-Z5R"/>
                             <constraint firstAttribute="bottom" secondItem="gsk-wD-w8n" secondAttribute="bottom" constant="10" id="PS4-Ij-hQp"/>
@@ -151,6 +158,8 @@
                             <constraint firstItem="ab0-XO-aw1" firstAttribute="top" secondItem="Du0-aH-eL6" secondAttribute="top" constant="10" id="SqZ-Ty-hNB"/>
                             <constraint firstAttribute="trailing" secondItem="CWn-K1-Zwk" secondAttribute="trailing" constant="13" id="X85-Oj-T29"/>
                             <constraint firstAttribute="trailing" secondItem="gsk-wD-w8n" secondAttribute="trailing" constant="10" id="azV-5y-akX"/>
+                            <constraint firstItem="6Lu-MW-ukN" firstAttribute="top" secondItem="6s3-Ld-H7E" secondAttribute="top" id="br4-Rm-H6D"/>
+                            <constraint firstItem="6Lu-MW-ukN" firstAttribute="trailing" secondItem="6s3-Ld-H7E" secondAttribute="trailing" id="eI4-H7-OSK"/>
                             <constraint firstItem="ab0-XO-aw1" firstAttribute="leading" secondItem="Du0-aH-eL6" secondAttribute="leading" constant="10" id="ryi-y9-hJ3"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -183,6 +192,7 @@
                 <outlet property="nameL" destination="rxE-KN-dTf" id="3dK-Vl-EUa"/>
                 <outlet property="operationBtn" destination="gsk-wD-w8n" id="xgx-1X-tIT"/>
                 <outlet property="priceL" destination="dY4-09-is1" id="FpH-NJ-nNT"/>
+                <outlet property="shengyiTime" destination="6Lu-MW-ukN" id="mFA-AS-ACr"/>
                 <outlet property="statusL" destination="CWn-K1-Zwk" id="V5p-KM-wlw"/>
             </connections>
             <point key="canvasLocation" x="-16" y="171.5"/>
