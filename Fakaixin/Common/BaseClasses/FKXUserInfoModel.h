@@ -78,6 +78,8 @@
 
 
 @property (nonatomic,copy)NSString<Optional> *createTime;
+@property (nonatomic,copy)NSString<Optional> *createTimeDate;
+
 
 //自己加字段
 @property (nonatomic,copy)NSString<Optional> *nickname;

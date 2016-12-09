@@ -47,6 +47,13 @@
     if ([model.type integerValue] == 7) {
         _labDetail.text = @"查看详情";
         _labDetail.textAlignment = NSTextAlignmentCenter;
+        
+        int i =0;
+        if (i==0) {
+            [[FKXUserManager shareInstance]setNoReadFangke:[NSNumber numberWithInteger:[model.time integerValue]]];
+            i++;
+        }
+        
     }
     
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

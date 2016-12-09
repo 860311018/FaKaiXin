@@ -24,6 +24,8 @@
 @property (nonatomic,assign) BOOL isSpeaking;
 @property (nonatomic,assign) BOOL isListening;
 @property(nonatomic, strong)NSNumber * noReadOrder;//“关怀列表”中加载的最新时间
+@property(nonatomic, strong)NSNumber * noReadFangke;//“工作台”中加载的最新时间
+
 @property(nonatomic, strong)NSNumber * unreadRelMe;//“我”中未读动态的最新一条time
 @property(nonatomic, strong)NSNumber * unAcceptOrderTime;//“工作台”中查看未接单的最新时间
 @property(nonatomic, strong)NSNumber * unReadNotification;//“消息-通知”中查看未读的信息

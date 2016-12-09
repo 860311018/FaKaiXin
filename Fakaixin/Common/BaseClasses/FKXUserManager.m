@@ -146,6 +146,19 @@
     [userDefaults setObject:noReadOrder  forKey:@"noReadOrder"];
     [userDefaults synchronize];
 }
+
+-(NSNumber *)noReadFangke
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults  standardUserDefaults];
+    return [userDefaults objectForKey:@"noReadFangke"];
+}
+-(void)setNoReadFangke:(NSNumber *)noReadFangke
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults  standardUserDefaults];
+    [userDefaults setObject:noReadFangke  forKey:@"noReadFangke"];
+    [userDefaults synchronize];
+}
+
 -(NSNumber *)unreadRelMe
 {
     NSUserDefaults *userDefaults = [NSUserDefaults  standardUserDefaults];

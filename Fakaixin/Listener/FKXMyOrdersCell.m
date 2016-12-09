@@ -24,6 +24,8 @@
     
     self.nameL.text = model.nickName;
     
+    self.priceL.text = [NSString stringWithFormat:@"￥%.2f",[model.money floatValue]/100.0];
+
     if (model.callLength && [model.callLength integerValue]!=0) {
         self.detailL.text = @"电话咨询";
     }else {
@@ -60,8 +62,11 @@
                 
                 self.cancelBtn.hidden = YES;
                 
-                self.shengyiTime.hidden = NO;
-                self.shengyiTime.text = @"";
+                if (model.callLength && [model.callLength integerValue]!=0) {
+                    self.shengyiTime.hidden = NO;
+                    self.shengyiTime.text = [NSString stringWithFormat:@"还剩%ld分钟",[model.callLength integerValue]];
+                }
+                
             }
                 break;
             case 2:
@@ -134,8 +139,11 @@
                 
                 self.cancelBtn.hidden = YES;
                 
-                self.shengyiTime.hidden = NO;
-                self.shengyiTime.text = @"";
+                if (model.callLength && [model.callLength integerValue]!=0) {
+                    self.shengyiTime.hidden = NO;
+                    self.shengyiTime.text = [NSString stringWithFormat:@"还剩%ld分钟",[model.callLength integerValue]];
+                }
+
 
             }
                 break;

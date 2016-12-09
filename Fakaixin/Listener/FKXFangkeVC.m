@@ -89,6 +89,8 @@
                          emptyDataView = nil;
                      }
                  }
+                 FKXUserInfoModel *model = data[0];
+                 [[FKXUserManager shareInstance]setNoReadFangke:[NSNumber numberWithInteger:[model.createTimeDate integerValue]]];
              }
              [self.tableData addObjectsFromArray:data];
              [self.tableView reloadData];

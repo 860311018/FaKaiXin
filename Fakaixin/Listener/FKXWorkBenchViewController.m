@@ -107,6 +107,9 @@
 //查看访客
 - (IBAction)lookOrder:(id)sender {
 //    [self showHint:@"即将开放"];
+    unReadOrder.hidden = YES;
+    self.tabBarItem.badgeValue = nil;
+
     FKXFangkeVC *vc = [[FKXFangkeVC alloc]init];
     [vc setHidesBottomBarWhenPushed:YES];
     [self.navigationController pushViewController:vc animated:YES];
@@ -195,11 +198,60 @@
 
 - (void)loadUnreadRelMe
 {
-    NSNumber *time = [FKXUserManager shareInstance].unAcceptOrderTime ? [FKXUserManager shareInstance].unAcceptOrderTime : @(0);
-    NSDictionary *paramDic = @{@"time" : time};
-    [AFRequest sendGetOrPostRequest:@"listener/unReadOrderList" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+//    NSNumber *time = [FKXUserManager shareInstance].unAcceptOrderTime ? [FKXUserManager shareInstance].unAcceptOrderTime : @(0);
+//    NSDictionary *paramDic = @{@"time" : time};
+//    [AFRequest sendGetOrPostRequest:@"listener/unReadOrderList" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+//        
+//        [self hideHud];
+//        if ([data[@"code"] integerValue] == 0)
+//        {
+//            NSInteger con = [data[@"data"][@"number"] integerValue];
+//            if (con) {
+//                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
+//                NSString *tit = [NSString stringWithFormat:@"%ld",con];
+//                unReadOrder.text = tit;
+//                unReadOrder.hidden = NO;
+//            }else{
+//                self.tabBarItem.badgeValue = nil;
+//                unReadOrder.hidden = YES;
+//            }
+//        }else if ([data[@"code"] integerValue] == 4)
+//        {
+//            [self showAlertViewWithTitle:data[@"message"]];
+//
+//            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+//        }else
+//        {
+//            [self showHint:data[@"message"]];
+//        }
+//    } failure:^(NSError *error) {
+//        [self hideHud];
+//        [self showAlertViewWithTitle:@"网络出错"];
+//    }];
+    
+    NSDictionary *paramDic = @{};
+    [FKXUserInfoModel sendGetOrPostRequest:@"user/browse_log"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
+     {
+         [self hideHud];
+         if (data)
+         {
+             if ([data count]>0) {
+                 FKXUserInfoModel *model = data[0];
+                 [[FKXUserManager shareInstance]setNoReadFangke:[NSNumber numberWithInteger:[model.createTimeDate integerValue]]];
+             }
+         } else if (errorModel)
+         {
+             [self showHint:errorModel.message];
+             
+         }
+     }];
+    
+    NSNumber *time2 = [FKXUserManager shareInstance].noReadFangke ? [FKXUserManager shareInstance].noReadFangke : @(0);
+    NSDictionary *paramDic2 = @{@"time" : time2};
+    [AFRequest sendGetOrPostRequest:@"user/new_browse" param:paramDic2 requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
         
         [self hideHud];
+        NSLog(@"%@",data);
         if ([data[@"code"] integerValue] == 0)
         {
             NSInteger con = [data[@"data"][@"number"] integerValue];
@@ -215,7 +267,7 @@
         }else if ([data[@"code"] integerValue] == 4)
         {
             [self showAlertViewWithTitle:data[@"message"]];
-
+            
             [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
         }else
         {

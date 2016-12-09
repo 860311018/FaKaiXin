@@ -43,4 +43,13 @@
 
 @property (nonatomic, copy) NSString<Optional> *talkId;
 
+@property (nonatomic, strong) NSNumber<Optional> *phonePrice;
+@property (nonatomic, strong) NSNumber<Optional> *role;
+@property (nonatomic, copy) NSString<Optional> *clientNum;
+@property (nonatomic, copy) NSString<Optional> *mobile;
+@property (nonatomic, strong) NSNumber<Optional> *isOnline;
+@property (nonatomic, strong) NSNumber<Optional> *money;
+
+
+
 @end

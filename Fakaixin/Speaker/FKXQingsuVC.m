@@ -88,10 +88,13 @@ typedef enum : NSUInteger {
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
 @property (nonatomic,assign) PayType payType;
 
+
+//一键咨询需要的参数
 @property (nonatomic,assign) BOOL isKeyTalk;
 
 @property (nonatomic,copy) NSString *callStr;
 @property (nonatomic,strong) NSNumber *listenerId;
+@property (nonatomic,copy) NSString *pMobile;
 
 @end
 
@@ -827,6 +830,7 @@ typedef enum : NSUInteger {
         if ([data[@"code"] integerValue] == 0) {
             NSDictionary *dic = data[@"data"][@"listenerInfo"];
             FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            self.pMobile = pModel.mobile;
             if ([pModel.status integerValue] == 1) {
                 [self showZaiXian:pModel callNum:[self.callStr integerValue]];
             }else {
@@ -1213,7 +1217,15 @@ typedef enum : NSUInteger {
 - (void)call:(NSString *)callLength {
     [self tapHide4];
     
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    NSDictionary *params;
+    if (self.isKeyTalk) {
+        if (self.pMobile) {
+            params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":self.pMobile,@"maxallowtime":callLength}, @"callback",nil];
+
+        }
+    }else {
+        params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    }
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];

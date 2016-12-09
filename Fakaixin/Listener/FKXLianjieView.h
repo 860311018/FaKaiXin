@@ -10,7 +10,7 @@
 
 @protocol CallDelegate <NSObject>
 
-- (void)call:(NSString *)callLength;
+- (void)call:(NSString *)callLength ;
 - (void)toHead:(NSNumber *)uid;
 
 @end

@@ -19,30 +19,46 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Common/Vender/EaseMob/Chat/ChatView/ChatViewController.m"
-            timestampString = "502888561.941156"
+            filePath = "Fakaixin/Listener/FKXMyOrderVC.m"
+            timestampString = "502944477.879666"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "298"
-            endingLineNumber = "298"
-            landmarkName = "-ttt"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "-call:"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Common/Vender/EaseMob/EaseUI/EMUIKit/ViewController/EaseMessageViewController.m"
-            timestampString = "502887150.174098"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "846"
-            endingLineNumber = "846"
-            landmarkName = "-keyBoardHidden:"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[FKXMyOrderVC call:]"
+                  moduleName = "Fakaixin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/apple/Documents/Faikaixin2/Fakaixin/Listener/FKXMyOrderVC.m"
+                  timestampString = "502948749.648142"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
+                  offsetFromSymbolStart = "520">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__21-[FKXMyOrderVC call:]_block_invoke"
+                  moduleName = "Fakaixin"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/apple/Documents/Faikaixin2/Fakaixin/Listener/FKXMyOrderVC.m"
+                  timestampString = "502948749.651867"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "280"
+                  endingLineNumber = "280"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
