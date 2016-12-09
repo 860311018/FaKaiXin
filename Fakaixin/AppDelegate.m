@@ -27,6 +27,8 @@
 #import "FKXWorkBenchViewController.h"
 #import "Growing.h"
 
+#import "FKXMyOrderVC.h"
+
 //两次提示的默认间隔
 static const CGFloat kDefaultPlaySoundInterval = 3.0;
 static NSString *kMessageType = @"MessageType";
@@ -371,7 +373,9 @@ static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88
     ListenerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarListenerVC;
     tab.selectedIndex = 1;
     FKXBaseNavigationController * nav = [tab viewControllers][1];
-    FKXOrderManageController *vc = [[UIStoryboard storyboardWithName:@"FKXCare" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXOrderManageController"];
+    
+    FKXMyOrderVC *vc = [[FKXMyOrderVC alloc]init];
+    vc.isWorkBench = YES;
     [vc setHidesBottomBarWhenPushed:YES];
     [nav pushViewController:vc animated:YES];
 }

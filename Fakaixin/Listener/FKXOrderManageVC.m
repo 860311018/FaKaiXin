@@ -215,8 +215,7 @@
                 {
                     [self headerRefreshEvent];
                     
-                    //需要发送的默认消息的用户信息
-                    FKXUserInfoModel *meInfo = [FKXUserManager getUserInfoModel];
+                   
                     
                     //保存接收方的信息
 //                    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[meInfo.uid stringValue] bodies:nil];
@@ -227,7 +226,9 @@
 //                                            @"name": cellModel.nickName,
 //                                            @"stop":@(NO)
 //                                            };
-//                    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+                    //                    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext]; //需要发送的默认消息的用户信息
+                    
+                    FKXUserInfoModel *meInfo = [FKXUserManager getUserInfoModel];
                     
                     NSArray *textArray = @[@"亲，我来了~在伐开心里可以无压力的倾诉心事，安抚您内心的小怪兽",@"身为伐开心的倾听者，能够倾听帮助您解决烦心事是我义不容辞的责任~",@"您的烦心事尽管告诉我，我会尽我所能帮助您的",@"不开心？来伐开心，我都在这陪伴倾听着你",@"我在呢~每当您有烦心事我都会第一时间出现在您身边的"];
                     NSInteger radom = arc4random()%textArray.count;

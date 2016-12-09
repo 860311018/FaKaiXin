@@ -48,6 +48,8 @@
     [super viewWillAppear:animated];
 
     beginRefreshBtn.hidden = NO;
+
+//    [self setUpNavBar];
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -94,8 +96,6 @@
 - (void)setUpNavBar {
     
     //请求在线状态
-    [self loadStatus];
-    
     UIButton *sendB = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 65, 18)];
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"申请课程" attributes:@{NSUnderlineStyleAttributeName: [NSNumber numberWithInteger:NSUnderlineStyleSingle],NSForegroundColorAttributeName : UIColorFromRGB(0x333333), NSFontAttributeName : [UIFont systemFontOfSize:13]}];
     [sendB setAttributedTitle:str forState:UIControlStateNormal];
@@ -110,30 +110,30 @@
     [statusBtn setImage:[UIImage imageNamed:@"img_status_on"] forState:UIControlStateSelected];
     [statusBtn addTarget:self action:@selector(changStatus:) forControlEvents:UIControlEventTouchUpInside];
    
-    if (_status == 0) {
-        statusBtn.selected = NO;
-    }else {
-        statusBtn.selected = YES;
-    }
+    NSDictionary *params = @{};
+    [AFRequest sendGetOrPostRequest:@"listener/select_status" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0){
+            _status = [data[@"data"] integerValue];
+            if (_status == 0) {
+                statusBtn.selected = NO;
+            }else {
+                statusBtn.selected = YES;
+            }
+        }else{
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self showHint:@"网络出错"];
+        [self hideHud];
+    }];
+    
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:statusBtn];
 
 }
 
-- (void)loadStatus {
-    NSDictionary *params = @{};
-   [AFRequest sendGetOrPostRequest:@"listener/select_status" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
-       [self hideHud];
-       if ([data[@"code"] integerValue] == 0){
-           _status = [data[@"data"] integerValue];
-       }else{
-           [self showHint:data[@"message"]];
-       }
-   } failure:^(NSError *error) {
-       [self showHint:@"网络出错"];
-       [self hideHud];
-   }];
-}
+
 
 
 #pragma mark - nav 点击
@@ -146,13 +146,13 @@
 }
 
 - (void)changStatus:(UIButton *)btn {
-    static BOOL isOn;
-    isOn = !isOn;
-    if (isOn) {
+    btn.selected = !btn.selected;
+    if (btn.selected) {
        NSDictionary *params = @{@"status":@1};
         [AFRequest sendGetOrPostRequest:@"listener/update_status" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
             [self hideHud];
             if ([data[@"code"] integerValue] == 0){
+                _status = [data[@"data"] integerValue];
                 btn.selected = YES;
             }else{
                 [self showHint:data[@"message"]];
@@ -160,12 +160,13 @@
         } failure:^(NSError *error) {
             [self showHint:@"网络出错"];
             [self hideHud];
-        }];
+}];
     }else {
         NSDictionary *params = @{@"status":@0};
-        [AFRequest sendGetOrPostRequest:@"listener/select_status" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        [AFRequest sendGetOrPostRequest:@"listener/update_status" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
             [self hideHud];
             if ([data[@"code"] integerValue] == 0){
+                _status = [data[@"data"] integerValue];
                 btn.selected = NO;
             }else{
                 [self showHint:data[@"message"]];

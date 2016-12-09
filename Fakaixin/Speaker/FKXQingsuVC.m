@@ -205,39 +205,11 @@ typedef enum : NSUInteger {
 #pragma mark - 一键倾诉
 - (void)qingsu {
     _isKeyTalk = YES;
-    order = [FKXConfirmView creatOrder];
-    order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
-    order.confirmDelegate = self;
     
-    order.price = 25;
-//    order.head = ;
-    order.isTalk = YES;
-    order.name = @"推荐专家";
-    order.status = @1;
-//    order.listenerId = proModel.uid;
-    
-    if (userModel.mobile) {
-        order.phoneStr = userModel.mobile;
+    if (_contentArr.count >0) {
+        FKXUserInfoModel *model = _contentArr[0];
+        [self callPro:model];
     }
-    
-    if (userModel.clientNum && userModel.clientNum.length>0) {
-        order.bangDingBtn.hidden = YES;
-    }
-    
-    
-    view1 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-    view1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    [view1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide)]];
-    
-    view1.alpha = 0;
-    order.alpha = 0;
-    [[UIApplication sharedApplication].keyWindow addSubview:view1];
-    [[UIApplication sharedApplication].keyWindow addSubview:order];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        view1.alpha = 1;
-        order.alpha = 1;
-    }];
 }
 
 #pragma mark - ---网络请求---
@@ -578,25 +550,41 @@ typedef enum : NSUInteger {
         return;
     }
     
-    if (!proModel.mobile || [NSString isEmpty:proModel.mobile] ||[NSString isEmpty:proModel.clientNum]) {
-        [self showHint:@"该咨询师暂未开通电话咨询服务"];
-        return;
-    }
-    
-    if ([proModel.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
-        [self showHint:@"不能咨询自己"];
-        return;
+    if (_isKeyTalk) {
+        if (!proModel.mobile || [NSString isEmpty:proModel.mobile] ||[NSString isEmpty:proModel.clientNum]) {
+            [self showHint:@"匹配失败"];
+            return;
+        }
+    }else {
+        if (!proModel.mobile || [NSString isEmpty:proModel.mobile] ||[NSString isEmpty:proModel.clientNum]) {
+            [self showHint:@"该咨询师暂未开通电话咨询服务"];
+            return;
+        }
+        
+        if ([proModel.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
+            [self showHint:@"不能咨询自己"];
+            return;
+        }
     }
     
     order = [FKXConfirmView creatOrder];
     order.frame = CGRectMake(0, kScreenHeight-285, kScreenWidth, 285);
     order.confirmDelegate = self;
     
-    order.price = [proModel.phonePrice integerValue]/100;
-    order.head = proModel.head;
-    order.name = proModel.name;
-    order.status = proModel.status;
-    order.listenerId = proModel.uid;
+    if (_isKeyTalk) {
+        order.price = 25;
+        //    order.head = ;
+        order.isTalk = YES;
+        order.name = @"推荐专家";
+        order.status = @1;
+        //    order.listenerId = proModel.uid;
+    }else {
+        order.price = [proModel.phonePrice integerValue]/100;
+        order.head = proModel.head;
+        order.name = proModel.name;
+        order.status = proModel.status;
+        order.listenerId = proModel.uid;
+    }
     
     if (userModel.mobile) {
         order.phoneStr = userModel.mobile;
@@ -849,16 +837,22 @@ typedef enum : NSUInteger {
 - (void)showView {
     [self hideHud];
     
-    if (_isKeyTalk) {
-        [self loadProInfo:self.listenerId];
+    if ([professionModel.status integerValue]==1) {
+        [self loadCallLength];
     }else {
-        if ([professionModel.status integerValue]==1) {
-            [self loadCallLength];
-        }else {
-            [self showLiXian:professionModel];
-        }
-
+        [self showLiXian:professionModel];
     }
+    
+//    if (_isKeyTalk) {
+//        [self loadProInfo:self.listenerId];
+//    }else {
+//        if ([professionModel.status integerValue]==1) {
+//            [self loadCallLength];
+//        }else {
+//            [self showLiXian:professionModel];
+//        }
+//
+//    }
     
 }
 
@@ -1218,22 +1212,17 @@ typedef enum : NSUInteger {
     [self tapHide4];
     
     NSDictionary *params;
-    if (self.isKeyTalk) {
-        if (self.pMobile) {
-            params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":self.pMobile,@"maxallowtime":callLength}, @"callback",nil];
-
-        }
-    }else {
-        params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
-    }
+    
+    params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
         if ([respCode isEqualToString:@"000000"]) {
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
-            NSDictionary *param = @{@"status":@2};
-            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":professionModel.uid};
+            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
                 NSLog(@"%@",data);
             } failure:^(NSError *error) {
                 NSLog(@"%@",error.description);

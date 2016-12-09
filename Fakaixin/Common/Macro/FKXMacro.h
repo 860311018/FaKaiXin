@@ -51,6 +51,7 @@
 
 //Reset API
 #define ResetAppId   @"c369cfe9148a40b998323b8e4d00d902"
+#define ResetRingtoneID   @"1744"
 
 #define isSimulator (NSNotFound != [[[UIDevice currentDevice] model] rangeOfString:@"Simulator"].location)
 

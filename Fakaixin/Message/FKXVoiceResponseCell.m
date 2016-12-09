@@ -32,7 +32,9 @@
         self.voiceTimeL.text = [NSString stringWithFormat:@"%ld:%ld",time/60,second];
     }
     
-    if ([model.isAccept integerValue] == 1) {
+    if ([model.isAccept integerValue] == 0 ||
+        [model.isAccept integerValue] == -1||
+        [model.isAccept integerValue] == -2) {
         self.zhiyeL.text = @"语音回复了";
     }else {
         self.zhiyeL.text = @"的语音回复被认可了";

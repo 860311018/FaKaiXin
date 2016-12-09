@@ -17,11 +17,11 @@
             <rect key="frame" x="0.0" y="0.0" width="423" height="200"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="423" height="200"/>
+                <rect key="frame" x="0.0" y="0.0" width="423" height="199"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Rad-UB-Qm2">
-                        <rect key="frame" x="10" y="0.0" width="403" height="200"/>
+                        <rect key="frame" x="10" y="0.0" width="403" height="199"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </imageView>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zVQ-ug-kd7">
@@ -30,7 +30,7 @@
                             <constraint firstAttribute="width" secondItem="zVQ-ug-kd7" secondAttribute="height" multiplier="8:8" id="Muy-qJ-Vtz"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="离上一名还有" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZo-Uu-c1Q">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="离上一名还差" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZo-Uu-c1Q">
                         <rect key="frame" x="167" y="56" width="98" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.90588235294117647" green="0.76862745098039209" blue="0.12549019607843137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

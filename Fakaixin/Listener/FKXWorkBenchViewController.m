@@ -18,8 +18,9 @@
 @interface FKXWorkBenchViewController ()<UITableViewDelegate>
 {
     FKXUserInfoModel *userInfoModel;
+    UILabel *unReadFangke;
     UILabel *unReadOrder;
-    
+
     FKXResonance_homepage_model *bannerModel;
 }
 
@@ -33,6 +34,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *InfluenceNum; //影响力
 @property (weak, nonatomic) IBOutlet UILabel *incomeLab;    //收入
 @property (weak, nonatomic) IBOutlet UIView *viewSectionTwo;
+
+@property (nonatomic,assign) NSInteger orderCount;
+@property (nonatomic,assign) NSInteger fangkeCount;
+
+
 @end
 
 @implementation FKXWorkBenchViewController
@@ -41,7 +47,20 @@
     [super viewWillAppear:animated];
     
     [self loadInfo];
+    self.orderCount = 0;
+    self.fangkeCount = 0;
+    
     [self loadUnreadRelMe];//界面出现就更新ui
+    if (self.orderCount + self.fangkeCount == 0) {
+        self.tabBarItem.badgeValue = nil;
+//        unReadOrder.hidden = YES;
+    }else {
+        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.orderCount + self.fangkeCount];
+        NSString *tit = [NSString stringWithFormat:@"%ld",self.orderCount + self.fangkeCount];
+//        unReadOrder.text = tit;
+//        unReadOrder.hidden = NO;
+    }
+    
     
     [self loadBanner];
 
@@ -55,7 +74,17 @@
     _userIcon.layer.borderColor = RGBACOLOR(181, 181, 181, 1.0).CGColor;
     _userIcon.layer.borderWidth = 1.0;
     
-     unReadOrder = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 150, 20, 20)];
+     unReadFangke = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 150, 20, 20)];
+    unReadFangke.hidden = YES;
+    unReadFangke.font = [UIFont systemFontOfSize:12];
+    unReadFangke.backgroundColor = [UIColor redColor];
+    unReadFangke.layer.cornerRadius = 10;
+    unReadFangke.clipsToBounds = YES;
+    unReadFangke.textColor = [UIColor whiteColor];
+    unReadFangke.textAlignment = NSTextAlignmentCenter;
+    [_viewSectionTwo addSubview:unReadFangke];
+    
+    unReadOrder = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 150, 20, 20)];
     unReadOrder.hidden = YES;
     unReadOrder.font = [UIFont systemFontOfSize:12];
     unReadOrder.backgroundColor = [UIColor redColor];
@@ -65,9 +94,19 @@
     unReadOrder.textAlignment = NSTextAlignmentCenter;
     [_viewSectionTwo addSubview:unReadOrder];
     
-//    [self loadBanner];
+    self.orderCount = 0;
+    self.fangkeCount = 0;
     
-    [self loadUnreadRelMe];//保证第一次执行（tabbarVC初始化的时候也加载）
+    [self loadUnreadRelMe];//界面出现就更新ui
+    if (self.orderCount + self.fangkeCount == 0) {
+        self.tabBarItem.badgeValue = nil;
+//        unReadOrder.hidden = YES;
+    }else {
+        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.orderCount + self.fangkeCount];
+        NSString *tit = [NSString stringWithFormat:@"%ld",self.orderCount + self.fangkeCount];
+//        unReadOrder.text = tit;
+//        unReadOrder.hidden = NO;
+    }
 
     [self.bannerImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapBanner:)]];
 
@@ -107,8 +146,9 @@
 //查看访客
 - (IBAction)lookOrder:(id)sender {
 //    [self showHint:@"即将开放"];
-    unReadOrder.hidden = YES;
-    self.tabBarItem.badgeValue = nil;
+//    unReadOrder.hidden = YES;
+//    self.tabBarItem.badgeValue = nil;
+    self.fangkeCount = 0;
 
     FKXFangkeVC *vc = [[FKXFangkeVC alloc]init];
     [vc setHidesBottomBarWhenPushed:YES];
@@ -198,71 +238,20 @@
 
 - (void)loadUnreadRelMe
 {
-//    NSNumber *time = [FKXUserManager shareInstance].unAcceptOrderTime ? [FKXUserManager shareInstance].unAcceptOrderTime : @(0);
-//    NSDictionary *paramDic = @{@"time" : time};
-//    [AFRequest sendGetOrPostRequest:@"listener/unReadOrderList" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
-//        
-//        [self hideHud];
-//        if ([data[@"code"] integerValue] == 0)
-//        {
-//            NSInteger con = [data[@"data"][@"number"] integerValue];
-//            if (con) {
-//                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
-//                NSString *tit = [NSString stringWithFormat:@"%ld",con];
-//                unReadOrder.text = tit;
-//                unReadOrder.hidden = NO;
-//            }else{
-//                self.tabBarItem.badgeValue = nil;
-//                unReadOrder.hidden = YES;
-//            }
-//        }else if ([data[@"code"] integerValue] == 4)
-//        {
-//            [self showAlertViewWithTitle:data[@"message"]];
-//
-//            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-//        }else
-//        {
-//            [self showHint:data[@"message"]];
-//        }
-//    } failure:^(NSError *error) {
-//        [self hideHud];
-//        [self showAlertViewWithTitle:@"网络出错"];
-//    }];
-    
-    NSDictionary *paramDic = @{};
-    [FKXUserInfoModel sendGetOrPostRequest:@"user/browse_log"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON handleBlock:^(id data, NSError *error, FMIErrorModelTwo *errorModel)
-     {
-         [self hideHud];
-         if (data)
-         {
-             if ([data count]>0) {
-                 FKXUserInfoModel *model = data[0];
-                 [[FKXUserManager shareInstance]setNoReadFangke:[NSNumber numberWithInteger:[model.createTimeDate integerValue]]];
-             }
-         } else if (errorModel)
-         {
-             [self showHint:errorModel.message];
-             
-         }
-     }];
-    
-    NSNumber *time2 = [FKXUserManager shareInstance].noReadFangke ? [FKXUserManager shareInstance].noReadFangke : @(0);
-    NSDictionary *paramDic2 = @{@"time" : time2};
-    [AFRequest sendGetOrPostRequest:@"user/new_browse" param:paramDic2 requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+
+    //订单
+    NSNumber *time = [FKXUserManager shareInstance].unAcceptOrderTime ? [FKXUserManager shareInstance].unAcceptOrderTime : @(0);
+    NSDictionary *param = @{@"time" : time};
+    [AFRequest sendGetOrPostRequest:@"listener/new_order" param:param requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
         
         [self hideHud];
-        NSLog(@"%@",data);
         if ([data[@"code"] integerValue] == 0)
         {
             NSInteger con = [data[@"data"][@"number"] integerValue];
             if (con) {
-                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
-                NSString *tit = [NSString stringWithFormat:@"%ld",con];
-                unReadOrder.text = tit;
-                unReadOrder.hidden = NO;
+                self.orderCount = con;
             }else{
-                self.tabBarItem.badgeValue = nil;
-                unReadOrder.hidden = YES;
+                self.orderCount = 0;
             }
         }else if ([data[@"code"] integerValue] == 4)
         {
@@ -277,6 +266,38 @@
         [self hideHud];
         [self showAlertViewWithTitle:@"网络出错"];
     }];
+    
+    
+    //访客
+    NSNumber *time2 = [FKXUserManager shareInstance].noReadFangke ? [FKXUserManager shareInstance].noReadFangke : @(0);
+    NSDictionary *paramDic2 = @{@"time" : time2};
+    [AFRequest sendGetOrPostRequest:@"user/new_browse" param:paramDic2 requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        
+        [self hideHud];
+        NSLog(@"%@",data);
+        if ([data[@"code"] integerValue] == 0)
+        {
+            NSInteger con = [data[@"data"][@"number"] integerValue];
+            if (con) {
+                self.fangkeCount = con;
+            }
+            else{
+                self.fangkeCount = 0;
+            }
+        }else if ([data[@"code"] integerValue] == 4)
+        {
+            [self showAlertViewWithTitle:data[@"message"]];
+            
+            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        }else
+        {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showAlertViewWithTitle:@"网络出错"];
+    }];
+    
 }
 //加载倾听者资料
 - (void)loadInfo

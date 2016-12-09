@@ -11,6 +11,7 @@
 #import "FKXFangkeVC.h"
 #import "FKXFangkeCell.h"
 #import "ChatViewController.h"
+#import "FKXProfessionInfoVC.h"
 
 @interface FKXFangkeVC ()<UITableViewDelegate,UITableViewDataSource,FangKeDelegate>
 {
@@ -182,10 +183,18 @@
     FKXFangkeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXFangkeCell" forIndexPath:indexPath];
     cell.delegate = self;
     cell.model = model;
+    cell.headImgV.tag = 400+indexPath.row;
+    [cell.headImgV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHeadImgV:)]];
     return cell;
 }
 
-
+- (void)tapHeadImgV:(UITapGestureRecognizer *)tap {
+    FKXUserInfoModel *model = self.tableData[tap.view.tag-400];
+    FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+    vc.userId = model.uid;
+    [vc setHidesBottomBarWhenPushed:YES];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 - (NSMutableArray *)tableData {
     if (!_tableData) {
         _tableData = [[NSMutableArray alloc]init];

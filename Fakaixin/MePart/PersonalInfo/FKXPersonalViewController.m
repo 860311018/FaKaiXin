@@ -102,6 +102,12 @@
        
         
     }
+    
+    //关怀模式不需要加消息
+    if ([FKXUserManager isUserPattern]) {
+        [self setUpNavigationBar];
+    }
+    
     NSString *imageName = @"user_guide_to_listener";
     [FKXUserManager showUserGuideWithKey:imageName];
     if ([FKXUserManager isUserPattern]) {
@@ -830,15 +836,7 @@
             //我的订单
         case 3:
         {
-//            NSDictionary * params = [NSDictionary dictionaryWithObjectsAndKeys:@{
-//                                                                                 @"appId"        : ResetAppId,
-//                                                                                 @"fromClient"       : @"65849071739985",@"fromSerNum":@"4001234567",@"to":@"15311111183",@"toSerNum":@"075512345678",@"maxallowtime":@"910"
-//                                                                                 }, @"callback",nil];
-//            [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
-//                NSLog(@"%@",data);
-//            } failure:^(NSError *error) {
-//                
-//            }];
+
             
             if ([FKXUserManager needShowLoginVC]) {
                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];

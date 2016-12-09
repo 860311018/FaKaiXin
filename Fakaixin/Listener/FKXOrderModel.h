@@ -24,6 +24,9 @@
  */
 @interface FKXOrderModel : AFRequest
 
+// 0 图文咨询  1电话咨询  2推荐专家电话咨询
+@property (nonatomic, strong) NSNumber<Optional> *type;
+
 
 @property (nonatomic, strong) NSNumber<Optional> *createTime;
 

@@ -33,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    self.navTitle = @"情感挽回";
+    self.navTitle = @"免费预约";
     
     [self setUpUI];
     

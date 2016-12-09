@@ -2022,7 +2022,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                     <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="心理咨询师；暖心大叔；逗比的IT男；热心的居委会阿姨，情感专家"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="心理咨询师；暖心大叔；逗比的IT男；热心的居委会阿姨，情感专家（字数不能少于5个字，但不能大于50个字）"/>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <outlet property="delegate" destination="axK-Rx-mSa" id="58b-8Y-8oQ"/>
@@ -2064,7 +2064,7 @@
                                                         <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                             <color key="value" red="0.91372549020000005" green="0.91372549020000005" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="遇到这些问题尽管来找我：擅长解决情感婚姻问题，怎样优雅的跟他人撕逼，孩子不爱学习我有妙招"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="遇到这些问题尽管来找我：擅长解决情感婚姻问题，怎样优雅的跟他人撕逼，孩子不爱学习我有妙招（字数不能少于20字）"/>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <outlet property="delegate" destination="axK-Rx-mSa" id="G65-3h-VdD"/>
@@ -2246,16 +2246,16 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="元/次【1次60分钟】" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qkz-q0-q36">
-                                                    <rect key="frame" x="177" y="16" width="129" height="17"/>
+                                                    <rect key="frame" x="182" y="16" width="129" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="¥大于0" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="QOi-OM-aPY">
-                                                    <rect key="frame" x="117" y="5" width="50" height="40"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="¥大于10" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="QOi-OM-aPY">
+                                                    <rect key="frame" x="117" y="5" width="55" height="40"/>
                                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="50" id="Ysl-II-Mdn"/>
+                                                        <constraint firstAttribute="width" constant="55" id="Ysl-II-Mdn"/>
                                                         <constraint firstAttribute="height" constant="40" id="gZO-42-Ao3"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

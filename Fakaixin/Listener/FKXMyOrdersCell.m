@@ -26,6 +26,13 @@
     
     self.priceL.text = [NSString stringWithFormat:@"￥%.2f",[model.money floatValue]/100.0];
 
+//    if ([model.type integerValue] == 0) {
+//        self.detailL.text = @"图文咨询";
+//
+//    }else {
+//        self.detailL.text = @"电话咨询";
+//    }
+    
     if (model.callLength && [model.callLength integerValue]!=0) {
         self.detailL.text = @"电话咨询";
     }else {
@@ -61,6 +68,13 @@
                 self.operationBtn.layer.borderColor = [UIColor colorWithRed:244/255.0 green:143/255.0 blue:141/255.0 alpha:1].CGColor;
                 
                 self.cancelBtn.hidden = YES;
+                
+//                if ([model.type integerValue] !=0) {
+//                    self.shengyiTime.hidden = NO;
+//                    self.shengyiTime.text = [NSString stringWithFormat:@"还剩%ld分钟",[model.callLength integerValue]];
+//                }
+                
+
                 
                 if (model.callLength && [model.callLength integerValue]!=0) {
                     self.shengyiTime.hidden = NO;
@@ -138,6 +152,11 @@
                 self.operationBtn.layer.borderColor = [UIColor colorWithRed:244/255.0 green:143/255.0 blue:141/255.0 alpha:1].CGColor;
                 
                 self.cancelBtn.hidden = YES;
+                
+                //                if ([model.type integerValue]!=0) {
+                //                    self.shengyiTime.hidden = NO;
+                //                    self.shengyiTime.text = [NSString stringWithFormat:@"还剩%ld分钟",[model.callLength integerValue]];
+                //                }
                 
                 if (model.callLength && [model.callLength integerValue]!=0) {
                     self.shengyiTime.hidden = NO;

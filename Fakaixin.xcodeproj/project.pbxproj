@@ -645,6 +645,7 @@
 		18F66F8C1DEBFA0D001C4B4B /* FKXFangkeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXFangkeCell.h; sourceTree = "<group>"; };
 		18F66F8D1DEBFA0D001C4B4B /* FKXFangkeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXFangkeCell.m; sourceTree = "<group>"; };
 		18F66F8E1DEBFA0D001C4B4B /* FKXFangkeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FKXFangkeCell.xib; sourceTree = "<group>"; };
+		18F940561DFA8DCA00268A21 /* Fakaixin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Fakaixin.entitlements; sourceTree = "<group>"; };
 		18FF65621DD2D1A6001EA9B7 /* FKXPsyListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPsyListModel.h; sourceTree = "<group>"; };
 		18FF65631DD2D1A6001EA9B7 /* FKXPsyListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FKXPsyListModel.m; sourceTree = "<group>"; };
 		18FF65651DD2D2AE001EA9B7 /* FKXPsyInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FKXPsyInfoModel.h; sourceTree = "<group>"; };
@@ -3036,6 +3037,7 @@
 		B3666D231BC7441000D48822 /* Fakaixin */ = {
 			isa = PBXGroup;
 			children = (
+				18F940561DFA8DCA00268A21 /* Fakaixin.entitlements */,
 				619FE3381CABC4D100A2336F /* SpeakerTabBarViewController.h */,
 				619FE3391CABC4D100A2336F /* SpeakerTabBarViewController.m */,
 				619FE33A1CABC4D100A2336F /* ListenerTabBarViewController.h */,
@@ -3428,6 +3430,11 @@
 					B3666D201BC7441000D48822 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = WTH9G377F6;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					B3666D391BC7441000D48822 = {
 						CreatedOnToolsVersion = 7.0;
@@ -4134,6 +4141,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = Fakaixin/Fakaixin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = WTH9G377F6;
@@ -4191,6 +4199,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = Fakaixin/Fakaixin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: beijing yisen Technology Co.Ltd (WTH9G377F6)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: beijing yisen Technology Co.Ltd (WTH9G377F6)";
 				DEVELOPMENT_TEAM = WTH9G377F6;

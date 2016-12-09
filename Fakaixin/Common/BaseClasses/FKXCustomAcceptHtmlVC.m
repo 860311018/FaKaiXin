@@ -177,6 +177,10 @@ typedef enum : NSUInteger {
 
 - (void)goBack
 {
+    //当前提问人不是你自己
+//    if () {
+//        _isShowAlert = NO;
+//    }
     if (_isShowAlert) {
         UIAlertController *alV = [UIAlertController alertControllerWithTitle:@"这条语音回复您满意吗？" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"我再想想" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -1449,7 +1453,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 电话回拨
 - (void)call:(NSString *)callLength {
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength,@"ringtoneID":ResetRingtoneID}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
@@ -1457,8 +1461,8 @@ typedef enum : NSUInteger {
             [self tapHide4];
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
-            NSDictionary *param = @{@"status":@2};
-            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":proModel.uid};
+            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
                 NSLog(@"%@",data);
             } failure:^(NSError *error) {
                 NSLog(@"%@",error.description);

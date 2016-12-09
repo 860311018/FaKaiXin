@@ -314,8 +314,8 @@
         else if ([_myPriceTF.text integerValue] < 1|| [_myPriceTF.text integerValue] > 100) {
             [self showHint:@"价格只能在1到100元之间"];
             return;
-        }else if ([_tfConsultPrice.text integerValue] <= 0) {
-            [self showHint:@"咨询费需大于0元"];
+        }else if ([_tfConsultPrice.text integerValue] <= 10) {
+            [self showHint:@"咨询费需大于10元"];
             return;
         }else if ([_phonePrice.text integerValue] <= 20) {
             [self showHint:@"咨询费需大于20元"];

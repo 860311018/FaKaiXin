@@ -450,12 +450,13 @@ typedef enum : NSUInteger {
                 model.userNickName = dyModel.toNickname;
                 model.listenerNickName = dyModel.fromNickname;
                 model.listenerHead = dyModel.fromHead;
-                model.listenerId = dyModel.fromId;
+                model.listenerId = _userId;
                 model.voiceId = dyModel.voiceId;
                 model.acceptMoney = dyModel.acceptMoney;
                 model.isAccept = dyModel.isAccept;
                 
-                if ([model.isAccept integerValue] == 1) {//需要展示认可
+                if ([model.isAccept integerValue] == 0 || [model.isAccept integerValue] == -1 ||
+                    [model.isAccept integerValue] == -2) {//需要展示认可
                     FKXCustomAcceptHtmlVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXCustomAcceptHtmlVC"];
                     vc.isHidenM = YES;
                     NSString *paraStr = @"worryId";//默认传worryId
@@ -501,7 +502,7 @@ typedef enum : NSUInteger {
                         paraId = model.lqId;
                     }
                     NSInteger agree = 1;
-                    if ([model.isAccept integerValue] == -1 ||[model.isAccept integerValue] == -2) {
+                    if ([model.isAccept integerValue] == -1 ||[model.isAccept integerValue] == -2||[model.isAccept integerValue] == 0) {
                         agree = 0;
                     }
                     vc.urlString = [NSString stringWithFormat:@"%@front/QA_a_detail.html?%@=%@&uid=%ld&voiceId=%@&IsAgree=%ld&token=%@",kServiceBaseURL,paraStr, paraId, (long)[FKXUserManager shareInstance].currentUserId, model.voiceId,agree, [FKXUserManager shareInstance].currentUserToken];
@@ -1615,8 +1616,8 @@ typedef enum : NSUInteger {
         if ([respCode isEqualToString:@"000000"]) {
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
-            NSDictionary *param = @{@"status":@2};
-            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":proUserInfoModel.uid};
+            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
                 NSLog(@"%@",data);
             } failure:^(NSError *error) {
                 NSLog(@"%@",error.description);
@@ -1631,6 +1632,13 @@ typedef enum : NSUInteger {
         [self showHint:@"电话线路出错"];
     }];
 }
+
+
+
+- (void)clickHead:(NSNumber *)listenId {
+    [self tapHide];
+}
+
 
 
 

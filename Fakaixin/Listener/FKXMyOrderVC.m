@@ -213,10 +213,13 @@ typedef enum : NSUInteger {
 
 #pragma mark - 操作订单（拒绝、接受）
 - (void)operationOrder:(FKXOrderModel *)model status:(NSNumber *)status {
+//    NSDictionary *params = @{@"orderId":model.orderId,@"type":model.type,@"status":status};
+
     NSNumber *type = @0;
     if (model.callLength && [model.callLength integerValue]!=0) {
         type = @1;
     }
+
     NSDictionary *params = @{@"orderId":model.orderId,@"type":type,@"status":status};
     
     [AFRequest sendGetOrPostRequest:@"listener/updateOrders" param:params requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
@@ -276,15 +279,15 @@ typedef enum : NSUInteger {
 
 - (void)call:(NSString *)callLength {
     [self tapHide4];
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength,@"ringtoneID":ResetRingtoneID}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [self hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
         if ([respCode isEqualToString:@"000000"]) {
             [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
             //改变咨询师在线状态
-            NSDictionary *param = @{@"status":@2};
-            [AFRequest sendPostRequestTwo:@"listener/update_status" param:param success:^(id data) {
+            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":proModel.uid};
+            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
                 NSLog(@"%@",data);
             } failure:^(NSError *error) {
                 NSLog(@"%@",error.description);
@@ -300,6 +303,56 @@ typedef enum : NSUInteger {
 }
 
 #pragma mark - 图文咨询（聊天页，已确认订单）
+//去服务
+- (void)toChatWithMessage:(FKXOrderModel *)model {
+    if (!model.userId) {
+        return;
+    }
+    
+    if ([model.userId integerValue] == [FKXUserManager shareInstance].currentUserId) {
+        [self showHint:@"不可以私信自己哟"];
+        return;
+    }
+    NSArray *textArray = @[@"亲，我来了~在伐开心里可以无压力的倾诉心事，安抚您内心的小怪兽",@"身为伐开心的倾听者，能够倾听帮助您解决烦心事是我义不容辞的责任~",@"您的烦心事尽管告诉我，我会尽我所能帮助您的",@"不开心？来伐开心，我都在这陪伴倾听着你",@"我在呢~每当您有烦心事我都会第一时间出现在您身边的"];
+    NSInteger radom = arc4random()%textArray.count;
+    NSString * welcomeMessage = textArray[radom];
+    NSDictionary *dicExt = @{
+                             @"head" : userModel.head,
+                             @"name": userModel.name,
+                             };
+    NSDictionary *params = @{@"userId":userModel.uid,@"listenerId":model.userId};
+    
+    [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
+        [self hideHud];
+        if ([data[@"code"] integerValue] == 0) {
+            NSDictionary *dic = data[@"data"][@"listenerInfo"];
+            FKXUserInfoModel *proM = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            
+            ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[proM.uid stringValue]  conversationType:eConversationTypeChat];
+            chatController.title = proM.name;
+            chatController.pModel = proM;
+
+            //对方是咨询师
+            if ([proM.role integerValue] !=0) {
+                chatController.toZiXunShi = YES;
+                 NSArray *array = [[FKXUserManager shareInstance] caluteHeight:proM];
+                chatController.headerH = [array[1] floatValue];
+                chatController.introStr = array[0];
+            }
+            [EaseSDKHelper sendTextMessage:welcomeMessage to:[model.userId stringValue] messageType:eMessageTypeChat requireEncryption:NO messageExt:dicExt];
+
+            chatController.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:chatController animated:YES];
+            
+        }else {
+            [self showHint:data[@"message"]];
+        }
+    } failure:^(NSError *error) {
+        [self hideHud];
+        [self showHint:@"网络出错"];
+    }];
+}
+
 - (void)toTuWen:(FKXOrderModel *)model {
     [self toChatVC:model];
 }
@@ -406,13 +459,21 @@ typedef enum : NSUInteger {
             //确认订单
             [self operationOrder:model status:@1];
         }else if ([model.status integerValue] == 1){
+            
+//            if ([model.type integerValue]!=0) {
+//                //电话咨询
+//                [self toCall:model btn:btn];
+//            }else {
+//                //图文咨询
+//                [self toTuWen:model];
+//            }
             //去服务
             if (model.callLength && [model.callLength integerValue]!=0) {
                 //电话咨询
                 [self toCall:model btn:btn];
             }else {
                 //图文咨询
-                [self toTuWen:model];
+                [self toChatWithMessage:model];
             }
         }else if ([model.status integerValue] == 2){
             //查看详情
@@ -430,6 +491,13 @@ typedef enum : NSUInteger {
             [self toChatVC:model];
         }else if ([model.status integerValue] == 1){
             //立即咨询
+//            if ([model.type integerValue]!=0) {
+//                //电话咨询
+//                [self toCall:model btn:btn];
+//            }else {
+//                //图文咨询
+//                [self toTuWen:model];
+//            }
             if (model.callLength && [model.callLength integerValue]!=0) {
                 //电话咨询
                 [self toCall:model btn:btn];
@@ -445,6 +513,13 @@ typedef enum : NSUInteger {
             [self toDetailVC:model];
         }else if ([model.status integerValue] == 4){
             //再次预约
+//            if ([model.type integerValue]!=0) {
+//                //电话咨询
+//                [self callOrder:model];
+//            }else {
+//                //图文咨询
+//                [self tuwenOrder:model];
+//            }
             if (model.callLength && [model.callLength integerValue]!=0) {
                 //电话咨询
                 [self callOrder:model];

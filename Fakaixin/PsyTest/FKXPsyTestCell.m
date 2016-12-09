@@ -36,7 +36,7 @@
     _model = model;
     self.labTitle.text = [NSString stringWithFormat:@"心理测试:%@",model.testTitle];
     self.labNum.text = [NSString stringWithFormat:@"%@人",model.testNum];
-    self.labAccurate.text = [NSString stringWithFormat:@"%@,人",model.praiseNum];
+    self.labAccurate.text = [NSString stringWithFormat:@"%@人",model.praiseNum];
     [self.psyBackImgV sd_setImageWithURL:[NSURL URLWithString:model.testBackground] placeholderImage:[UIImage imageNamed:@"img_bac_default"]];
 }
 
