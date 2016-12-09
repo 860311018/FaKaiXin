@@ -288,52 +288,58 @@
         return;
     }
 
-    NSDictionary *params = @{@"userId":[FKXUserManager getUserInfoModel].uid,@"listenerId":[NSNumber numberWithInteger:[conversation.chatter integerValue]]};
-    
-    [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
-        [self hideHud];
-        if ([data[@"code"] integerValue] == 0) {
-            NSDictionary *dic = data[@"data"][@"listenerInfo"];
-            FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
-            
-            NSArray *array = [[FKXUserManager shareInstance] caluteHeight:pModel];
-            ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[pModel.uid stringValue]  conversationType:eConversationTypeChat];
-            chatController.title = pModel.name;
-            
-            if ([pModel.role integerValue] !=0) {
-                chatController.toZiXunShi = YES;
+    //单聊
+    if (conversation.conversationType == eConversationTypeChat) {
+        NSDictionary *params = @{@"userId":[FKXUserManager getUserInfoModel].uid,@"listenerId":[NSNumber numberWithInteger:[conversation.chatter integerValue]]};
+        
+        [AFRequest sendPostRequestTwo:@"user/selectClient" param:params success:^(id data) {
+            [self hideHud];
+            if ([data[@"code"] integerValue] == 0) {
+                NSDictionary *dic = data[@"data"][@"listenerInfo"];
+                FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+                
+                NSArray *array = [[FKXUserManager shareInstance] caluteHeight:pModel];
+                ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:conversation.chatter conversationType:conversation.conversationType];
+                chatController.title = pModel.name;
+                
+                if ([pModel.role integerValue] !=0) {
+                    chatController.toZiXunShi = YES;
+                }
+                
+                chatController.pModel = pModel;
+                chatController.headerH = [array[1] floatValue];
+                chatController.introStr = array[0];
+                
+                chatController.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:chatController animated:YES];
+                
+            }else {
+                [self showHint:data[@"message"]];
             }
-            
-            chatController.pModel = pModel;
-            chatController.headerH = [array[1] floatValue];
-            chatController.introStr = array[0];
-            
-            chatController.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:chatController animated:YES];
-            
-        }else {
-            [self showHint:data[@"message"]];
+        } failure:^(NSError *error) {
+            [self hideHud];
+            [self showHint:@"网络出错"];
+        }];
+    }else {
+        ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:conversation.chatter conversationType:conversation.conversationType];
+        NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
+        [fetchRequest setReturnsObjectsAsFaults:NO];
+        NSError *fetchError;
+        NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+        for (ChatUser *user in usersArray)
+        {
+            //接受方信息赋值
+            if ([user.userId isEqualToString:conversation.chatter])
+            {
+                chatController.title = user.nick;
+                break;
+            }
         }
-    } failure:^(NSError *error) {
-        [self hideHud];
-        [self showHint:@"网络出错"];
-    }];
-//    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationChatter:conversation.chatter conversationType:conversation.conversationType];
-//    NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
-//    [fetchRequest setReturnsObjectsAsFaults:NO];
-//    NSError *fetchError;
-//    NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
-//    for (ChatUser *user in usersArray)
-//    {
-//        //接受方信息赋值
-//        if ([user.userId isEqualToString:conversation.chatter])
-//        {
-//            chatController.title = user.nick;
-//            break;
-//        }
-//    }
-//    [chatController setHidesBottomBarWhenPushed:YES];
-//    [self.navigationController pushViewController:chatController animated:YES];
+        [chatController setHidesBottomBarWhenPushed:YES];
+        [self.navigationController pushViewController:chatController animated:YES];
+
+    }
+
 }
 #pragma mark - 创建ui
 - (void)createTopView

@@ -36,7 +36,7 @@
                   moduleName = "Fakaixin"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/apple/Documents/Faikaixin2/Fakaixin/Listener/FKXMyOrderVC.m"
-                  timestampString = "502948749.648142"
+                  timestampString = "502955414.561582"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "280"
@@ -51,7 +51,7 @@
                   moduleName = "Fakaixin"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/apple/Documents/Faikaixin2/Fakaixin/Listener/FKXMyOrderVC.m"
-                  timestampString = "502948749.651867"
+                  timestampString = "502955414.565031"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "280"
@@ -59,6 +59,22 @@
                   offsetFromSymbolStart = "44">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Fakaixin/Message/FKXChatListController.m"
+            timestampString = "502955364.9733"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "-tableView:didSelectRowAtIndexPath:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

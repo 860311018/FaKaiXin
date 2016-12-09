@@ -59,7 +59,7 @@
         self.statusL.hidden = YES;
         self.scaleL.hidden = YES;
         totals = multiple *self.price;
-        self.headImgV.image = [UIImage imageNamed:@"AppIcon"];
+        self.headImgV.image = [UIImage imageNamed:@"Qingsu_Image"];
         
     }else {
         self.scaleL.hidden = NO;
