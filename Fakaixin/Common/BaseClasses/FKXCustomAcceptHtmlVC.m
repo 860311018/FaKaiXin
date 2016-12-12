@@ -85,6 +85,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIView *renkeView;
 
 @property (nonatomic,assign) NSInteger yanzhengCode;
+@property (nonatomic,copy) NSString *mimaStr;
 
 @property (nonatomic,copy) NSString *requestClientNum;
 @property (nonatomic,copy) NSString *requestClientPwd;
@@ -141,7 +142,7 @@ typedef enum : NSUInteger {
     [_labReward addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(beginReward)]];
     //赋值
     _userName.text = _secondModel.listenerNickName;
-    [_userIcon sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",_secondModel.listenerHead,cropImageW]] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
+    [_userIcon sd_setImageWithURL:[NSURL URLWithString:_secondModel.listenerHead] placeholderImage:[UIImage imageNamed:@"avatar_default"]];
     [_userIcon addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHead:)]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
@@ -177,10 +178,11 @@ typedef enum : NSUInteger {
 
 - (void)goBack
 {
-    //当前提问人不是你自己
-//    if () {
-//        _isShowAlert = NO;
-//    }
+    //当前提问人不是你自己,不显示Alert
+    if ([_secondModel.userId integerValue] != [[FKXUserManager getUserInfoModel].uid integerValue]) {
+        _isShowAlert = NO;
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     if (_isShowAlert) {
         UIAlertController *alV = [UIAlertController alertControllerWithTitle:@"这条语音回复您满意吗？" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *ac1 = [UIAlertAction actionWithTitle:@"我再想想" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
@@ -1246,7 +1248,9 @@ typedef enum : NSUInteger {
         }
         return;
     }
-    
+
+    self.mimaStr = [NSString md532BitUpper:secret];
+
     //开始申请client
     [self requsetClient];
 }
@@ -1412,7 +1416,7 @@ typedef enum : NSUInteger {
     
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!userModel.mobile) {
-        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
@@ -1433,7 +1437,7 @@ typedef enum : NSUInteger {
              
              if (!model.mobile) {
                  model.mobile = phone.phoneTF.text;
-                 model.pwd = phone.pwdTF.text;
+//                 model.pwd = phone.pwdTF.text;
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
              

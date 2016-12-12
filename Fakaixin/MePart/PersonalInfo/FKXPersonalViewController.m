@@ -27,6 +27,7 @@
 
 #import "FKXMyOrderVC.h"
 
+#import "FKXZiXunShiV.h"
 
 @interface FKXPersonalViewController ()
 {
@@ -41,6 +42,9 @@
     FKXSignInView *signView;//签到总图
     STypeSignInView *sTypeView;//s型图
     NSInteger daysSignIn;//签到天数,传给s型图
+    
+    UIView *transViewPay;   //透明图
+    FKXZiXunShiV *payView;    //界面
 }
 @property (weak, nonatomic) IBOutlet UILabel *labUserName;
 @property (weak, nonatomic) IBOutlet UIImageView *imgIcon;
@@ -132,6 +136,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:QianDaoBack object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"FirstEditBackShare" object:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fkxReceiveEaseMobMessage" object:nil];
 }
@@ -147,6 +152,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessAndNeedRefreshAllUI:) name:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil];
     //签到
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpsignIn) name:QianDaoBack object:nil];
+    //第一次编辑资料分享
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showView) name:@"FirstEditBackShare" object:nil];
 
     //添加手势
     [_viewAboutMe addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(goToAboutMeVC)]];
@@ -348,6 +355,7 @@
     
     [AFRequest sendGetOrPostRequest:@"user/unreadRelMe" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
         
+        
         [self hideHud];
         if ([data[@"code"] integerValue] == 0)
         {
@@ -355,7 +363,12 @@
             NSString *headUrl = data[@"data"][@"headUrl"];
             if (con) {
                 noReadNum = con;
-                _viewAboutMe.hidden = NO;
+                if ([FKXUserManager isUserPattern]) {
+                    _viewAboutMe.hidden = NO;
+                }else {
+                    _viewAboutMe.hidden = YES;
+                }
+                
                 self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
                 UIView *view = self.tableView.tableHeaderView;
                 view.height = 233 + 41 + 48;
@@ -651,6 +664,7 @@
         label.textColor = UIColorFromRGB(0x0092ff);
         if ([FKXUserManager isUserPattern]) {
             label.text = @"正在切换至关怀模式...";
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"loadUnreadRelMeOF" object:nil];
         }else{
             label.text = @"正在切换至倾诉模式...";
         }
@@ -672,14 +686,21 @@
 }
 - (void)showTheTabBar
 {
+    //倾诉转关怀
     if ([FKXUserManager isUserPattern]) {
         [FKXUserManager setUserPatternToListener];
         [[FKXLoginManager shareInstance] showTabBarListenerController];
-        [changePatternBacView removeFromSuperview];
-    }else{
+        ListenerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarListenerVC;
+        tab.selectedIndex = 0;
+
+    }
+    //关怀转倾诉
+    else{
         [FKXUserManager setUserPatternToUser];
         [[FKXLoginManager shareInstance] showTabBarController];
         [changePatternBacView removeFromSuperview];
+        SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
+        tab.selectedIndex = 0;
     }
 }
 #pragma mark - 通知
@@ -837,7 +858,6 @@
         case 3:
         {
 
-            
             if ([FKXUserManager needShowLoginVC]) {
                 [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
                 return;
@@ -904,4 +924,117 @@
         }
     }
 }
+
+- (void)showView {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    if (!transViewPay)
+    {
+        //透明背景
+        transViewPay = [[UIView alloc] initWithFrame:screenBounds];
+        transViewPay.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+        transViewPay.alpha = 0.0;
+        [[UIApplication sharedApplication].keyWindow addSubview:transViewPay];
+        
+        payView = [[[NSBundle mainBundle] loadNibNamed:@"FKXZiXunShiV" owner:nil options:nil] firstObject];
+        [payView.closeBtn addTarget:self action:@selector(hiddentransViewPay) forControlEvents:UIControlEventTouchUpInside];
+        [payView.shareBtn addTarget:self action:@selector(share) forControlEvents:UIControlEventTouchUpInside];
+        
+        [transViewPay addSubview:payView];
+        payView.center = transViewPay.center;
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            transViewPay.alpha = 1.0;
+        }];
+        
+    }
+    
+}
+
+- (void)share {
+    NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+    NSArray* imageArray = @[[NSURL URLWithString:@""]];
+    NSString *urlStr;
+    if ([FKXUserManager shareInstance].inviteCode) {
+        urlStr = [NSString stringWithFormat:@"%@front/share.html?inviteCode=%@", kServiceBaseURL,[FKXUserManager shareInstance].inviteCode];
+    }else{
+        urlStr = [NSString stringWithFormat:@"%@front/share.html", kServiceBaseURL];
+    }
+    [shareParams SSDKSetupShareParamsByText:@"安抚你的小情绪"
+                                     images:imageArray
+     
+                                        url:[NSURL URLWithString:urlStr]
+                                      title:@"如何安全优雅地呵呵"
+                                       type:SSDKContentTypeAuto];
+    //单个分享
+    SSDKPlatformType type = SSDKPlatformSubTypeWechatSession;
+    [ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error)
+     {
+         switch (state)
+         {
+             case SSDKResponseStateSuccess:
+             {
+                 [self shareSuccessCallBack];
+                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                     message:nil
+                                                                    delegate:nil
+                                                           cancelButtonTitle:@"确定"
+                                                           otherButtonTitles:nil];
+                 [alertView show];
+                 break;
+             }
+             case SSDKResponseStateFail:
+             {
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                 message:nil
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil, nil];
+                 [alert show];
+                 break;
+             }
+             case SSDKResponseStateCancel:
+             {
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享取消"
+                                                                 message:nil
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"OK"
+                                                       otherButtonTitles:nil, nil];
+                 [alert show];
+                 break;
+             }
+         }
+     }];
+}
+
+- (void)shareSuccessCallBack
+{
+    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [paramDic setValue:@([FKXUserManager shareInstance].currentUserId) forKey:@"uid"];
+    [AFRequest sendGetOrPostRequest:@"sys/share_app" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
+        [self hiddentransViewPay];
+    } failure:^(NSError *error) {
+    }];
+}
+
+- (void)hiddentransViewPay
+{
+    [UIView animateWithDuration:0.5 animations:^{
+        transViewPay.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [transViewPay removeFromSuperview];
+        transViewPay = nil;
+        
+        SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
+        //展示切换模式动画
+        FKXBaseNavigationController *nav = [tab.viewControllers lastObject];
+        FKXPersonalViewController *vc = [nav viewControllers][0];
+        [vc clickOpenAsk:nil];
+        
+        ListenerTabBarViewController *lis = [FKXLoginManager shareInstance].tabBarListenerVC;
+        lis.selectedIndex = 0;
+    }];
+    
+    
+}
+
 @end

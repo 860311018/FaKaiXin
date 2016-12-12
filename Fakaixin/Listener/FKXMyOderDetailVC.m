@@ -67,7 +67,7 @@ typedef enum : NSUInteger {
 @property (weak, nonatomic) IBOutlet UIButton *oneBtn;
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
 
-
+@property (nonatomic,copy) NSString *mimaStr;
 @property (nonatomic,assign) NSInteger yanzhengCode;
 
 @property (nonatomic,copy) NSString *requestClientNum;
@@ -389,6 +389,16 @@ typedef enum : NSUInteger {
             NSDictionary *dic = data[@"data"][@"listenerInfo"];
             FKXUserInfoModel *proM = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
             
+            //保存接收方的信息
+            EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[proM.uid stringValue] bodies:nil];
+            receiverMessage.from = [proM.uid stringValue];
+            receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+            receiverMessage.ext = @{
+                                    @"head" : proM.head,
+                                    @"name": proM.name,
+                                    };
+            [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+            
             ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[proM.uid stringValue]  conversationType:eConversationTypeChat];
             chatController.title = proM.name;
             chatController.pModel = proM;
@@ -438,6 +448,16 @@ typedef enum : NSUInteger {
         if ([data[@"code"] integerValue] == 0) {
             NSDictionary *dic = data[@"data"][@"listenerInfo"];
             self.proModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            
+            //保存接收方的信息
+            EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[self.proModel.uid stringValue] bodies:nil];
+            receiverMessage.from = [self.proModel.uid stringValue];
+            receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+            receiverMessage.ext = @{
+                                    @"head" : self.proModel.head,
+                                    @"name": self.proModel.name,
+                                    };
+            [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
             
             NSArray *array = [[FKXUserManager shareInstance] caluteHeight:self.proModel];
             ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[self.proModel.uid stringValue]  conversationType:eConversationTypeChat];
@@ -825,6 +845,7 @@ typedef enum : NSUInteger {
         }
         return;
     }
+    self.mimaStr = [NSString md532BitUpper:secret];
     
     //开始申请client
     [self requsetClient];
@@ -1009,7 +1030,7 @@ typedef enum : NSUInteger {
     
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!self.userModel.mobile) {
-        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
@@ -1030,7 +1051,7 @@ typedef enum : NSUInteger {
              
              if (!model.mobile) {
                  model.mobile = phone.phoneTF.text;
-                 model.pwd = phone.pwdTF.text;
+//                 model.pwd = phone.pwdTF.text;
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
              

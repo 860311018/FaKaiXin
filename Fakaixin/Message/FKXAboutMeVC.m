@@ -308,6 +308,16 @@
                     chatController.headerH = [array[1] floatValue];
                     chatController.introStr = array[0];
                     
+                    //保存接收方的信息
+                    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[pModel.uid stringValue] bodies:nil];
+                    receiverMessage.from = [pModel.uid stringValue];
+                    receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+                    receiverMessage.ext = @{
+                                            @"head" : pModel.head,
+                                            @"name": pModel.name,
+                                            };
+                    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+                    
                     chatController.hidesBottomBarWhenPushed = YES;
                     [self.navigationController pushViewController:chatController animated:YES];
                     

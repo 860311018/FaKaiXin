@@ -304,12 +304,21 @@
                 
                 if ([pModel.role integerValue] !=0) {
                     chatController.toZiXunShi = YES;
+                    chatController.pModel = pModel;
+                    chatController.headerH = [array[1] floatValue];
+                    chatController.introStr = array[0];
+
                 }
-                
-                chatController.pModel = pModel;
-                chatController.headerH = [array[1] floatValue];
-                chatController.introStr = array[0];
-                
+//                else {
+                    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[pModel.uid stringValue] bodies:nil];
+                        receiverMessage.to = [pModel.uid stringValue];
+                        receiverMessage.from = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+                        receiverMessage.ext = @{
+                                                @"head" : pModel.head,
+                                                @"name": pModel.name,
+                                                };
+                        [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+//                }
                 chatController.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:chatController animated:YES];
                 

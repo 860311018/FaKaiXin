@@ -101,6 +101,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic,assign) NSInteger yanzhengCode;
 
+@property (nonatomic,copy) NSString *mimaStr;
 @property (nonatomic,copy) NSString *requestClientNum;
 @property (nonatomic,copy) NSString *requestClientPwd;
 
@@ -447,6 +448,7 @@ typedef enum : NSUInteger {
          {
              if ([data[@"data"][@"canPrivateChat"] integerValue]) {//是可以私聊的
              }else{
+//                 self.toZiXunShi = YES;
                  if ([data[@"data"][@"isFinish"] integerValue])
                  {
 //                     canShowEndBtn = YES;
@@ -657,21 +659,23 @@ typedef enum : NSUInteger {
 #pragma mark - setup subviews  包括设置按钮
 - (void)setUpLabelWarnOfEndingTalk
 {
-    [self.chatToolbar resignFirstResponder];
-    self.chatToolbar.hidden = YES;
+    
     if (self.conversation.conversationType == eConversationTypeChat) {
-        if (!labWarnOfEndingTalk) {
-            labWarnOfEndingTalk = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
-            labWarnOfEndingTalk.userInteractionEnabled = YES;
-            labWarnOfEndingTalk.hidden = NO;
-            labWarnOfEndingTalk.font = kFont_F4();
-            labWarnOfEndingTalk.textColor = kColor_MainLightGray();
-            labWarnOfEndingTalk.text = @"对话已结束，您暂时不能发送消息";
-            labWarnOfEndingTalk.textAlignment = NSTextAlignmentCenter;
-            labWarnOfEndingTalk.backgroundColor = [UIColor whiteColor];
-            [self.view addSubview:labWarnOfEndingTalk];
-        }
+        [self validTalkIsFinish];
+//        if (!labWarnOfEndingTalk) {
+//            labWarnOfEndingTalk = [[UILabel alloc] initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
+//            labWarnOfEndingTalk.userInteractionEnabled = YES;
+//            labWarnOfEndingTalk.hidden = NO;
+//            labWarnOfEndingTalk.font = kFont_F4();
+//            labWarnOfEndingTalk.textColor = kColor_MainLightGray();
+//            labWarnOfEndingTalk.text = @"对话已结束，您暂时不能发送消息";
+//            labWarnOfEndingTalk.textAlignment = NSTextAlignmentCenter;
+//            labWarnOfEndingTalk.backgroundColor = [UIColor whiteColor];
+//            [self.view addSubview:labWarnOfEndingTalk];
+//        }
     }else{
+        [self.chatToolbar resignFirstResponder];
+        self.chatToolbar.hidden = YES;
         NSString *content;
         if ([groupInfo.groupDescription containsString:@"分享会"])
         {
@@ -907,35 +911,133 @@ typedef enum : NSUInteger {
     }
 }
 #pragma mark - EaseMessageViewControllerDelegate
+
+- (void)mengceng {
+    [self.view endEditing:YES];
+    mengCeng = [FKXChatOrdersV creatMengCeng];
+    mengCeng.frame = CGRectMake(0, 0, 270, 110);
+    CGPoint center = self.view.center;
+    center.y = center.y -50;
+    mengCeng.center = center;
+    
+    [mengCeng.tuwenBtn addTarget:self action:@selector(bookConsultService) forControlEvents:UIControlEventTouchUpInside];
+    [mengCeng.phoneBtn addTarget:self action:@selector(callOrder) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    view5 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
+    view5.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [view5 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide5)]];
+    
+    view5.alpha = 0;
+    mengCeng.alpha = 0;
+    [[UIApplication sharedApplication].keyWindow addSubview:view5];
+    [[UIApplication sharedApplication].keyWindow addSubview:mengCeng];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        view5.alpha = 1;
+        mengCeng.alpha = 1;
+    }];
+    
+}
+- (void)sendImageMessage:(UIImage *)image{
+    
+    if (canShowPay) {
+        //调询问蒙层
+        [self mengceng];
+    }else {
+        if (self.toZiXunShi) {
+            NSDictionary *params = @{@"fromId":[FKXUserManager getUserInfoModel].uid,@"toId":[NSNumber numberWithFloat:[self.conversation.chatter floatValue]]};
+            [AFRequest sendPostRequestTwo:@"talk/insertChat" param:params success:^(id data) {
+                if ([data[@"code"] integerValue] == 0) {
+                    
+                    [self validTalkIsFinish];
+                    
+                }else {
+                    
+                }
+            } failure:^(NSError *error) {
+                
+            }];
+            //将自己的信息发送给对方
+            EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
+                                                                       to:self.conversation.chatter
+                                                              messageType:[self _messageTypeFromConversationType]
+                                                        requireEncryption:NO
+                                                               messageExt:nil
+                                                                 progress:nil];
+       
+            
+            [self addMessageToDataSource:message
+                                progress:nil];
+        }else {
+            //将自己的信息发送给对方
+            EMMessage *message = [EaseSDKHelper sendImageMessageWithImage:image
+                                                                       to:self.conversation.chatter
+                                                              messageType:[self _messageTypeFromConversationType]
+                                                        requireEncryption:NO
+                                                               messageExt:nil
+                                                                 progress:nil];
+            
+            
+            [self addMessageToDataSource:message
+                                progress:nil];
+        }
+    }
+}
+
+
+
+- (void)sendVoiceMessageWithLocalPath:(NSString *)localPath
+                             duration:(NSInteger)duration{
+    if (canShowPay) {
+        //调询问蒙层
+        [self mengceng];
+    }else {
+        if (self.toZiXunShi) {
+            NSDictionary *params = @{@"fromId":[FKXUserManager getUserInfoModel].uid,@"toId":[NSNumber numberWithFloat:[self.conversation.chatter floatValue]]};
+            [AFRequest sendPostRequestTwo:@"talk/insertChat" param:params success:^(id data) {
+                if ([data[@"code"] integerValue] == 0) {
+                    
+                    [self validTalkIsFinish];
+                    
+                }else {
+                    
+                }
+            } failure:^(NSError *error) {
+                
+            }];
+            //将自己的信息发送给对方
+            EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
+                                                                     duration:duration
+                                                                           to:self.conversation.chatter
+                                                                  messageType:[self _messageTypeFromConversationType]
+                                                            requireEncryption:NO
+                                                                   messageExt:nil
+                                                                     progress:nil];
+            [self addMessageToDataSource:message
+                                progress:nil];
+        }else {
+            //将自己的信息发送给对方
+            EMMessage *message = [EaseSDKHelper sendVoiceMessageWithLocalPath:localPath
+                                                                     duration:duration
+                                                                           to:self.conversation.chatter
+                                                                  messageType:[self _messageTypeFromConversationType]
+                                                            requireEncryption:NO
+                                                                   messageExt:nil
+                                                                     progress:nil];
+            [self addMessageToDataSource:message
+                                progress:nil];
+        }
+    }
+
+}
+
 - (void)sendTextMessage:(NSString *)text withExt:(NSDictionary*)ext
 {
     
     if (canShowPay) {
         //调询问蒙层
-        [self.view endEditing:YES];
-        mengCeng = [FKXChatOrdersV creatMengCeng];
-        mengCeng.frame = CGRectMake(0, 0, 270, 110);
-        CGPoint center = self.view.center;
-        center.y = center.y -50;
-        mengCeng.center = center;
-        
-        [mengCeng.tuwenBtn addTarget:self action:@selector(bookConsultService) forControlEvents:UIControlEventTouchUpInside];
-        [mengCeng.phoneBtn addTarget:self action:@selector(callOrder) forControlEvents:UIControlEventTouchUpInside];
-
-        
-        view5 = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight)];
-        view5.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-        [view5 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHide5)]];
-        
-        view5.alpha = 0;
-        mengCeng.alpha = 0;
-        [[UIApplication sharedApplication].keyWindow addSubview:view5];
-        [[UIApplication sharedApplication].keyWindow addSubview:mengCeng];
-
-        [UIView animateWithDuration:0.3 animations:^{
-            view5.alpha = 1;
-            mengCeng.alpha = 1;
-        }];
+        [self mengceng];
         
 //        [self.chatToolbar resignFirstResponder];
 
@@ -947,7 +1049,8 @@ typedef enum : NSUInteger {
             [AFRequest sendPostRequestTwo:@"talk/insertChat" param:params success:^(id data) {
                 if ([data[@"code"] integerValue] == 0) {
                     
-                    [self talkIsContinue];
+                    [self validTalkIsFinish];
+//                    [self talkIsContinue];
                     
                 }else {
                     
@@ -1146,21 +1249,21 @@ typedef enum : NSUInteger {
     }else
     {
         if (self.conversation.conversationType == eConversationTypeGroupChat) {
-//            NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
-//            [fetchRequest setReturnsObjectsAsFaults:NO];
-//            NSError *fetchError;
-//            NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
-//            NSLog(@"%@",usersArray);
-//            for (ChatUser *user in usersArray)
-//            {
-//                //接受方信息赋值
-//                if ([user.userId isEqualToString:message.groupSenderName])
-//                {
-//                    ((EaseMessageModel *)model).avatarURLPath = user.avatar;
-//                    ((EaseMessageModel *)model).nickname = user.nick;
-//                    break;
-//                }
-//            }
+            NSFetchRequest * fetchRequest = [[NSFetchRequest alloc] initWithEntityName:@"ChatUser"];
+            [fetchRequest setReturnsObjectsAsFaults:NO];
+            NSError *fetchError;
+            NSArray *usersArray = [ApplicationDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+            NSLog(@"%@",usersArray);
+            for (ChatUser *user in usersArray)
+            {
+                //接受方信息赋值
+                if ([user.userId isEqualToString:message.groupSenderName])
+                {
+                    ((EaseMessageModel *)model).avatarURLPath = user.avatar;
+                    ((EaseMessageModel *)model).nickname = user.nick;
+                    break;
+                }
+            }
             ((EaseMessageModel *)model).avatarURLPath = ext[@"head"];
             ((EaseMessageModel *)model).nickname = ext[@"name"];
             
@@ -1887,6 +1990,7 @@ typedef enum : NSUInteger {
         return;
     }
     
+    self.mimaStr = [NSString md532BitUpper:secret];
     //开始申请client
     [self requsetClient];
 }
@@ -2052,7 +2156,7 @@ typedef enum : NSUInteger {
     
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!userModel.mobile) {
-        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
@@ -2073,7 +2177,7 @@ typedef enum : NSUInteger {
              
              if (!model.mobile) {
                  model.mobile = phone.phoneTF.text;
-                 model.pwd = phone.pwdTF.text;
+//                 model.pwd = phone.pwdTF.text;
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
              

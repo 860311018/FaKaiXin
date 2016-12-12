@@ -28,9 +28,6 @@
     NSInteger role;
     UIImage *imageSelected;
     NSMutableArray *goodAtsArr;//擅长领域
-    
-    UIView *transViewPay;   //透明图
-    FKXZiXunShiV *payView;    //界面
 
 }
 
@@ -44,6 +41,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneTF;//手机号
 @property (weak, nonatomic) IBOutlet UITextField *yanzhengTF;//验证码
 @property (weak, nonatomic) IBOutlet UITextField *mimaTF;//密码
+@property (nonatomic,copy) NSString *mimaStr;
+
 @property (weak, nonatomic) IBOutlet UILabel *timeL;//获取验证码
 @property (weak, nonatomic) IBOutlet UIButton *bangDingBtn;
 
@@ -85,6 +84,7 @@
     _tfUserName.text = _userModel.name;
     if (_isOpen) {
         self.navTitle = @"成为心理关怀师";
+        _tfUserName.text = @"";
     }else
     {
         self.navTitle = @"编辑资料";
@@ -260,6 +260,8 @@
         return;
     }
     
+    self.mimaStr = [NSString md532BitUpper:self.mimaTF.text];
+
     //开始申请client
     [self requsetClient];
   
@@ -314,10 +316,10 @@
         else if ([_myPriceTF.text integerValue] < 1|| [_myPriceTF.text integerValue] > 100) {
             [self showHint:@"价格只能在1到100元之间"];
             return;
-        }else if ([_tfConsultPrice.text integerValue] <= 10) {
-            [self showHint:@"咨询费需大于10元"];
+        }else if ([_tfConsultPrice.text integerValue] < 10) {
+            [self showHint:@"咨询费需大于等于10元"];
             return;
-        }else if ([_phonePrice.text integerValue] <= 20) {
+        }else if ([_phonePrice.text integerValue] < 20) {
             [self showHint:@"咨询费需大于20元"];
             return;
         }else if (!goodAtsArr.count)
@@ -343,17 +345,18 @@
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
          
-                 if (_isShowClose) {//如果是present的此界面
-                     [self dismissViewControllerAnimated:YES completion:^{
-                         if (_isOpen) {
-                             [self showView];
-                         }
-                     }];
-                 }else {
-                     [self.navigationController popViewControllerAnimated:YES];
+             
+             if (_isShowClose) {//如果是present的此界面
+                 [self dismissViewControllerAnimated:YES completion:^{
                      if (_isOpen) {
-                         [self showView];
-                }
+                         [[NSNotificationCenter defaultCenter]postNotificationName:@"FirstEditBackShare" object:nil];
+                     }
+                 }];
+             }else {
+                 [self.navigationController popViewControllerAnimated:YES];
+                 if (_isOpen) {
+                     [[NSNotificationCenter defaultCenter]postNotificationName:@"FirstEditBackShare" object:nil];
+                 }
              }
              
              //登陆成功之后，按照以下代码设置当前登录用户的apns昵称
@@ -382,115 +385,6 @@
      }];
 }
 
-- (void)showView {
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    if (!transViewPay)
-    {
-        //透明背景
-        transViewPay = [[UIView alloc] initWithFrame:screenBounds];
-        transViewPay.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-        transViewPay.alpha = 0.0;
-        [[UIApplication sharedApplication].keyWindow addSubview:transViewPay];
-        
-        payView = [[[NSBundle mainBundle] loadNibNamed:@"FKXZiXunShiV" owner:nil options:nil] firstObject];
-        [payView.closeBtn addTarget:self action:@selector(hiddentransViewPay) forControlEvents:UIControlEventTouchUpInside];
-        [payView.shareBtn addTarget:self action:@selector(share) forControlEvents:UIControlEventTouchUpInside];
-       
-        [transViewPay addSubview:payView];
-        payView.center = transViewPay.center;
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            transViewPay.alpha = 1.0;
-        }];
-        
-    }
-
-}
-
-- (void)share {
-    NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
-    NSArray* imageArray = @[[NSURL URLWithString:@""]];
-    NSString *urlStr;
-    if ([FKXUserManager shareInstance].inviteCode) {
-        urlStr = [NSString stringWithFormat:@"%@front/share.html?inviteCode=%@", kServiceBaseURL,[FKXUserManager shareInstance].inviteCode];
-    }else{
-        urlStr = [NSString stringWithFormat:@"%@front/share.html", kServiceBaseURL];
-    }
-    [shareParams SSDKSetupShareParamsByText:@"安抚你的小情绪"
-                                     images:imageArray
-     
-                                        url:[NSURL URLWithString:urlStr]
-                                      title:@"如何安全优雅地呵呵"
-                                       type:SSDKContentTypeAuto];
-    //单个分享
-    SSDKPlatformType type = SSDKPlatformSubTypeWechatSession;
-    [ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error)
-     {
-         switch (state)
-         {
-             case SSDKResponseStateSuccess:
-             {
-                 [self shareSuccessCallBack];
-                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
-                                                                     message:nil
-                                                                    delegate:nil
-                                                           cancelButtonTitle:@"确定"
-                                                           otherButtonTitles:nil];
-                 [alertView show];
-                 break;
-             }
-             case SSDKResponseStateFail:
-             {
-                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
-                                                                 message:nil
-                                                                delegate:nil
-                                                       cancelButtonTitle:@"OK"
-                                                       otherButtonTitles:nil, nil];
-                 [alert show];
-                 break;
-             }
-             case SSDKResponseStateCancel:
-             {
-                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享取消"
-                                                                 message:nil
-                                                                delegate:nil
-                                                       cancelButtonTitle:@"OK"
-                                                       otherButtonTitles:nil, nil];
-                 [alert show];
-                 break;
-             }
-         }
-     }];
-}
-
-- (void)shareSuccessCallBack
-{
-    NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
-    [paramDic setValue:@([FKXUserManager shareInstance].currentUserId) forKey:@"uid"];
-    [AFRequest sendGetOrPostRequest:@"sys/share_app" param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data) {
-        [self hiddentransViewPay];
-    } failure:^(NSError *error) {
-    }];
-}
-
-- (void)hiddentransViewPay
-{
-    [UIView animateWithDuration:0.5 animations:^{
-        transViewPay.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        [transViewPay removeFromSuperview];
-        transViewPay = nil;
-        
-        SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
-        //展示切换模式动画
-        FKXBaseNavigationController *nav = [tab.viewControllers lastObject];
-        FKXPersonalViewController *vc = [nav viewControllers][0];
-        [vc clickOpenAsk:nil];
-    }];
-    
-    
-}
-
 //存入绑定手机
 - (void)addToData {
     
@@ -498,11 +392,23 @@
 
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!self.userModel.mobile) {
-      paramDic = @{@"mobile" : self.phoneTF.text, @"pwd":self.mimaTF.text, @"clientNum":self.clientNum, @"clientPwd" : self.clientPwd};
+        if (self.clientNum && self.clientPwd) {
+            paramDic = @{@"mobile" : self.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.clientNum, @"clientPwd" : self.clientPwd};
+ 
+        }else {
+            [self.view setHidden:@"绑定失败，请重试"];
+            return;
+        }
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
-        paramDic = @{@"clientNum":self.clientNum, @"clientPwd" : self.clientPwd};
+        if (self.clientNum && self.clientPwd) {
+            paramDic = @{@"clientNum":self.clientNum, @"clientPwd" : self.clientPwd};
+   
+        }else {
+            [self.view setHidden:@"绑定失败，请重试"];
+            return;
+        }
     }
     
     [AFRequest sendGetOrPostRequest:@"user/edit"param:paramDic requestStyle:HTTPRequestTypePost setSerializer:HTTPResponseTypeJSON success:^(id data)
@@ -519,7 +425,7 @@
              
              if (!model.mobile) {
                  model.mobile = self.phoneTF.text;
-                 model.pwd = self.mimaTF.text;
+//                 model.pwd = self.mimaTF.text;
              }
 
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
@@ -552,11 +458,11 @@
         }
         else if ([respCode isEqualToString:@"000000"]) {
 //            [self showHint:@"绑定成功"];
-            NSDictionary *clientDic = data[@"resp"][@"client"];
+//            NSDictionary *clientDic = data[@"resp"][@"client"];
             
-            self.clientNum = clientDic[@"clientNum"];
-            self.clientPwd = clientDic[@"clientPwd"];
-            self.creatTime = clientDic[@"createDate"];
+            self.clientNum = data[@"resp"][@"client"][@"clientNum"];
+            self.clientPwd = data[@"resp"][@"client"][@"clientPwd"];
+            self.creatTime = data[@"resp"][@"client"][@"createDate"];
 
             [self addToData];
 

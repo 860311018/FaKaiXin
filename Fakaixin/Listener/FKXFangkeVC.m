@@ -89,9 +89,9 @@
                          [emptyDataView removeFromSuperview];
                          emptyDataView = nil;
                      }
-                 }
                  FKXUserInfoModel *model = data[0];
                  [[FKXUserManager shareInstance]setNoReadFangke:[NSNumber numberWithInteger:[model.createTimeDate integerValue]]];
+                 }
              }
              [self.tableData addObjectsFromArray:data];
              [self.tableView reloadData];
@@ -140,6 +140,16 @@
         if ([data[@"code"] integerValue] == 0) {
             NSDictionary *dic = data[@"data"][@"listenerInfo"];
             FKXUserInfoModel *pModel = [[FKXUserInfoModel alloc]initWithDictionary:dic error:nil];
+            
+            //保存接收方的信息
+            EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[pModel.uid stringValue] bodies:nil];
+            receiverMessage.from = [pModel.uid stringValue];
+            receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+            receiverMessage.ext = @{
+                                    @"head" : pModel.head,
+                                    @"name": pModel.name,
+                                    };
+            [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
             
             NSArray *array = [[FKXUserManager shareInstance] caluteHeight:pModel];
             ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[pModel.uid stringValue]  conversationType:eConversationTypeChat];

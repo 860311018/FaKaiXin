@@ -8,12 +8,13 @@
 
 
 //咨询者tableviewVC
-@interface FKXConsultViewController : FKXBaseViewController
+@interface FKXConsultViewController : FKXBaseTableViewController
 
 @property(nonatomic, copy)NSDictionary *paraDic;
 
 - (void)loadData;//加载数据，为筛选提供接口
-
-@property (nonatomic,strong) UITableView *tableView;
+//- (void)footRefreshEvent;
+//- (void)headerRefreshEvent;
+//@property (nonatomic,strong) UITableView *tableView;
 
 @end

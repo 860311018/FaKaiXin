@@ -42,6 +42,12 @@
 @end
 
 @implementation FKXWorkBenchViewController
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:@"loadUnreadRelMeOF" object:nil];
+
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -51,17 +57,6 @@
     self.fangkeCount = 0;
     
     [self loadUnreadRelMe];//界面出现就更新ui
-    if (self.orderCount + self.fangkeCount == 0) {
-        self.tabBarItem.badgeValue = nil;
-//        unReadOrder.hidden = YES;
-    }else {
-        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.orderCount + self.fangkeCount];
-        NSString *tit = [NSString stringWithFormat:@"%ld",self.orderCount + self.fangkeCount];
-//        unReadOrder.text = tit;
-//        unReadOrder.hidden = NO;
-    }
-    
-    
     [self loadBanner];
 
 }
@@ -74,6 +69,18 @@
     _userIcon.layer.borderColor = RGBACOLOR(181, 181, 181, 1.0).CGColor;
     _userIcon.layer.borderWidth = 1.0;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadUnreadRelMe) name:@"loadUnreadRelMeOF" object:nil];
+    
+    unReadOrder = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 30, 20, 20)];
+    unReadOrder.hidden = YES;
+    unReadOrder.font = [UIFont systemFontOfSize:12];
+    unReadOrder.backgroundColor = [UIColor redColor];
+    unReadOrder.layer.cornerRadius = 10;
+    unReadOrder.clipsToBounds = YES;
+    unReadOrder.textColor = [UIColor whiteColor];
+    unReadOrder.textAlignment = NSTextAlignmentCenter;
+    [_viewSectionTwo addSubview:unReadOrder];
+
      unReadFangke = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 150, 20, 20)];
     unReadFangke.hidden = YES;
     unReadFangke.font = [UIFont systemFontOfSize:12];
@@ -84,20 +91,10 @@
     unReadFangke.textAlignment = NSTextAlignmentCenter;
     [_viewSectionTwo addSubview:unReadFangke];
     
-    unReadOrder = [[UILabel alloc] initWithFrame:CGRectMake(self.view.width/3 - self.view.width/9, 150, 20, 20)];
-    unReadOrder.hidden = YES;
-    unReadOrder.font = [UIFont systemFontOfSize:12];
-    unReadOrder.backgroundColor = [UIColor redColor];
-    unReadOrder.layer.cornerRadius = 10;
-    unReadOrder.clipsToBounds = YES;
-    unReadOrder.textColor = [UIColor whiteColor];
-    unReadOrder.textAlignment = NSTextAlignmentCenter;
-    [_viewSectionTwo addSubview:unReadOrder];
-    
     self.orderCount = 0;
     self.fangkeCount = 0;
     
-    [self loadUnreadRelMe];//界面出现就更新ui
+       [self loadUnreadRelMe];//界面出现就更新ui
     if (self.orderCount + self.fangkeCount == 0) {
         self.tabBarItem.badgeValue = nil;
 //        unReadOrder.hidden = YES;
@@ -148,7 +145,6 @@
 //    [self showHint:@"即将开放"];
 //    unReadOrder.hidden = YES;
 //    self.tabBarItem.badgeValue = nil;
-    self.fangkeCount = 0;
 
     FKXFangkeVC *vc = [[FKXFangkeVC alloc]init];
     [vc setHidesBottomBarWhenPushed:YES];
@@ -250,8 +246,12 @@
             NSInteger con = [data[@"data"][@"number"] integerValue];
             if (con) {
                 self.orderCount = con;
+                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.orderCount + self.fangkeCount];
+                unReadOrder.hidden = NO;
+                unReadOrder.text = [NSString stringWithFormat:@"%ld",self.orderCount];
             }else{
                 self.orderCount = 0;
+                unReadOrder.hidden = YES;
             }
         }else if ([data[@"code"] integerValue] == 4)
         {
@@ -280,9 +280,18 @@
             NSInteger con = [data[@"data"][@"number"] integerValue];
             if (con) {
                 self.fangkeCount = con;
+                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.orderCount + self.fangkeCount];
+                unReadFangke.hidden = NO;
+                unReadFangke.text = [NSString stringWithFormat:@"%ld",self.fangkeCount];
             }
             else{
                 self.fangkeCount = 0;
+                unReadFangke.hidden = YES;
+                if (self.orderCount + self.fangkeCount == 0) {
+                    self.tabBarItem.badgeValue = nil;
+                    unReadOrder.hidden = YES;
+                    unReadFangke.hidden = YES;
+                }
             }
         }else if ([data[@"code"] integerValue] == 4)
         {
@@ -298,6 +307,8 @@
         [self showAlertViewWithTitle:@"网络出错"];
     }];
     
+    
+
 }
 //加载倾听者资料
 - (void)loadInfo

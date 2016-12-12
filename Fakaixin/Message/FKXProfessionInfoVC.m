@@ -92,6 +92,7 @@ typedef enum : NSUInteger {
 @property (nonatomic,copy) NSString *userOfEvaName;
 @property (nonatomic,copy) NSString *userOfEvaContent;
 
+@property (nonatomic,copy) NSString *mimaStr;
 @property (nonatomic,assign) NSInteger yanzhengCode;
 @property (nonatomic,copy) NSString *requestClientNum;
 @property (nonatomic,copy) NSString *requestClientPwd;
@@ -156,6 +157,7 @@ typedef enum : NSUInteger {
             NSLog(@"%@",userD);
             proUserInfoModel = [[FKXUserInfoModel alloc] initWithDictionary:userD error:nil];
             proUserInfoModel.uid = _userId;
+            proUserInfoModel.name = proUserInfoModel.nickname;
             self.role =[proUserInfoModel.role integerValue];
 //            self.phonePingFen = [NSString stringWithFormat:@"评分："];
             
@@ -322,10 +324,15 @@ typedef enum : NSUInteger {
     }
     
     //保存接收方的信息
+    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
+    receiverMessage.from = [_userId stringValue];
+    receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+    receiverMessage.ext = @{
+                            @"head" : proUserInfoModel.head,
+                            @"name": proUserInfoModel.nickname,
+                            };
+    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
     
-    //进入聊天
-    //    EaseMessageViewController *vc = [[EaseMessageViewController alloc]initWithConversationChatter:[model.uid stringValue] conversationType:eConversationTypeChat];
-    //    vc.toZiXunShi = YES;
     NSArray *array = [[FKXUserManager shareInstance] caluteHeight:proUserInfoModel];
     ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[proUserInfoModel.uid stringValue]  conversationType:eConversationTypeChat];
     chatController.title = proUserInfoModel.nickname;
@@ -447,9 +454,10 @@ typedef enum : NSUInteger {
                 model.topicId = dyModel.topicId;
                 model.text = dyModel.replyText;
                 model.userHead = dyModel.toHead;
+                model.userId = dyModel.toId;
                 model.userNickName = dyModel.toNickname;
                 model.listenerNickName = dyModel.fromNickname;
-                model.listenerHead = dyModel.fromHead;
+                model.listenerHead = dyModel.head;
                 model.listenerId = _userId;
                 model.voiceId = dyModel.voiceId;
                 model.acceptMoney = dyModel.acceptMoney;
@@ -1131,7 +1139,7 @@ typedef enum : NSUInteger {
     
     order.price = [proUserInfoModel.phonePrice integerValue]/100;
     order.head = proUserInfoModel.head;
-    order.name = proUserInfoModel.name;
+    order.name = proUserInfoModel.nickname;
     order.status = proUserInfoModel.status;
     order.listenerId = _userId;
     
@@ -1337,6 +1345,7 @@ typedef enum : NSUInteger {
         return;
     }
     
+    self.mimaStr = [NSString md532BitUpper:secret];
     //开始申请client
     [self requsetClient];
 }
@@ -1509,7 +1518,7 @@ typedef enum : NSUInteger {
     
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!userModel.mobile) {
-        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
@@ -1530,7 +1539,7 @@ typedef enum : NSUInteger {
              
              if (!model.mobile) {
                  model.mobile = phone.phoneTF.text;
-                 model.pwd = phone.pwdTF.text;
+//                 model.pwd = phone.pwdTF.text;
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
              

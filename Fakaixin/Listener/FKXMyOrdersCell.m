@@ -194,7 +194,7 @@
                 break;
             case 4:
             {
-                self.statusL.text = @"待确认";
+                self.statusL.text = @"已完成";
                 self.statusL.textColor = [UIColor colorWithRed:81/255.0 green:181/255.0 blue:255/255.0 alpha:1];
                 [self.operationBtn setTitle:@"再次预约" forState:UIControlStateNormal];
                 [self.operationBtn setTitleColor:[UIColor colorWithRed:81/255.0 green:181/255.0 blue:255/255.0 alpha:1] forState:UIControlStateNormal];

@@ -72,6 +72,7 @@ typedef enum : NSUInteger {
 @property (nonatomic,copy) NSString *mobile;
 @property (nonatomic,copy) NSString *clientNum;
 
+@property (nonatomic,copy) NSString *mimaStr;
 @property (nonatomic,assign) NSInteger yanzhengCode;
 
 @property (nonatomic,copy) NSString *requestClientNum;
@@ -126,14 +127,17 @@ typedef enum : NSUInteger {
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
-    
+   
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+////    [self.tableView becomeFirstResponder];
+//    [self.view bringSubviewToFront:self.tableView];
+//}
 #pragma mark - ---网络请求---
 - (void)headerRefreshEvent
 {
@@ -199,23 +203,23 @@ typedef enum : NSUInteger {
 
 
 #pragma mark - separator insets 设置
--(void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    }
-    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])  {
-        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    }
-}
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat{
-    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    if ([cell respondsToSelector:@selector(setSeparatorInset:)]){
-        [cell setSeparatorInset:UIEdgeInsetsZero];
-    }
-}
+//-(void)viewDidLayoutSubviews {
+//    [super viewDidLayoutSubviews];
+//    if ([self.tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+//        [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//    if ([self.tableView respondsToSelector:@selector(setLayoutMargins:)])  {
+//        [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+//    }
+//}
+//-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPat{
+//    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+//        [cell setLayoutMargins:UIEdgeInsetsZero];
+//    }
+//    if ([cell respondsToSelector:@selector(setSeparatorInset:)]){
+//        [cell setSeparatorInset:UIEdgeInsetsZero];
+//    }
+//}
 //#pragma mark - cell自定义代理
 //- (void)goToDynamicVC:(FKXUserInfoModel*)cellModel sender:(UIButton*)sender
 //{
@@ -242,6 +246,21 @@ typedef enum : NSUInteger {
 {
     return _contentArr.count;
 }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+
+{
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 50;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
+    view.backgroundColor = [UIColor whiteColor];
+    return view;
+}
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FKXUserInfoModel *model = [self.contentArr objectAtIndex:indexPath.row];
@@ -265,10 +284,16 @@ typedef enum : NSUInteger {
     }
     
     //保存接收方的信息
+    EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[model.uid stringValue] bodies:nil];
+    receiverMessage.from = [model.uid stringValue];
+    receiverMessage.to = [NSString stringWithFormat:@"%ld",[FKXUserManager shareInstance].currentUserId];
+    receiverMessage.ext = @{
+                            @"head" : model.head,
+                            @"name": model.name,
+                            };
+    [self insertDataToTableWith:receiverMessage managedObjectContext:ApplicationDelegate.managedObjectContext];
+
     
-    //进入聊天
-//    EaseMessageViewController *vc = [[EaseMessageViewController alloc]initWithConversationChatter:[model.uid stringValue] conversationType:eConversationTypeChat];
-//    vc.toZiXunShi = YES;
     NSArray *array = [[FKXUserManager shareInstance] caluteHeight:model];
     ChatViewController * chatController=[[ChatViewController alloc] initWithConversationChatter:[model.uid stringValue]  conversationType:eConversationTypeChat];
     chatController.title = model.name;
@@ -295,21 +320,21 @@ typedef enum : NSUInteger {
     return _payParameterDic;
 }
 
-- (UITableView *)tableView {
-    if (!_tableView) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64-49) style:UITableViewStylePlain];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
-//        _tableView.backgroundColor = [UIColor blueColor];
-        _tableView.estimatedRowHeight = 44;
-        _tableView.rowHeight = UITableViewAutomaticDimension;
-        
-        [self.view addSubview:_tableView];
-    }
-    return _tableView;
-}
+//- (UITableView *)tableView {
+//    if (!_tableView) {
+//        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, kScreenHeight-64-49) style:UITableViewStylePlain];
+//        _tableView.delegate = self;
+//        _tableView.dataSource = self;
+//        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//        _tableView.backgroundColor = [UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1];
+////        _tableView.backgroundColor = [UIColor blueColor];
+//        _tableView.estimatedRowHeight = 44;
+//        _tableView.rowHeight = UITableViewAutomaticDimension;
+//        
+//        [self.view addSubview:_tableView];
+//    }
+//    return _tableView;
+//}
 
 
 #pragma mark - 打电话
@@ -648,6 +673,8 @@ typedef enum : NSUInteger {
         }
         return;
     }
+    
+    self.mimaStr = [NSString md532BitUpper:secret];
 
     //开始申请client
     [self requsetClient];
@@ -840,7 +867,7 @@ typedef enum : NSUInteger {
     
     //未绑定手机号，传入手机号，登录密码，clientPwd，clientNum
     if (!self.mobile) {
-        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":phone.pwdTF.text, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
+        paramDic = @{@"mobile" : phone.phoneTF.text, @"pwd":self.mimaStr, @"clientNum":self.requestClientNum, @"clientPwd" : self.requestClientPwd};
     }
     //已绑定手机号 ，只需传入clientPwd，clientNum
     else {
@@ -861,7 +888,7 @@ typedef enum : NSUInteger {
              
              if (!model.mobile) {
                  model.mobile = phone.phoneTF.text;
-                 model.pwd = phone.pwdTF.text;
+//                 model.pwd = phone.pwdTF.text;
              }
              [FKXUserManager archiverUserInfo:model toUid:[model.uid stringValue]];
              

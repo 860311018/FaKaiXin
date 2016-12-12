@@ -21,7 +21,7 @@
 
 
 
-@interface FKXConsulterPageVC ()//<UIPageViewControllerDelegate, UIPageViewControllerDataSource>
+@interface FKXConsulterPageVC ()<UIScrollViewDelegate>//<UIPageViewControllerDelegate, UIPageViewControllerDataSource>
 {
     UIPageViewController *myPageVC;
     UIImageView *bottomLineImg;//titleView中按钮下的线
@@ -90,7 +90,26 @@
     //子视图
     [self setUpNavBar];
     [self setUpMyPageVC];
+    
+//    currentVC.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+//    [currentVC.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
+//    
+//    [currentVC.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
 }
+
+//- (void)headerRefreshEvent
+//{
+//    [currentVC headerRefreshEvent];
+////    start = 0;
+////    [self loadData];
+//}
+//- (void)footRefreshEvent
+//{
+//    [currentVC headerRefreshEvent];
+//
+////    start += size;
+////    [self loadData];
+//}
 
 //- (void)headerRefreshEvent {
 //    [currentVC loadData];
@@ -100,6 +119,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+}
 #pragma mark - 导航栏
 //- (void)setUpNavBar
 //{
@@ -132,6 +154,8 @@
 //    [rightBarbtn addTarget:self action:@selector(rightBarButtonAction:) forControlEvents:UIControlEventTouchUpInside];
 //    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:rightBarbtn]];
 //}
+
+
 
 - (void)setUpNavBar
 {
@@ -241,6 +265,7 @@
     FKXConsultViewController *vc = [self viewControllerAtIndex:0];
     [myPageVC setViewControllers:@[vc] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
 }
+
 // 得到相应的VC对象
 - (FKXConsultViewController *)viewControllerAtIndex:(NSUInteger)index {
     if (([self.pageContent count] == 0) || (index >= [self.pageContent count])) {
@@ -564,6 +589,8 @@
         toVC2Dic[@"goodAt"] = _goodAtsArr;
         
         currentVC.paraDic = [_pageContent objectAtIndex:currentIndex];
+        //给tableview添加下拉刷新,上拉加载
+        
         [currentVC loadData];//重新加载数据
         
         [UIView animateWithDuration:0.3 animations:^{
