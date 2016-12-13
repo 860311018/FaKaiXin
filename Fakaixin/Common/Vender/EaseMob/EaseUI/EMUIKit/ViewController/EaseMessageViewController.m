@@ -970,6 +970,10 @@
                         if (emcell.delegate == nil) {
                             emcell.delegate = self;
                         }
+                        if (self.conversation.conversationType == eConversationTypeChat) {
+                            [emcell.avatarView addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(taphead:)]];
+ 
+                        }
                     }
                     return cell;
                 }

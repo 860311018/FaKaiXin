@@ -664,7 +664,6 @@
         label.textColor = UIColorFromRGB(0x0092ff);
         if ([FKXUserManager isUserPattern]) {
             label.text = @"正在切换至关怀模式...";
-            [[NSNotificationCenter defaultCenter]postNotificationName:@"loadUnreadRelMeOF" object:nil];
         }else{
             label.text = @"正在切换至倾诉模式...";
         }
@@ -690,9 +689,10 @@
     if ([FKXUserManager isUserPattern]) {
         [FKXUserManager setUserPatternToListener];
         [[FKXLoginManager shareInstance] showTabBarListenerController];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"loadUnreadRelMeOF" object:nil];
         ListenerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarListenerVC;
         tab.selectedIndex = 0;
-
+    
     }
     //关怀转倾诉
     else{
