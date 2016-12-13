@@ -161,6 +161,8 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToSameMind" object:nil];
 
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil userInfo:@{@"status" : @"logout"}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"loginOutNoSign" object:nil];
+
             [FKXUserManager userLogout];
             [[EaseMob sharedInstance].chatManager asyncLogoffWithUnbindDeviceToken:NO completion:^(NSDictionary *info, EMError *error) {
                 NSLog(@"环信退出Error:%@.info = %@.", error, info);

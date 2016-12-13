@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Fakaixin/Common/Vender/EaseMob/Chat/ChatView/ChatViewController.m"
-            timestampString = "503233811.01206"
+            timestampString = "503233823.568787"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "350"
-            endingLineNumber = "350"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
             landmarkName = "-loadHistory"
             landmarkType = "7">
          </BreakpointContent>
@@ -35,13 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Fakaixin/Common/Vender/EaseMob/Chat/ChatView/ChatViewController.m"
-            timestampString = "503233823.568787"
+            filePath = "Fakaixin/MePart/PersonalInfo/FKXPersonalViewController.m"
+            timestampString = "503294272.126997"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
-            landmarkName = "-loadHistory"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
+            landmarkName = "-loadInfo"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

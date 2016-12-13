@@ -52,7 +52,6 @@
 		18A1BE9D1DCC6E5700F621A6 /* FKXMind.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18A1BE9C1DCC6E5700F621A6 /* FKXMind.storyboard */; };
 		18A1BE9F1DCC6ED200F621A6 /* FKXRecommendListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1BE9E1DCC6ED200F621A6 /* FKXRecommendListener.m */; };
 		18A1BEA11DCC734D00F621A6 /* My.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18A1BEA01DCC734D00F621A6 /* My.storyboard */; };
-		18A1BEA51DCC73B700F621A6 /* FKXPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1BEA41DCC73B700F621A6 /* FKXPersonalViewController.m */; };
 		18B03AFE1DF032B7009DE6DD /* FKXMyOderDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B03AFC1DF032B7009DE6DD /* FKXMyOderDetailVC.m */; };
 		18B03AFF1DF032B7009DE6DD /* FKXMyOderDetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B03AFD1DF032B7009DE6DD /* FKXMyOderDetailVC.xib */; };
 		18B3AC451DD415AA00831BCD /* FKXPsyCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B3AC431DD415AA00831BCD /* FKXPsyCommentCell.m */; };
@@ -75,6 +74,7 @@
 		18B4DFF31DDE964400845451 /* FKXLianjieView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18B4DFF21DDE964400845451 /* FKXLianjieView.xib */; };
 		18BA47F61DD16AF500B1E67D /* FKXLoveDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BA47F41DD16AF500B1E67D /* FKXLoveDetailCell.m */; };
 		18BA47F71DD16AF600B1E67D /* FKXLoveDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BA47F51DD16AF500B1E67D /* FKXLoveDetailCell.xib */; };
+		18C2A0F61DFFA8BA005A5758 /* FKXPersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A1BEA41DCC73B700F621A6 /* FKXPersonalViewController.m */; };
 		18C547091DF5590A00A1F33B /* FKXCallOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C547081DF5590A00A1F33B /* FKXCallOrder.m */; };
 		18C87AE01DD950EF00A83CC9 /* FKXYuYueProCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C87ADE1DD950EF00A83CC9 /* FKXYuYueProCell.m */; };
 		18C87AE11DD950EF00A83CC9 /* FKXYuYueProCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18C87ADF1DD950EF00A83CC9 /* FKXYuYueProCell.xib */; };
@@ -3663,6 +3663,7 @@
 			files = (
 				18C87AED1DD9C58D00A83CC9 /* FKXFreeYuYueVC.m in Sources */,
 				61AE07081DC1E730000AB0C2 /* FKXPayForAcceptView.m in Sources */,
+				18C2A0F61DFFA8BA005A5758 /* FKXPersonalViewController.m in Sources */,
 				61C682841DC7315C001BE424 /* FKXTestResultVC.m in Sources */,
 				189FBC871DDAAD72001BC1E6 /* FKXQingsuVC.m in Sources */,
 				18FF65921DD32B43001EA9B7 /* FKXdynamicsVoiceCell.m in Sources */,
@@ -3922,7 +3923,6 @@
 				617670061D6B0CEF003C7DEF /* MyDynamicModel.m in Sources */,
 				617F53C81C43A73B00CCD8AB /* EaseBubbleView.m in Sources */,
 				617F53B01C43A73B00CCD8AB /* UIViewController+HUD.m in Sources */,
-				18A1BEA51DCC73B700F621A6 /* FKXPersonalViewController.m in Sources */,
 				18B3AC451DD415AA00831BCD /* FKXPsyCommentCell.m in Sources */,
 				61C60AF11CBDE967003429EE /* FKXSameMindImgCell.m in Sources */,
 				188C49D01DEED1FD0013AB62 /* FKXChatV.m in Sources */,

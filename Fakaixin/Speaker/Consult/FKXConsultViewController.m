@@ -96,8 +96,7 @@ typedef enum : NSUInteger {
     // Do any additional setup after loading the view.
     
 //    self.view.backgroundColor = [UIColor yellowColor];
-    //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法
-    [BeeCloud setBeeCloudDelegate:self];
+    
     userModel = [FKXUserManager getUserInfoModel];
     
     if ([_paraDic[@"role"] integerValue] == 1) {
@@ -105,6 +104,10 @@ typedef enum : NSUInteger {
     }else{
         isVip = YES;
     }
+    
+    //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法
+    [BeeCloud setBeeCloudDelegate:self];
+    
     //初始化数据
     _contentArr = [NSMutableArray arrayWithCapacity:1];
     size = kRequestSize;
@@ -497,6 +500,7 @@ typedef enum : NSUInteger {
             break;
     }
     [self doPay:channel billNo:self.payParameterDic[@"billNo"] money:self.payParameterDic[@"money"]];
+    
 }
 
 //微信、支付宝

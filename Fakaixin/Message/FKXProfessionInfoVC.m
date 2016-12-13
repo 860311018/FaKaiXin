@@ -691,7 +691,7 @@ typedef enum : NSUInteger {
         if (indexPath.row == 0) {
             cell.phoneIcon.hidden = NO;
             cell.helpName.text = @"电话咨询";
-            cell.priceL.text = [NSString stringWithFormat:@"￥%ld/小时", [proUserInfoModel.phonePrice integerValue]/100];;
+            cell.priceL.text = [NSString stringWithFormat:@"￥%ld/15分钟", [proUserInfoModel.phonePrice integerValue]/100];;
 //            cell.pingFenL.text = self.phonePingFen;
             [cell.helpBackV addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectTelHelp)]];
             

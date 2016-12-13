@@ -321,13 +321,17 @@
         case 0:
 //            [self goToListeners];
         {
+            [self.navigationController popViewControllerAnimated:NO];
+            SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectMindType" object:@(_type)];
+            tab.selectedIndex = 1;
 //            [self.navigationController popViewControllerAnimated:NO];
 //            SpeakerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarVC;
 //            [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectMindType" object:@(_type)];
 //            tab.selectedIndex = 1;
-            FKXSecondAskController *vc = [[UIStoryboard storyboardWithName:@"FKXMind" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXSecondAskController"];
-            vc.passMindType = @(_type);
-            [self.navigationController pushViewController:vc animated:YES];
+//            FKXSecondAskController *vc = [[UIStoryboard storyboardWithName:@"FKXMind" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXSecondAskController"];
+//            vc.passMindType = @(_type);
+//            [self.navigationController pushViewController:vc animated:YES];
         }
             break;
         case 1:

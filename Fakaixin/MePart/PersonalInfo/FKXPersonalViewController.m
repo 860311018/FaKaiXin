@@ -136,6 +136,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:QianDaoBack object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"loginOutNoSign" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"FirstEditBackShare" object:nil];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fkxReceiveEaseMobMessage" object:nil];
@@ -152,6 +153,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessAndNeedRefreshAllUI:) name:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil];
     //签到
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setUpsignIn) name:QianDaoBack object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginOutNoSign) name:@"loginOutNoSign" object:nil];
+
     //第一次编辑资料分享
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showView) name:@"FirstEditBackShare" object:nil];
 
@@ -182,13 +185,16 @@
     //签到
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.qianDaoView];
     
-    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
-        //加载用户是否签到
-        if (![FKXUserManager needShowLoginVC]) {
-            [self setUpsignIn];
-        }
-    }
+//    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
+    
+    [self setUpsignIn];
+
+//    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
+//        //加载用户是否签到
+//        if (![FKXUserManager needShowLoginVC]) {
+//            [self setUpsignIn];
+//        }
+//    }
 
 }
 
@@ -238,6 +244,10 @@
     return _yiQianDaoView;
 }
 
+#pragma mark - 退出登录后改变成未签到状态
+- (void)loginOutNoSign {
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.qianDaoView];
+}
 
 #pragma mark - 判断签到
 - (void)setUpsignIn {
@@ -251,22 +261,10 @@
             daysSignIn = [data[@"data"][@"signDays"] integerValue];
             BOOL isQianDao = [data[@"data"][@"isCheckIn"] integerValue] ? YES : NO;
             if (isQianDao) {
-//                self.left.image = [UIImage imageNamed:@"qianDao_yes1"];
-//                self.left2.image = [UIImage imageNamed:@"qianDao_yes2"];
-
                 self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.yiQianDaoView];
 
             }else {
                 self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.qianDaoView];
-                
-//                self.navigationItem.leftBarButtonItem.action = @selector(signInClick);
-
-//                self.left.image = [UIImage imageNamed:@"qianDao_no1"];
-//                self.left2.image = [UIImage imageNamed:@"qianDao_no2"];
-                
-//                self.left.action = @selector(signInClick);
-//                self.left2.action = @selector(signInClick);
-
             }
             if (sTypeView) {
                 sTypeView.haveDays = daysSignIn;
@@ -302,7 +300,7 @@
 
 //已经签到
 - (void)signedClick {
-    [self showHint:@"您已经签过道了"];
+    [self showHint:@"您已签到"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -369,7 +367,9 @@
                     _viewAboutMe.hidden = YES;
                 }
                 
-                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
+                if ([FKXUserManager isUserPattern]) {
+                    self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", con];
+                }
                 UIView *view = self.tableView.tableHeaderView;
                 view.height = 233 + 41 + 48;
                 [self.tableView setTableHeaderView:view];
@@ -500,7 +500,7 @@
                          
                          _bangzhuL.text =[data[@"data"][@"commentNum"] stringValue];
                          _zanL.text =[data[@"data"][@"praiseNum"] stringValue];
-    
+
                      }
                  }else{
                      [self showHint:data[@"message"]];
@@ -879,6 +879,7 @@
 //            [vc setHidesBottomBarWhenPushed:YES];
 //            [self.navigationController pushViewController:vc animated:YES];
             FKXMyLoveValueController *vc = [[UIStoryboard storyboardWithName:@"My" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyLoveValueController"];
+            vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
             break;
