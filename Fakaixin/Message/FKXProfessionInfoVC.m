@@ -122,9 +122,8 @@ typedef enum : NSUInteger {
     }
     
     self.navTitle = @"个人主页";
+    self.view.backgroundColor = [UIColor whiteColor];
     
-    [self.view addSubview:self.bottomView];
-
     userModel = [FKXUserManager getUserInfoModel];
 
     [self registerCell];//添加tableView;
@@ -159,6 +158,12 @@ typedef enum : NSUInteger {
             proUserInfoModel.uid = _userId;
             proUserInfoModel.name = proUserInfoModel.nickname;
             self.role =[proUserInfoModel.role integerValue];
+            
+            if (self.role >0) {
+                [self.view addSubview:self.bottomView];
+            }else {
+                self.tableView.frame = CGRectMake(0, 0, kScreenWidth , kScreenHeight-64);
+            }
 //            self.phonePingFen = [NSString stringWithFormat:@"评分："];
             
 //            self.chatPingFen = [NSString stringWithFormat:@"评分："];
@@ -1617,29 +1622,7 @@ typedef enum : NSUInteger {
 #pragma mark - 电话回拨
 - (void)call:(NSString *)callLength {
     [self tapHide4];
-
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proUserInfoModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
-    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
-        [self hideHud];
-        NSString *respCode = data[@"resp"][@"respCode"];
-        if ([respCode isEqualToString:@"000000"]) {
-            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
-            //改变咨询师在线状态
-            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":proUserInfoModel.uid};
-            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
-                NSLog(@"%@",data);
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error.description);
-                
-            }];
-            
-        }else {
-            [self showHint:@"电话线路出错"];
-        }
-    } failure:^(NSError *error) {
-        [self hideHud];
-        [self showHint:@"电话线路出错"];
-    }];
+    [FKXCallOrder calling:callLength userModel:userModel proModel:proUserInfoModel controller:self];
 }
 
 

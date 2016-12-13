@@ -335,28 +335,7 @@ typedef enum : NSUInteger {
 
 - (void)call:(NSString *)callLength {
     [self tapHide4];
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":self.userModel.clientNum,@"to":self.proModel.mobile,@"maxallowtime":callLength,@"ringtoneID":ResetRingtoneID}, @"callback",nil];
-    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
-        [self hideHud];
-        NSString *respCode = data[@"resp"][@"respCode"];
-        if ([respCode isEqualToString:@"000000"]) {
-            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
-            //改变咨询师在线状态
-            NSDictionary *param = @{@"userId":self.userModel.uid,@"listenerId":self.proModel.uid};
-            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
-                NSLog(@"%@",data);
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error.description);
-                
-            }];
-            
-        }else {
-            [self showHint:@"电话线路出错"];
-        }
-    } failure:^(NSError *error) {
-        [self hideHud];
-        [self showHint:@"电话线路出错"];
-    }];
+    [FKXCallOrder calling:callLength userModel:self.userModel proModel:self.proModel controller:self];
 }
 
 #pragma mark - 图文咨询（聊天页，已确认订单）

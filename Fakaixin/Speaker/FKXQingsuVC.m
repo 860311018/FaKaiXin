@@ -29,6 +29,8 @@
 
 #import "ChatViewController.h"
 
+#import "FKXCallOrder.h"
+
 typedef enum : NSUInteger {
     PayType_weChat,
     PayType_Ali,
@@ -1220,31 +1222,7 @@ typedef enum : NSUInteger {
 - (void)call:(NSString *)callLength {
     [self tapHide4];
     
-    NSDictionary *params;
-    
-    params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
-    
-    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
-        [self hideHud];
-        NSString *respCode = data[@"resp"][@"respCode"];
-        if ([respCode isEqualToString:@"000000"]) {
-            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
-            //改变咨询师在线状态
-            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":professionModel.uid};
-            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
-                NSLog(@"%@",data);
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error.description);
-                
-            }];
-            
-        }else {
-            [self showHint:@"电话线路出错"];
-        }
-    } failure:^(NSError *error) {
-        [self hideHud];
-        [self showHint:@"电话线路出错"];
-    }];
+    [FKXCallOrder calling:callLength userModel:userModel proModel:professionModel controller:self];
 }
 
 

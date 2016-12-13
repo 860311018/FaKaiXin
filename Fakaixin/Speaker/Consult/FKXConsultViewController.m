@@ -490,14 +490,13 @@ typedef enum : NSUInteger {
         case PayType_weChat:
             channel = PayChannelWxApp;
             break;
-          case PayType_Ali:
+        case PayType_Ali:
             channel = PayChannelAliApp;
             break;
         default:
             break;
     }
     [self doPay:channel billNo:self.payParameterDic[@"billNo"] money:self.payParameterDic[@"money"]];
-
 }
 
 //微信、支付宝
@@ -910,28 +909,8 @@ typedef enum : NSUInteger {
 - (void)call:(NSString *)callLength {
     [self tapHide4];
 
-    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":professionModel.mobile,@"maxallowtime":callLength,@"ringtoneID":ResetRingtoneID}, @"callback",nil];
-    [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
-        [self hideHud];
-        NSString *respCode = data[@"resp"][@"respCode"];
-        if ([respCode isEqualToString:@"000000"]) {
-            [self showHint2:@"马上会有电话打到您手机上，请及时接听。如果没有请过5分钟后再次拨打"];
-            //改变咨询师在线状态
-            NSDictionary *param = @{@"userId":userModel.uid,@"listenerId":professionModel.uid};
-            [AFRequest sendPostRequestTwo:@"listener/update_call_status" param:param success:^(id data) {
-                NSLog(@"%@",data);
-            } failure:^(NSError *error) {
-                NSLog(@"%@",error.description);
-                
-            }];
-            
-        }else {
-            [self showHint:@"电话线路出错"];
-        }
-    } failure:^(NSError *error) {
-        [self hideHud];
-        [self showHint:@"电话线路出错"];
-    }];
+    [FKXCallOrder calling:callLength userModel:userModel proModel:professionModel controller:self];
+
 }
 
 

@@ -161,7 +161,7 @@
 
 
 + (void)calling:(NSString *)callLength userModel:(FKXUserInfoModel *)userModel proModel:(FKXUserInfoModel *)proModel controller:(UIViewController *)vc {
-   NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength,@"ringtoneID":ResetRingtoneID}, @"callback",nil];
+    NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:@{                                            @"appId":ResetAppId,@"fromClient":userModel.clientNum,@"to":proModel.mobile,@"maxallowtime":callLength}, @"callback",nil];
     [AFRequest sendResetPostRequest:@"Calls/callBack" param:params success:^(id data) {
         [vc hideHud];
         NSString *respCode = data[@"resp"][@"respCode"];
@@ -173,16 +173,17 @@
                 NSLog(@"%@",data);
             } failure:^(NSError *error) {
                 NSLog(@"%@",error.description);
-
+                
             }];
             
         }else {
-            [vc showHint:@"电话线路出错"];
+            [vc showHint:@"拨打失败，请稍后再试"];
         }
     } failure:^(NSError *error) {
         [vc hideHud];
-        [vc showHint:@"电话线路出错"];
+        [vc showHint:@"拨打失败，请稍后再试"];
     }];
+
 }
 
 
