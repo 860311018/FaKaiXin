@@ -14,8 +14,8 @@
 #define is_iPhone5 [UIScreen mainScreen].bounds.size.width == 320 ? YES : NO
 
 //URL
-#define kServiceBaseURL @"http://101.200.196.71:8200/"
-//#define kServiceBaseURL @"http://api.imfakaixin.com/"
+//#define kServiceBaseURL @"http://101.200.196.71:8200/"
+#define kServiceBaseURL @"http://api.imfakaixin.com/"
 //七牛裁切图片，以宽50，高等比裁切
 #define cropImageW @"?imageView2/2/w/300"
 #define voiceBaseUrl @"http://7xrrm3.com1.z0.glb.clouddn.com/"

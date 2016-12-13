@@ -17,9 +17,9 @@
     //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法 [BeeCloud setBeeCloudDelegate:self];
     
     //开启沙箱测试环境
-    [BeeCloud initWithAppID:appid andAppSecret:appSecret sandbox:YES];
+//    [BeeCloud initWithAppID:appid andAppSecret:appSecret sandbox:YES];
     //开启生产环境
-//    [BeeCloud initWithAppID:appid andAppSecret:appSecret ];
+    [BeeCloud initWithAppID:appid andAppSecret:appSecret ];
     //微信支付
     [BeeCloud initWeChatPay:weChatID];
     //查看当前模式

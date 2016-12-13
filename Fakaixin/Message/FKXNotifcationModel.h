@@ -37,6 +37,8 @@
 @property(nonatomic, strong)NSNumber<Optional> * type;
 @property(nonatomic, copy)NSString<Optional>   * fromHeadUrl;
 @property(nonatomic, copy)NSString<Optional>   * fromNickname;
+// 0  已评价  1未评价
+@property(nonatomic, strong)NSNumber<Optional> * valid;
 
 @property(nonatomic, copy)NSString<Optional> * worryId;
 @end

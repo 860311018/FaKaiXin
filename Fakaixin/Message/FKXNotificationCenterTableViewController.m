@@ -164,6 +164,12 @@
         //push的时候隐藏tabbar
         [self.navigationController pushViewController:vc animated:YES];
     }else if([model.type integerValue] == notification_type_end_talk){
+        
+        //已评价
+        if ([model.valid integerValue] == 0) {
+            [self showHint:@"该订单已评价"];
+            return;
+        }
         FKXEvaluateVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXEvaluateVC"];
         vc.model = model;
         [self.navigationController pushViewController:vc animated:YES];

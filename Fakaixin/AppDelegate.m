@@ -53,21 +53,21 @@ static NSString *const qqAppKey = @"rStV05ZaQg0rXkm1";
 //BeeCloud
 static NSString *const BeeCloudAppId = @"ee3d53f1-c63d-4928-bba3-c16cf1b9a3ba";
 //-------------正式环境-------------
-////环信
-//static NSString *const AppKey = @"imfakaixin#online";
-//static NSString *const ApnsCertName = @"fakaixin_push_distribution";
-////友盟推送
-//static NSString *const UMAppKey = @"567773efe0f55a4a450037cf";
-////BeeCloud，需要将beecloud的测试代码改为正式的
-//static NSString *const BeeCloudAppSecret = @"c2e09ec3-316f-46f6-9583-4bf4c6a62a4e";
-//-------------测试环境-------------
 //环信
-static NSString *const AppKey = @"imfakaixin#fakaixin";
-static NSString *const ApnsCertName = @"push_dev_fakaixin";
+static NSString *const AppKey = @"imfakaixin#online";
+static NSString *const ApnsCertName = @"fakaixin_push_distribution";
 //友盟推送
-static NSString *const UMAppKey = @"567773d4e0f55ad5400026c0";
+static NSString *const UMAppKey = @"567773efe0f55a4a450037cf";
 //BeeCloud，需要将beecloud的测试代码改为正式的
-static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88d";//BeeCloudTestSecret
+static NSString *const BeeCloudAppSecret = @"c2e09ec3-316f-46f6-9583-4bf4c6a62a4e";
+////-------------测试环境-------------
+////环信
+//static NSString *const AppKey = @"imfakaixin#fakaixin";
+//static NSString *const ApnsCertName = @"push_dev_fakaixin";
+////友盟推送
+//static NSString *const UMAppKey = @"567773d4e0f55ad5400026c0";
+////BeeCloud，需要将beecloud的测试代码改为正式的
+//static NSString *const BeeCloudAppSecret = @"cbd95280-fb7d-4ebc-bcb3-af515b02e88d";//BeeCloudTestSecret
 
 @interface AppDelegate ()<EMChatManagerDelegate>
 {
