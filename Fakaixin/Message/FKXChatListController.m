@@ -241,6 +241,27 @@
                 break;
             }
         }
+        if (conversation.conversationType == eConversationTypeGroupChat) {
+
+            //如果不是群主
+            EMGroup *group = [[EaseMob sharedInstance].chatManager fetchGroupInfo:conversation.chatter error:nil];
+            
+            if (![group.owner isEqualToString:[[FKXUserManager getUserInfoModel].uid stringValue]]) {
+                [[EaseMob sharedInstance].chatManager asyncLeaveGroup:conversation.chatter
+                                                           completion:
+                 ^(EMGroup *group, EMGroupLeaveReason reason, EMError *error) {
+                     if (!error) {
+                         UIAlertView * alert=[[UIAlertView alloc]initWithTitle:@"温馨提示" message:@"您已退出群组" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                         [alert show];
+                         
+                     }
+                 } onQueue:nil];
+            }else {
+//                [self showHint:@"请到聊天页里解散群组"];
+                return;
+            }
+        }
+       
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

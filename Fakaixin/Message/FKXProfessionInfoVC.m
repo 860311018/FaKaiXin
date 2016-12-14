@@ -328,6 +328,11 @@ typedef enum : NSUInteger {
         return;
     }
     
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        return;
+    }
+    
     //保存接收方的信息
     EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[_userId stringValue] bodies:nil];
     receiverMessage.from = [_userId stringValue];

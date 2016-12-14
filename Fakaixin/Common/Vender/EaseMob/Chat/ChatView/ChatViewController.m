@@ -455,8 +455,11 @@ typedef enum : NSUInteger {
                      [self talkIsContinue];
 //                     [self setUpLabelWarnOfEndingTalk];
                  }
-                 if ([data[@"data"][@"canFinish"] integerValue]) {
+                 if ([data[@"data"][@"canFinish"]  integerValue]) {
                       canShowEndBtn = YES;
+                 }
+                 if([data[@"data"][@"canFinish"]  integerValue] && [data[@"data"][@"isFinish"]  integerValue]) {
+                     canShowEndBtn = NO;
                  }
 //                 if ([data[@"data"][@"canFinish"] integerValue] && ![data[@"data"][@"isFinish"] integerValue]) {
 //                     canShowEndBtn = YES;

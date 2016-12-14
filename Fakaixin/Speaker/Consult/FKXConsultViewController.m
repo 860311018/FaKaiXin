@@ -81,6 +81,8 @@ typedef enum : NSUInteger {
 @property (nonatomic,strong) NSMutableDictionary *payParameterDic;//支付参数
 @property (nonatomic,assign) PayType payType;
 
+//@property (nonatomic,strong) UITableView *tableView;
+
 
 @end
 
@@ -163,6 +165,7 @@ typedef enum : NSUInteger {
     }
     paramDic[@"start"] = @(start);
     paramDic[@"size"] = @(size);
+    
     paramDic[@"role"] = _paraDic[@"role"];
     paramDic[@"priceRange"] = [_paraDic[@"priceRange"] integerValue] == -1 ? nil : _paraDic[@"priceRange"];
     paramDic[@"goodAt"] = [_paraDic[@"goodAt"] count]?_paraDic[@"goodAt"] : nil;
@@ -276,6 +279,11 @@ typedef enum : NSUInteger {
     FKXUserInfoModel *model = _contentArr[indexPath.row];
     if ([model.uid integerValue] == [FKXUserManager shareInstance].currentUserId) {
         [self showHint:@"不可以私信自己哟"];
+        return;
+    }
+    
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
         return;
     }
     
@@ -511,11 +519,22 @@ typedef enum : NSUInteger {
     payReq.viewController = self;
     payReq.optional = nil;
     [BeeCloud sendBCReq:payReq];
+    
+    [self performSelector:@selector(hideDelayed) withObject:[NSNumber numberWithBool:nil] afterDelay:10];
+
+}
+
+- (void)hideDelayed {
+    [self hideHud];
+    [self showHint:@"请到我的订单联系咨询师"];
 }
 
 #pragma mark - BeeCloudDelegate
 - (void)onBeeCloudResp:(BCBaseResp *)resp {
     [self hideHud];
+    [self hideHud];
+    [self hideHud];
+
     switch (resp.type) {
         case BCObjsTypePayResp:
         {
@@ -524,7 +543,9 @@ typedef enum : NSUInteger {
             if (tempResp.resultCode == 0)
             {
                 [self showHint:@"支付成功，等待对方确认"];
-                [self showView];
+//                if (self.isCall) {
+                    [self showView];
+//                }
             }
             else
             {

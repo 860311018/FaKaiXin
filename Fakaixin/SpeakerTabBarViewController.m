@@ -17,6 +17,8 @@
 #import "FKXQingsuVC.h"
 #import "FKXConsulterPageVC.h"
 
+#import "FKXConsultViewController.h"
+
 @interface SpeakerTabBarViewController ()<UITabBarControllerDelegate>
 {
     UIView *transparentViewPop;//弹出的选项透明背景图
@@ -74,6 +76,7 @@
     
     //预约专家
     FKXConsulterPageVC *proVC = [[FKXConsulterPageVC alloc]init];
+//    FKXConsultViewController *proVC = [[FKXConsultViewController alloc]init];
     FKXBaseNavigationController *proNav = [[FKXBaseNavigationController alloc] initWithRootViewController:proVC];
     proNav.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"咨询" image:[[UIImage imageNamed:@"tab_bar_pro_nor"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tab_bar_pro_selected"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     

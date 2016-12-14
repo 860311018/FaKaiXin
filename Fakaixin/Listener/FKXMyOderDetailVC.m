@@ -470,9 +470,9 @@ typedef enum : NSUInteger {
     noModel.fromHeadUrl = model.headUrl;
     noModel.fromNickname = model.nickName;
     if (model.callLength && [model.callLength integerValue]!=0) {
-        noModel.type = @2;
+        vc.type = @2;
     }else {
-        noModel.type = @1;
+        vc.type = @1;
     }
     vc.model = noModel;
     [self.navigationController pushViewController:vc animated:YES];

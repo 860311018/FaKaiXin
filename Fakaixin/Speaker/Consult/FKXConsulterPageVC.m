@@ -21,7 +21,7 @@
 
 
 
-@interface FKXConsulterPageVC ()<UIScrollViewDelegate>//<UIPageViewControllerDelegate, UIPageViewControllerDataSource>
+@interface FKXConsulterPageVC ()<UIScrollViewDelegate,BeeCloudDelegate>//<UIPageViewControllerDelegate, UIPageViewControllerDataSource>
 {
     UIPageViewController *myPageVC;
     UIImageView *bottomLineImg;//titleView中按钮下的线
@@ -72,6 +72,7 @@
 //    self.view.backgroundColor = [UIColor redColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshNewMessageLab) name:@"fkxReceiveEaseMobMessage" object:nil];
+    [BeeCloud setBeeCloudDelegate:self];
 
 //    [currentVC.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
 
@@ -114,6 +115,34 @@
 //- (void)headerRefreshEvent {
 //    [currentVC loadData];
 //}
+
+- (void)onBeeCloudResp:(BCBaseResp *)resp {
+    [self hideHud];
+    switch (resp.type) {
+        case BCObjsTypePayResp:
+        {
+            // 支付请求响应
+            BCPayResp *tempResp = (BCPayResp *)resp;
+            if (tempResp.resultCode == 0)
+            {
+                [self showHint:@"支付成功，等待对方确认"];
+                //                if (self.isCall) {
+//                [currentVC showView];
+                //                }
+            }
+            else
+            {
+                //支付取消或者支付失败,,或者取消支付都要再次提示用户购买
+                [self showAlertViewWithTitle:[NSString stringWithFormat:@"%@", tempResp.errDetail]];
+            }
+        }
+            break;
+        default:
+            NSLog(@"%@", @"不是支付响应的回调");
+            break;
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

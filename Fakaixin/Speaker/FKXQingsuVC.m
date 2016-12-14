@@ -117,7 +117,7 @@ typedef enum : NSUInteger {
     isVip = YES;
     //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法
     [BeeCloud setBeeCloudDelegate:self];
-
+//
     [self setUpNavBar];
     if (self.showBack) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backView];
@@ -129,16 +129,16 @@ typedef enum : NSUInteger {
 
     [self.tableView  registerNib:[UINib nibWithNibName:@"FKXYuYueProCell" bundle:nil] forCellReuseIdentifier:@"FKXYuYueProCell"];
     
-    //给tableview添加下拉刷新,上拉加载
+//    给tableview添加下拉刷新,上拉加载
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
     
-//    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
+    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"LoginBackToQingSu" object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
-    //首次刷新加载页面数据
+ //    首次刷新加载页面数据
     [self headerRefreshEvent];
     
     [self.view addSubview:self.bottomView];
@@ -235,6 +235,8 @@ typedef enum : NSUInteger {
         paramDic[@"uid"] = @([FKXUserManager shareInstance].currentUserId);
     }
     
+    [self showHudInView:self.view hint:@""];
+
     [AFRequest sendPostRequestTwo:@"user/confide" param:paramDic success:^(id data) {
         [self hideHud];
         self.tableView.header.state = MJRefreshHeaderStateIdle;
@@ -308,111 +310,116 @@ typedef enum : NSUInteger {
     
     NSMutableArray *viewsArray = [@[] mutableCopy];
     
-    if (self.viewArr.count !=0) {
-        
-        if (self.viewArr.count == 1){
-            FKXScrTitelModel *model = self.viewArr[0];
-            self.arr = [@[model,model,model,model] mutableCopy];
-        }else if(self.viewArr.count == 2) {
-            FKXScrTitelModel *model1 = self.viewArr[0];
-            FKXScrTitelModel *model2 = self.viewArr[1];
-            self.arr = [@[model1,model2,model1,model2] mutableCopy];
-        }else {
-            self.arr = self.viewArr;
-        }
-       
-        int j = (int)(self.arr.count +2-1)/2 ;
-        
-    for (int i = 1; i <= j; i++) {
-        
-        UIView *view = [[UIView alloc]initWithFrame:CGRectMake(64, 0, kScreenWidth-56, 98)];
-        for (int z=(i-1)*2; z<i*2; z++) {
-            if (z<self.arr.count) {
-                FKXScrTitelModel *tiModel = self.arr[z];
-                if (z%2==0) {
-                    ScrllTitleView *scrV1 = [ScrllTitleView creatTitleView];
-                    scrV1.frame = CGRectMake(0, 0, kScreenWidth-56, 49);
-                    scrV1.tag = z+1000;
-                    [scrV1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
-                    if(tiModel.fromNickname && tiModel.fromNickname.length>1){
-                        scrV1.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
-                    }else {
-                        scrV1.nameL.text = @"***";
-                    }
-                    scrV1.name2L.text = tiModel.toNickname;
-                    switch ([tiModel.type integerValue]) {
-                        case 1:
-                            scrV1.label1.text = @"向";
-                            scrV1.label2.text = @"提问";
-                            break;
-                        case 2:
-                            scrV1.label1.text = @"购买了";
-                            scrV1.label2.text = @"图文咨询";
-                            break;
-                        case 3:
-                            scrV1.label1.text = @"购买了";
-                            scrV1.label2.text = @"电话服务";
-                            break;
-                        case 4:
-                            scrV1.label1.text = @"给了";
-                            scrV1.label2.text = @"一个评价";
-                            break;
-                        default:
-                            break;
-                    }
-                    [view addSubview:scrV1];
-                    
-                }else {
-                    ScrllTitleView *scrV2 = [ScrllTitleView creatTitleView];
-                    scrV2.frame = CGRectMake(0, 49, kScreenWidth-56, 49);
-                    scrV2.tag = z+1000;
-                    [scrV2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
-                    if(tiModel.fromNickname && tiModel.fromNickname.length>1){
-                        scrV2.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
-                    }else {
-                        scrV2.nameL.text = @"***";
-                    }
-                    scrV2.name2L.text = tiModel.toNickname;
-                    switch ([tiModel.type integerValue]) {
-                        case 1:
-                            scrV2.label1.text = @"向";
-                            scrV2.label2.text = @"提问";
-                            break;
-                        case 2:
-                            scrV2.label1.text = @"购买了";
-                            scrV2.label2.text = @"图文咨询";
-                            break;
-                        case 3:
-                            scrV2.label1.text = @"购买了";
-                            scrV2.label2.text = @"电话服务";
-                            break;
-                        case 4:
-                            scrV2.label1.text = @"给了";
-                            scrV2.label2.text = @"一个评价";
-                            break;
-                        default:
-                            break;
-                    }
-                    [view addSubview:scrV2];
-                }
+    if (self.viewArr.count == 0) {
+        return view;
+    }else {
+        if (self.viewArr.count > 0) {
+            
+            if (self.viewArr.count == 1){
+                FKXScrTitelModel *model = self.viewArr[0];
+                self.arr = [@[model,model,model,model] mutableCopy];
+            }else if(self.viewArr.count == 2) {
+                FKXScrTitelModel *model1 = self.viewArr[0];
+                FKXScrTitelModel *model2 = self.viewArr[1];
+                self.arr = [@[model1,model2,model1,model2] mutableCopy];
+            }else {
+                self.arr = self.viewArr;
             }
+            
+            int j = (int)(self.arr.count +2-1)/2 ;
+            
+            for (int i = 1; i <= j; i++) {
+                
+                UIView *view = [[UIView alloc]initWithFrame:CGRectMake(64, 0, kScreenWidth-56, 98)];
+                for (int z=(i-1)*2; z<i*2; z++) {
+                    if (z<self.arr.count) {
+                        FKXScrTitelModel *tiModel = self.arr[z];
+                        if (z%2==0) {
+                            ScrllTitleView *scrV1 = [ScrllTitleView creatTitleView];
+                            scrV1.frame = CGRectMake(0, 0, kScreenWidth-56, 49);
+                            scrV1.tag = z+1000;
+                            [scrV1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
+                            if(tiModel.fromNickname && tiModel.fromNickname.length>1){
+                                scrV1.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                            }else {
+                                scrV1.nameL.text = @"***";
+                            }
+                            scrV1.name2L.text = tiModel.toNickname;
+                            switch ([tiModel.type integerValue]) {
+                                case 1:
+                                    scrV1.label1.text = @"向";
+                                    scrV1.label2.text = @"提问";
+                                    break;
+                                case 2:
+                                    scrV1.label1.text = @"购买了";
+                                    scrV1.label2.text = @"图文咨询";
+                                    break;
+                                case 3:
+                                    scrV1.label1.text = @"购买了";
+                                    scrV1.label2.text = @"电话服务";
+                                    break;
+                                case 4:
+                                    scrV1.label1.text = @"给了";
+                                    scrV1.label2.text = @"一个评价";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            [view addSubview:scrV1];
+                            
+                        }else {
+                            ScrllTitleView *scrV2 = [ScrllTitleView creatTitleView];
+                            scrV2.frame = CGRectMake(0, 49, kScreenWidth-56, 49);
+                            scrV2.tag = z+1000;
+                            [scrV2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
+                            if(tiModel.fromNickname && tiModel.fromNickname.length>1){
+                                scrV2.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                            }else {
+                                scrV2.nameL.text = @"***";
+                            }
+                            scrV2.name2L.text = tiModel.toNickname;
+                            switch ([tiModel.type integerValue]) {
+                                case 1:
+                                    scrV2.label1.text = @"向";
+                                    scrV2.label2.text = @"提问";
+                                    break;
+                                case 2:
+                                    scrV2.label1.text = @"购买了";
+                                    scrV2.label2.text = @"图文咨询";
+                                    break;
+                                case 3:
+                                    scrV2.label1.text = @"购买了";
+                                    scrV2.label2.text = @"电话服务";
+                                    break;
+                                case 4:
+                                    scrV2.label1.text = @"给了";
+                                    scrV2.label2.text = @"一个评价";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            [view addSubview:scrV2];
+                        }
+                    }
+                }
+                [viewsArray addObject:view];
+            }
+            
+            self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(64, 0, 288, 98) animationDuration:2.5];
+            self.mainScorllView.backgroundColor = [[UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1] colorWithAlphaComponent:0.1];
+            
+            self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
+                return viewsArray[pageIndex];
+            };
+            self.mainScorllView.totalPagesCount = ^NSInteger(void){
+                return viewsArray.count;
+            };
+            
+            [view addSubview:self.mainScorllView];
         }
-        [viewsArray addObject:view];
-    }
 
-    self.mainScorllView = [[CycleScrollView alloc] initWithFrame:CGRectMake(64, 0, 288, 98) animationDuration:2.5];
-    self.mainScorllView.backgroundColor = [[UIColor colorWithRed:247/255.0 green:247/255.0 blue:247/255.0 alpha:1] colorWithAlphaComponent:0.1];
-
-    self.mainScorllView.fetchContentViewAtIndex = ^UIView *(NSInteger pageIndex){
-        return viewsArray[pageIndex];
-    };
-    self.mainScorllView.totalPagesCount = ^NSInteger(void){
-        return viewsArray.count;
-    };
-    
-    [view addSubview:self.mainScorllView];
+        return view;
     }
-    return view;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -425,7 +432,12 @@ typedef enum : NSUInteger {
         [self showHint:@"不可以私信自己哟"];
         return;
     }
-        
+    
+    if ([FKXUserManager needShowLoginVC]) {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+        return;
+    }
+
     //保存接收方的信息
     EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[professionModel.uid stringValue] bodies:nil];
     receiverMessage.from = [professionModel.uid stringValue];

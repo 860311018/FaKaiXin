@@ -170,7 +170,11 @@
             [self showHint:@"该订单已评价"];
             return;
         }
+        NSData *data = [model.data dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *err;
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
         FKXEvaluateVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXEvaluateVC"];
+        vc.type = dic[@"type"];
         vc.model = model;
         [self.navigationController pushViewController:vc animated:YES];
     }else if([model.type integerValue] == notification_type_people){

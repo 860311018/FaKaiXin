@@ -13,5 +13,6 @@
 
 @property(nonatomic, strong)FKXNotifcationModel * model;
 
+@property (nonatomic,strong) NSNumber *type;
 
 @end

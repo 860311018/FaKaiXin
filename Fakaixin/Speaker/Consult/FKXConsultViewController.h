@@ -12,6 +12,7 @@
 
 @property(nonatomic, copy)NSDictionary *paraDic;
 
+- (void)showView;
 - (void)loadData;//加载数据，为筛选提供接口
 //- (void)footRefreshEvent;
 //- (void)headerRefreshEvent;
