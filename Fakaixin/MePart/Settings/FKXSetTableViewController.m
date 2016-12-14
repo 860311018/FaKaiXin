@@ -159,6 +159,8 @@
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToConsult" object:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToSameMind" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToQingSu" object:nil];
+
 
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationLoginSuccessAndNeedRefreshAllUI object:nil userInfo:@{@"status" : @"logout"}];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"loginOutNoSign" object:nil];

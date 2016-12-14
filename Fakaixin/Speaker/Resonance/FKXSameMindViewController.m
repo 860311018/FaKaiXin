@@ -6,6 +6,16 @@
 //  Copyright © 2016年 Fakaixin. All rights reserved.
 //
 
+#import "FKXSecondAskController.h"
+#import "FKXSecondAskCell.h"
+#import "NSString+HeightCalculate.h"
+#import "FKXSecondAskModel.h"
+
+#import "FKXCourseModel.h"
+#import "FKXCommitHtmlViewController.h"
+#import "FKXProfessionInfoVC.h"
+#import "FKXChatListController.h"
+
 #import "FKXSameMindViewController.h"
 #import "FKXSameMindModel.h"
 #import "ChatViewController.h"
@@ -69,6 +79,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"fkxReceiveEaseMobMessage" object:nil];
 }
 
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+//    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+}
+
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.helpBtn removeFromSuperview];
@@ -116,9 +134,11 @@
     //ui设置
 
     [self setUpNavBar];
+    self.tableView.tableHeaderView.frame = CGRectZero;
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
-    
     [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     //加载数据
     [self headerRefreshEvent];
 
@@ -455,11 +475,7 @@
             NSArray *listArr = data[@"data"][@"list"];
             if (listArr) {
                 [self hideHud];
-                if ([data count] < kRequestSize) {
-                    self.tableView.footer.hidden = YES;
-                }else{
-                    self.tableView.footer.hidden = NO;
-                }
+                
                 if (start == 0){
                     [_contentArr removeAllObjects];
                     if ([data count] == 0) {
@@ -475,6 +491,12 @@
                     FKXRongHeModel * officalSources = [[FKXRongHeModel alloc] initWithDictionary:dic error:nil];
                     [_contentArr addObject:officalSources];
                 }
+                if ([listArr count] < kRequestSize) {
+                    self.tableView.footer.hidden = YES;
+                }else{
+                    self.tableView.footer.hidden = NO;
+                }
+                
                 [self.tableView reloadData];
             }
         }else {
@@ -498,6 +520,7 @@
         [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     }
 }
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {

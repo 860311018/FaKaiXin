@@ -282,7 +282,9 @@
     if ([NSString isEmpty:_tfUserName.text]) {
         [self showHint:@"请输入昵称"];
         return;
-    }else if (_tfUserName.text.length <2) {
+    }
+    NSString *nicheng = [_tfUserName.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (nicheng.length <2) {
         [self showHint:@"昵称字数要大于2~"];
         return;
     }

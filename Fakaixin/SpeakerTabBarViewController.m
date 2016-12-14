@@ -87,7 +87,7 @@
     UIImage *centerIma = [UIImage imageNamed:@"tab_bar_center_publish"];
     placeHolderVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:nil image:[centerIma imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"tab_bar_center_publish"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     placeHolderVC.tabBarItem.imageInsets = UIEdgeInsetsMake(self.tabBar.height/2 - centerIma.size.height/2, 0, -self.tabBar.height/2 + centerIma.size.height/2, 0);
-    //共鸣
+//    //共鸣
     FKXSameMindViewController *feelVC = [[UIStoryboard storyboardWithName:@"FKXMind" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXSameMindViewController"];
     [feelVC viewDidLoad];
     FKXBaseNavigationController *feelVCNav = [[FKXBaseNavigationController alloc] initWithRootViewController:feelVC];

@@ -647,8 +647,8 @@ typedef enum : NSUInteger {
              [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
              CGFloat money = [data[@"data"][@"money"] floatValue];
              [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
-             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
-             [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+//             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+//             [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
              [self confirmToPay];
          }else
          {

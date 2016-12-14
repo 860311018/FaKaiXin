@@ -6,7 +6,7 @@
 //  Copyright © 2016年 Fakaixin. All rights reserved.
 //
 
-#import "FKXBaseTableViewController.h"
+#import <UIKit/UIKit.h>
 //（相同心情的人），心事界面（以前是共鸣）
 @interface FKXSameMindViewController : FKXBaseTableViewController
 

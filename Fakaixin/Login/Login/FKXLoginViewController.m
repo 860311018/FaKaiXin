@@ -130,6 +130,8 @@
                  //LoginBackToConsult
                  [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToConsult" object:nil];
                  [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToSameMind" object:nil];
+                 [[NSNotificationCenter defaultCenter] postNotificationName:@"LoginBackToQingSu" object:nil];
+
                  [[NSNotificationCenter defaultCenter] postNotificationName:QianDaoBack object:nil];
 
                  [[EaseMob sharedInstance].chatManager setApnsNickname:model.name];

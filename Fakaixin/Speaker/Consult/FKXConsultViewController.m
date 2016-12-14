@@ -179,7 +179,7 @@ typedef enum : NSUInteger {
         
         if (listArr) {
             
-            if ([data count] < kRequestSize) {
+            if ([listArr count] < kRequestSize) {
                 self.tableView.footer.hidden = YES;
             }else{
                 self.tableView.footer.hidden = NO;
@@ -255,14 +255,7 @@ typedef enum : NSUInteger {
     return 1;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return 50;
-}
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 50)];
-    view.backgroundColor = [UIColor whiteColor];
-    return view;
-}
+
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -473,8 +466,8 @@ typedef enum : NSUInteger {
              [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
              CGFloat money = [data[@"data"][@"money"] floatValue];
              [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
-             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
-             [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+//             NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+//             [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
              [self confirmToPay];
          }else
          {

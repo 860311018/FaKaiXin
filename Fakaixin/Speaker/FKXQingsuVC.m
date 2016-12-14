@@ -103,6 +103,10 @@ typedef enum : NSUInteger {
 
 @implementation FKXQingsuVC
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"LoginBackToQingSu" object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -130,7 +134,8 @@ typedef enum : NSUInteger {
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
     
 //    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(headerRefreshEvent) name:@"LoginBackToQingSu" object:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
     //首次刷新加载页面数据
@@ -223,6 +228,12 @@ typedef enum : NSUInteger {
 - (void)loadData
 {
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
+    //未登录
+    if ([FKXUserManager needShowLoginVC]) {
+        paramDic[@"uid"] = @0;
+    }else {
+        paramDic[@"uid"] = @([FKXUserManager shareInstance].currentUserId);
+    }
     
     [AFRequest sendPostRequestTwo:@"user/confide" param:paramDic success:^(id data) {
         [self hideHud];
@@ -356,7 +367,11 @@ typedef enum : NSUInteger {
                     scrV2.frame = CGRectMake(0, 49, kScreenWidth-56, 49);
                     scrV2.tag = z+1000;
                     [scrV2 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
-                    scrV2.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                    if(tiModel.fromNickname && tiModel.fromNickname.length>1){
+                        scrV2.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                    }else {
+                        scrV2.nameL.text = @"***";
+                    }
                     scrV2.name2L.text = tiModel.toNickname;
                     switch ([tiModel.type integerValue]) {
                         case 1:
@@ -726,8 +741,8 @@ typedef enum : NSUInteger {
                  [self.payParameterDic setObject:data[@"data"][@"billNo"] forKey:@"billNo"];
                  CGFloat money = [data[@"data"][@"money"] floatValue];
                  [self.payParameterDic setObject:[NSNumber numberWithFloat:money] forKey:@"money"];
-                 NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
-                 [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
+//                 NSInteger isAmple = [data[@"data"][@"isAmple"] integerValue];
+//                 [self.payParameterDic setObject:[NSNumber numberWithInteger:isAmple] forKey:@"isAmple"];
                  [self confirmToPay];
              }else
              {

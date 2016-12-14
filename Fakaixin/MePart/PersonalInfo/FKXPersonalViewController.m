@@ -104,7 +104,8 @@
         
         [self loadInfo];
        
-        
+        [self setUpsignIn];
+
     }
     
     //关怀模式不需要加消息
@@ -180,21 +181,23 @@
     //为了在程序启动后调用一次需要写在viewdidload里边
     if (![FKXUserManager needShowLoginVC]) {
         [self loadInfo];
+        [self setUpsignIn];
+
     }
    
     //签到
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.qianDaoView];
     
-    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
+//    NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
     
 //    [self setUpsignIn];
  
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
-        //加载用户是否签到
-        if (![FKXUserManager needShowLoginVC]) {
-            [self setUpsignIn];
-        }
-    }
+//    if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
+//        //加载用户是否签到
+//        if (![FKXUserManager needShowLoginVC]) {
+//            [self setUpsignIn];
+//        }
+//    }
 
 }
 
@@ -270,12 +273,14 @@
                 sTypeView.haveDays = daysSignIn;
                 [sTypeView updateSubviews];
             }
-        }else if ([data[@"code"] integerValue] == 4)
-        {
-            [self showAlertViewWithTitle:data[@"message"]];
-            
-            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
-        }else
+        }
+//        else if ([data[@"code"] integerValue] == 4)
+//        {
+//            [self showAlertViewWithTitle:data[@"message"]];
+//            
+//            [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+//        }
+        else
         {
             [self showHint:data[@"message"]];
         }
