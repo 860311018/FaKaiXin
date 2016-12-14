@@ -110,15 +110,7 @@ typedef enum : NSUInteger {
     self.navTitle = @"一键咨询";
     self.view.backgroundColor = [UIColor whiteColor];
     userModel = [FKXUserManager getUserInfoModel];
-    
-    if (_paraDic) {
-        if ([_paraDic[@"role"] integerValue] == 1) {
-            isVip = NO;
-        }else{
-            isVip = YES;
-        }
-    }
-    
+    isVip = YES;
     //设置支付代理,记得要在支付页面写上这句话，否则支付成功后不走代理方法
     [BeeCloud setBeeCloudDelegate:self];
 
@@ -128,7 +120,8 @@ typedef enum : NSUInteger {
     }
     //初始化数据
     _contentArr = [NSMutableArray arrayWithCapacity:1];
-    size = kRequestSize;
+//    size = kRequestSize;
+    size = 3;
 
     [self.tableView  registerNib:[UINib nibWithNibName:@"FKXYuYueProCell" bundle:nil] forCellReuseIdentifier:@"FKXYuYueProCell"];
     
@@ -136,7 +129,7 @@ typedef enum : NSUInteger {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView addLegendHeaderWithRefreshingTarget:self refreshingAction:@selector(headerRefreshEvent) dateKey:@""];
     
-    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
+//    [self.tableView addGifFooterWithRefreshingTarget:self refreshingAction:@selector(footRefreshEvent)];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification  object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification  object:nil];
@@ -150,13 +143,14 @@ typedef enum : NSUInteger {
 #pragma mark - UI
 - (void)setUpNavBar
 {
-    UIView *guizeV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 16)];
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 30, 15)];
+    UIView *guizeV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 35, 16)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 35, 15)];
     label.text = @"规则";
-    label.font = [UIFont systemFontOfSize:15];
+    label.font = [UIFont systemFontOfSize:14];
     label.textColor = kColorMainBlue;
+    label.textAlignment = NSTextAlignmentCenter;
     
-    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 15, 30, 1)];
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(2, 15, 31, 1)];
     line.backgroundColor = kColorMainBlue;
 
     [guizeV addSubview:label];
@@ -245,9 +239,10 @@ typedef enum : NSUInteger {
             }else{
                 self.tableView.footer.hidden = NO;
             }
-            if (start == 0){
-                [_contentArr removeAllObjects];
-            }
+//            if (start == 0){
+//            }
+            [_contentArr removeAllObjects];
+
             for (NSDictionary *dic in listArr) {
                 FKXUserInfoModel * officalSources =  [[FKXUserInfoModel alloc] initWithDictionary:dic error:nil];
                 [_contentArr addObject:officalSources];
@@ -328,7 +323,11 @@ typedef enum : NSUInteger {
                     scrV1.frame = CGRectMake(0, 0, kScreenWidth-56, 49);
                     scrV1.tag = z+1000;
                     [scrV1 addGestureRecognizer:[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapScr:)]];
-                    scrV1.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                    if(tiModel.fromNickname && tiModel.fromNickname.length>1){
+                        scrV1.nameL.text = [NSString stringWithFormat:@"%@***",[tiModel.fromNickname substringToIndex:1]];
+                    }else {
+                        scrV1.nameL.text = @"***";
+                    }
                     scrV1.name2L.text = tiModel.toNickname;
                     switch ([tiModel.type integerValue]) {
                         case 1:
@@ -411,9 +410,7 @@ typedef enum : NSUInteger {
         [self showHint:@"不可以私信自己哟"];
         return;
     }
-    
-    //保存接收方的信息
-    
+        
     //保存接收方的信息
     EMMessage *receiverMessage = [[EMMessage alloc] initWithReceiver:[professionModel.uid stringValue] bodies:nil];
     receiverMessage.from = [professionModel.uid stringValue];
@@ -977,8 +974,9 @@ typedef enum : NSUInteger {
         }
         return;
     }
-    self.mimaStr = [NSString md532BitUpper:secret];
-    
+    if(secret) {
+        self.mimaStr = [NSString md532BitUpper:secret];
+    }
     //开始申请client
     [self requsetClient];
 }

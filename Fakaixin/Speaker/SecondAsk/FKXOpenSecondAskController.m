@@ -260,7 +260,9 @@
         return;
     }
     
-    self.mimaStr = [NSString md532BitUpper:self.mimaTF.text];
+    if(self.mimaTF.text) {
+        self.mimaStr = [NSString md532BitUpper:self.mimaTF.text];
+    }
 
     //开始申请client
     [self requsetClient];
@@ -417,7 +419,9 @@
          {
              [self showHint:@"绑定手机成功"];
              self.bangDingBtn.enabled = NO;
- 
+             self.yanzhengTF.hidden = YES;
+             self.timeL.hidden = YES;
+             
              FKXUserInfoModel *model = _userModel;
              model.clientNum = self.clientNum;
              model.clientPwd = self.clientPwd;

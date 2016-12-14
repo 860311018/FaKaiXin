@@ -603,13 +603,14 @@ typedef enum : NSUInteger {
     // Dispose of any resources that can be recreated.
 }
 - (void)setUpNav {
-    UIView *guizeV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 30, 16)];
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 30, 15)];
+    UIView *guizeV = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 35, 16)];
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 35, 15)];
     label.text = @"规则";
-    label.font = [UIFont systemFontOfSize:15];
+    label.font = [UIFont systemFontOfSize:14];
     label.textColor = kColorMainBlue;
+    label.textAlignment = NSTextAlignmentCenter;
     
-    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 15, 30, 1)];
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(2, 15, 31, 1)];
     line.backgroundColor = kColorMainBlue;
     
     [guizeV addSubview:label];
@@ -1000,8 +1001,9 @@ typedef enum : NSUInteger {
         return;
     }
     
-    self.mimaStr = [NSString md532BitUpper:secret];
-    //开始申请client
+    if(secret) {
+        self.mimaStr = [NSString md532BitUpper:secret];
+    }    //开始申请client
     [self requsetClient];
 }
 

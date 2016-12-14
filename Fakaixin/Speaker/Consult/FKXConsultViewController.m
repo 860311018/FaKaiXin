@@ -677,8 +677,9 @@ typedef enum : NSUInteger {
         return;
     }
     
-    self.mimaStr = [NSString md532BitUpper:secret];
-
+    if(secret) {
+        self.mimaStr = [NSString md532BitUpper:secret];
+    }
     //开始申请client
     [self requsetClient];
 }

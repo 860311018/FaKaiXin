@@ -188,7 +188,7 @@
     NSString *guideKey =[NSString stringWithFormat:@"user_guide_book_listener%@", AppVersionBuild];
     
 //    [self setUpsignIn];
-
+ 
     if ([[NSUserDefaults standardUserDefaults] stringForKey:guideKey]) {
         //加载用户是否签到
         if (![FKXUserManager needShowLoginVC]) {
@@ -690,8 +690,13 @@
         [FKXUserManager setUserPatternToListener];
         [[FKXLoginManager shareInstance] showTabBarListenerController];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"loadUnreadRelMeOF" object:nil];
+        
         ListenerTabBarViewController *tab = [FKXLoginManager shareInstance].tabBarListenerVC;
         tab.selectedIndex = 0;
+    
+        if (![FKXUserManager getUserInfoModel].clientNum) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"bangdingPhone" object:nil];
+        }
     
     }
     //关怀转倾诉
