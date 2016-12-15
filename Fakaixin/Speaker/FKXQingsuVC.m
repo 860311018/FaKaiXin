@@ -111,7 +111,7 @@ typedef enum : NSUInteger {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
-    self.navTitle = @"一键咨询";
+    self.navTitle = @"即时倾诉";
     self.view.backgroundColor = [UIColor whiteColor];
     userModel = [FKXUserManager getUserInfoModel];
     isVip = YES;

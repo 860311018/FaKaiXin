@@ -12,5 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *labLoveValue;
 @property (nonatomic, strong) NSNumber *love;//爱心值
-
+@property(nonatomic, assign)NSInteger status;
+- (IBAction)clickTool:(UIButton *)sender;
+- (IBAction)clickStamp:(id)sender ;
 @end

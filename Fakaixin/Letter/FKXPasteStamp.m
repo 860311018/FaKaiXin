@@ -57,6 +57,8 @@
 - (IBAction)goToBuyStamp:(id)sender
 {
     FKXMyShopVC *vc = [[UIStoryboard storyboardWithName:@"Consulting" bundle:nil] instantiateViewControllerWithIdentifier:@"FKXMyShopVC"];
+    [vc clickTool:nil];
+    [vc clickStamp:nil];
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)loadStampNum

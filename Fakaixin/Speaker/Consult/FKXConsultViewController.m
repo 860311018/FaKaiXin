@@ -32,7 +32,7 @@ typedef enum : NSUInteger {
 } PayType;
 
 
-@interface FKXConsultViewController ()<CallProDelegate,ConfirmDelegate,BindPhoneDelegate,CallDelegate,UITableViewDelegate,UITableViewDataSource,BeeCloudDelegate,LixianDelegate>//<FKXConsulterCellDelegate>
+@interface FKXConsultViewController ()<CallProDelegate,ConfirmDelegate,BindPhoneDelegate,CallDelegate,UITableViewDelegate,UITableViewDataSource,BeeCloudDelegate,LixianDelegate,ConsultCallProDelegate>//<FKXConsulterCellDelegate>
 {
     NSInteger start;
     NSInteger size;
@@ -117,7 +117,7 @@ typedef enum : NSUInteger {
 //    [self setUpNavBar];
     
 //
-    [self.tableView registerNib:[UINib nibWithNibName:@"FKXYuYueProCell" bundle:nil] forCellReuseIdentifier:@"FKXYuYueProCell"];
+//    [self.tableView registerNib:[UINib nibWithNibName:@"FKXYuYueProCell" bundle:nil] forCellReuseIdentifier:@"FKXYuYueProCell"];
     
     //给tableview添加下拉刷新,上拉加载
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -156,6 +156,7 @@ typedef enum : NSUInteger {
 }
 - (void)loadData
 {
+    
     NSMutableDictionary *paramDic = [NSMutableDictionary dictionaryWithCapacity:1];
     //未登录
     if ([FKXUserManager needShowLoginVC]) {
@@ -167,9 +168,11 @@ typedef enum : NSUInteger {
     paramDic[@"size"] = @(size);
     
     paramDic[@"role"] = _paraDic[@"role"];
-    paramDic[@"priceRange"] = [_paraDic[@"priceRange"] integerValue] == -1 ? nil : _paraDic[@"priceRange"];
+    paramDic[@"priceOrder"] = [_paraDic[@"priceOrder"] integerValue] == -1 ? nil : _paraDic[@"priceOrder"];
     paramDic[@"goodAt"] = [_paraDic[@"goodAt"] count]?_paraDic[@"goodAt"] : nil;
-    
+   
+//    [self showHudInView:self.view hint:@""];
+
     [AFRequest sendPostRequestTwo:@"listener/listByRole" param:paramDic success:^(id data) {
         [self hideHud];
         self.tableView.header.state = MJRefreshHeaderStateIdle;
@@ -258,19 +261,21 @@ typedef enum : NSUInteger {
     return 1;
 }
 
-
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    return 50;
+//}
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FKXUserInfoModel *model = [self.contentArr objectAtIndex:indexPath.row];
 
-//    FKXConsulterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXConsulterCell" forIndexPath:indexPath];
-    //    cell.delegate = self;
+    FKXConsulterCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXConsulterCell" forIndexPath:indexPath];
+        cell.delegate = self;
 
-    FKXYuYueProCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXYuYueProCell" forIndexPath:indexPath];
+//    FKXYuYueProCell *cell = [tableView dequeueReusableCellWithIdentifier:@"FKXYuYueProCell" forIndexPath:indexPath];
     cell.isVip = isVip;
     cell.model = model;
-    cell.callProDelegate = self;
+//    cell.callProDelegate = self;
     
     return cell;
 }
@@ -343,7 +348,7 @@ typedef enum : NSUInteger {
 
 #pragma mark - 打电话
 
-- (void)callPro:(FKXUserInfoModel *)proModel{
+- (void)consultCallPro:(FKXUserInfoModel *)proModel{
     
     professionModel = proModel;
     

@@ -4181,7 +4181,7 @@
 					"$(PROJECT_DIR)/Fakaixin/Common/Tools/lame",
 					"$(PROJECT_DIR)/Fakaixin/Common/Vender/GrowingIO",
 				);
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yisen.fakaixin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "c56167ff-e1ea-41a9-876e-1b6550b86ad0";
@@ -4240,7 +4240,7 @@
 					"$(PROJECT_DIR)/Fakaixin/Common/Tools/lame",
 					"$(PROJECT_DIR)/Fakaixin/Common/Vender/GrowingIO",
 				);
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yisen.fakaixin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "5672dc37-f927-492d-8a0b-f820a783a2b7";

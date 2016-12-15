@@ -13,12 +13,32 @@
 //- (void)goToDynamicVC:(FKXUserInfoModel*)cellModel sender:(UIButton*)sender;
 //
 //@end
+
+@protocol ConsultCallProDelegate <NSObject>
+
+- (void)consultCallPro:(FKXUserInfoModel *)proModel;
+
+@end
+
 @interface FKXConsulterCell : UITableViewCell
 
-@property(nonatomic, strong)FKXUserInfoModel * model;
+@property (weak, nonatomic) IBOutlet UIView *tapView;
+@property (weak, nonatomic) IBOutlet UIImageView *headImgV;
+@property (weak, nonatomic) IBOutlet UILabel *nameL;
+@property (weak, nonatomic) IBOutlet UILabel *desL;
+@property (weak, nonatomic) IBOutlet UILabel *zhiyuL;
+@property (weak, nonatomic) IBOutlet UILabel *zhiyeL;
+@property (weak, nonatomic) IBOutlet UIButton *phoneBtn;
+
 @property (weak, nonatomic) IBOutlet UIImageView *imgVip;
+
+@property (weak, nonatomic) IBOutlet UIImageView *tagImgV;
+@property (weak, nonatomic) IBOutlet UILabel *tagL;
+
+@property(nonatomic, strong)FKXUserInfoModel * model;
 @property(nonatomic, assign)BOOL isVip;
-//@property(nonatomic, assign)id<FKXConsulterCellDelegate> delegate;
+
+@property(nonatomic,weak)id<ConsultCallProDelegate>delegate;
 
 
 @end

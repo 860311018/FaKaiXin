@@ -41,6 +41,7 @@
     //头衔
     self.nameL.text = model.name;
     self.zhiyeL.text = model.profession;
+    self.tagL.text = [NSString stringWithFormat:@"%ld元起",[model.phonePrice integerValue]/100];
     //简介
     NSMutableParagraphStyle *sty = [[NSMutableParagraphStyle alloc] init];
     sty.lineSpacing = 7;

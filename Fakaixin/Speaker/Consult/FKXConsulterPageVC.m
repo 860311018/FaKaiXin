@@ -611,6 +611,16 @@
 }
 - (void)clickedConfirm:(UIButton *)butt
 {
+//    //未登录
+//    if ([FKXUserManager needShowLoginVC]) {
+//        toVC2Dic[@"uid"] = @0;
+//    }else {
+//        toVC2Dic[@"uid"] = @([FKXUserManager shareInstance].currentUserId);
+//    }
+//    toVC2Dic[@"start"] = @(0);
+//    toVC2Dic[@"size"] = @(10);
+//    toVC2Dic[@"role"] = @3;
+//    
     if (butt.tag == 301) {//确认
 //        toVC1Dic[@"priceRange"] = @(priceTag);
         toVC2Dic[@"priceOrder"] = @(priceTag);

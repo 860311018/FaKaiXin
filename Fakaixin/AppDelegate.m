@@ -61,7 +61,7 @@ static NSString *const UMAppKey = @"567773efe0f55a4a450037cf";
 //BeeCloud，需要将beecloud的测试代码改为正式的
 static NSString *const BeeCloudAppSecret = @"c2e09ec3-316f-46f6-9583-4bf4c6a62a4e";
 ////-------------测试环境-------------
-////环信
+//环信
 //static NSString *const AppKey = @"imfakaixin#fakaixin";
 //static NSString *const ApnsCertName = @"push_dev_fakaixin";
 ////友盟推送

@@ -24,7 +24,6 @@
 }
 @property (strong, nonatomic) NSArray *pageContent;
 @property (weak, nonatomic) IBOutlet UIView *viewBacLoveValue;
-@property(nonatomic, assign)NSInteger status;
 
 @end
 
