@@ -87,6 +87,8 @@
     [self loadBannerImage];//加载banner图，
 
     isDisappear = NO;
+    
+    
     //签到动画
 //    [UIView animateWithDuration:1 animations:^{
 //        [UIView setAnimationRepeatCount:3];
@@ -107,7 +109,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    if ([FKXUserManager needShowLoginVC])
+    {
+        [[FKXLoginManager shareInstance] showLoginViewControllerFromViewController:self withSomeObject:nil];
+    }
     // 设置导航控制器的代理为self
     self.navigationController.delegate = self;
     

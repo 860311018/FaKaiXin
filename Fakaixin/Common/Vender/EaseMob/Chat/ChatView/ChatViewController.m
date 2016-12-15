@@ -597,14 +597,18 @@ typedef enum : NSUInteger {
         if (btn.tag == 100) {
             FKXUserInfoModel *model = [[FKXUserInfoModel alloc] init];
             model.uid = [NSNumber numberWithInteger:[groupInfo.owner integerValue]];
-            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
-            vc.shareType = @"user_center";
-            vc.urlString = [NSString stringWithFormat:@"%@front/QA_home.html?uid=%@&loginUserId=%ld&token=%@",kServiceBaseURL, model.uid, [FKXUserManager shareInstance].currentUserId,[FKXUserManager shareInstance].currentUserToken];
-            vc.pageType = MyPageType_people;
-            vc.userModel = model;
-            //push的时候隐藏tabbar
+            FKXProfessionInfoVC *vc = [[FKXProfessionInfoVC alloc]init];
+            vc.userId = model.uid;
             [vc setHidesBottomBarWhenPushed:YES];
             [self.navigationController pushViewController:vc animated:YES];
+//            FKXCommitHtmlViewController *vc = [[FKXCommitHtmlViewController alloc] init];
+//            vc.shareType = @"user_center";
+//            vc.urlString = [NSString stringWithFormat:@"%@front/QA_home.html?uid=%@&loginUserId=%ld&token=%@",kServiceBaseURL, model.uid, [FKXUserManager shareInstance].currentUserId,[FKXUserManager shareInstance].currentUserToken];
+//            vc.pageType = MyPageType_people;
+//            vc.userModel = model;
+//            //push的时候隐藏tabbar
+//            [vc setHidesBottomBarWhenPushed:YES];
+//            [self.navigationController pushViewController:vc animated:YES];
         }else
         {
             [self.chatToolbar.inputTextView becomeFirstResponder];
